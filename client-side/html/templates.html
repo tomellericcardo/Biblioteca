@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+    
+    <!-- CARICA ALBUM -->
+    <div id="carica_album">
+        <div class="w3-row-padding">
+            {{#lista_album}}
+                <div class="w3-col s4 m2 l1">
+                    <div class="w3-card-4" onclick="home.apri_album('{{nome}}')">
+                        {{#copertina}}
+                            <img src="{{copertina}}">
+                        {{/copertina}}
+                        {{^copertina}}
+                            <div class="w3-container w3-light-grey">
+                                &nbsp;
+                            </div>
+                        {{/copertina}}
+                        <div class="w3-container w3-center">
+                            <p>{{nome}}</p>
+                        </div>
+                    </div>
+                </div>
+            {{/lista_album}}
+            {{^lista_album}}
+                <div class="w3-display-container vuoto">
+                    <div class="w3-display-middle w3-center">
+                        <p class="w3-text-grey">
+                            <br>Nessun album
+                        </p>
+                    </div>
+                </div>
+            {{/lista_album}}
+        </div>
+    </div>
+    
+</html>

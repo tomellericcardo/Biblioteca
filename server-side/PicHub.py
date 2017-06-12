@@ -17,16 +17,17 @@ class PicHub:
         cursore = database.cursor()
         cursore.execute('''
             CREATE TABLE IF NOT EXISTS album (
-                titolo TEXT PRIMARY KEY,
-                data_ora DATETIME DEFAULT CURRENT_TIMESTAMP,
-                descrizione TEXT
+                nome TEXT PRIMARY KEY,
+                descrizione TEXT,
+                data_ora DATETIME DEFAULT CURRENT_TIMESTAMP
             )
         ''')
         database.commit()
         cursore.execute('''
             CREATE TABLE IF NOT EXISTS foto (
                 id TEXT PRIMARY KEY,
-                sorgente TEXT NOT NULL
+                sorgente TEXT NOT NULL,
+                data_ora DATETIME DEFAULT CURRENT_TIMESTAMP
             )
         ''')
         database.commit()
@@ -42,25 +43,45 @@ class PicHub:
         if db is not None:
             db.close()
     
-    def leggi_righe(self, query, parametri):
+    def leggi_righe(self, query, parametri = ()):
         cursore = self.g.db.cursor()
         cursore.execute(query, parametri)
         risultato = cursore.fetchall()
         cursore.close()
         return risultato
     
-    def leggi_riga(self, query, parametri):
+    def leggi_riga(self, query, parametri = ()):
         cursore = self.g.db.cursor()
         cursore.execute(query, parametri)
         risultato = cursore.fetchone()
         cursore.close()
         return risultato
     
-    def leggi_dato(self, query, parametri):
+    def leggi_dato(self, query, parametri = ()):
         return self.leggi_riga(query, parametri)[0]
     
-    def scrivi(self, query, parametri):
+    def scrivi(self, query, parametri = ()):
         cursore = self.g.db.cursor()
         cursore.execute(query, parametri)
         self.g.db.commit()
         cursore.close()
+    
+    def carica_album(self):
+        return self.leggi_righe('''
+            SELECT nome
+            FROM album
+        ''')
+    
+    def nome_presente(self, nome):
+        presente = self.leggi_dato('''
+            SELECT COUNT(*)
+            FROM album
+            WHERE nome = ?
+        ''', (nome,))
+        return presente == 1
+    
+    def nuovo_album(self, nome, descrizione):
+        self.scrivi('''
+            INSERT INTO album (nome, descrizione)
+            VALUES (?, ?)
+        ''', (nome, descrizione))

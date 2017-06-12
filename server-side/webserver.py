@@ -40,7 +40,19 @@ def invia_file(nome_cartella, nome_file):
 
 # CONTESTI
 
+@app.route('/carica_album', methods = ['POST'])
+def carica_album():
+    return dumps({'lista_album': pichub.carica_album()})
 
+@app.route('/nuovo_album', methods = ['POST'])
+def nuovo_album():
+    richiesta = request.get_json(force = True)
+    nome = richiesta['nome']
+    descrizione = richiesta['descrizione']
+    if (pichub.nome_presente(nome)):
+        return dumps({'nome_presente': True})
+    pichub.nuovo_album(nome, descrizione)
+    return dumps({'successo': True})
 
 
 # AVVIO DEL SERVER
