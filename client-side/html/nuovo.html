@@ -26,6 +26,7 @@
         
         <!-- HEADER -->
         <header class="w3-container w3-center w3-indigo ombra">
+            <i id="home" class="w3-margin w3-display-topleft material-icons">arrow_back</i>
             <h1 class="w3-xlarge">Nuovo album</h1>
         </header>
         
@@ -34,12 +35,35 @@
             <i class="material-icons">done</i>
         </div>
         
+        <!-- SELEZIONA -->
+        <input type="file" id="seleziona" accept="image/*">
+        
         <!-- NUOVO -->
-        <div id="primo_elemento" class="w3-container w3-white">
+        <div class="w3-container w3-white">
             <div class="w3-third w3-hide-small">&nbsp;</div>
             <div class="w3-third">
-                <input type="text" id="nome" class="w3-input" placeholder="Nome">
-                <textarea id="descrizione" rows="7" placeholder="Nessuna descrizione..." maxlength="150" class="w3-input"></textarea>
+                <div class="w3-row w3-margin-top w3-margin-bottom w3-center">
+                    <div class="w3-col s1 m1 l1">&nbsp;</div>
+                    <div id="copertina" class="w3-col s10 m10 l10">
+                        <div id="placeholder_copertina" class="w3-light-grey">
+                            <p class="w3-text-grey">Seleziona la copertina</p>
+                        </div>
+                    </div>
+                    <div class="w3-col s1 m1 l1">&nbsp;</div>
+                </div>
+                <input type="text" id="nome" class="w3-input" placeholder="Inserisci il nome">
+                <textarea id="descrizione" rows="4" placeholder="Inserisci una descrizione" maxlength="150" class="w3-input"></textarea>
+            </div>
+        </div>
+        
+        <!-- CARICAMENTO -->
+        <div id="caricamento" class="w3-light-grey">
+            <div class="w3-third w3-hide-small">&nbsp;</div>
+            <div class="w3-third w3-container w3-center w3-light-grey">
+                <p>
+                    <i class="material-icons w3-spin w3-text-grey">refresh</i>
+                    Caricamento in corso...
+                </p>
             </div>
         </div>
         

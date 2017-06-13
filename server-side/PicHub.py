@@ -18,7 +18,8 @@ class PicHub:
         cursore.execute('''
             CREATE TABLE IF NOT EXISTS album (
                 nome TEXT PRIMARY KEY,
-                descrizione TEXT,
+                descrizione TEXT NOT NULL,
+                copertina TEXT NOT NULL,
                 data_ora DATETIME DEFAULT CURRENT_TIMESTAMP
             )
         ''')
@@ -68,7 +69,7 @@ class PicHub:
     
     def carica_album(self):
         return self.leggi_righe('''
-            SELECT nome
+            SELECT nome, copertina
             FROM album
         ''')
     
@@ -80,8 +81,8 @@ class PicHub:
         ''', (nome,))
         return presente == 1
     
-    def nuovo_album(self, nome, descrizione):
+    def nuovo_album(self, nome, descrizione, copertina):
         self.scrivi('''
-            INSERT INTO album (nome, descrizione)
-            VALUES (?, ?)
-        ''', (nome, descrizione))
+            INSERT INTO album (nome, descrizione, copertina)
+            VALUES (?, ?, ?)
+        ''', (nome, descrizione, copertina))

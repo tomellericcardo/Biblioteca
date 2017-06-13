@@ -48,14 +48,15 @@ def carica_album():
 def nuovo_album():
     richiesta = request.get_json(force = True)
     nome = richiesta['nome']
-    descrizione = richiesta['descrizione']
     if (pichub.nome_presente(nome)):
         return dumps({'nome_presente': True})
-    pichub.nuovo_album(nome, descrizione)
+    descrizione = richiesta['descrizione']
+    copertina = richiesta['copertina']
+    pichub.nuovo_album(nome, descrizione, copertina)
     return dumps({'successo': True})
 
 
 # AVVIO DEL SERVER
 
 if __name__ == '__main__':
-    app.run(host = "localhost", port = 80, threaded = True, debug = True)
+    app.run(host = 'localhost', port = 80, threaded = True, debug = True)

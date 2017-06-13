@@ -16,9 +16,10 @@ home = {
             url: 'carica_album',
             method: 'POST',
             contentType: 'application/json',
+            dataType: 'json',
             success: function(risposta) {
                 risposta.lista_album = home.formatta_album(risposta.lista_album);
-                $.get('/templates', function(contenuto) {
+                $.get('/html/templates.html', function(contenuto) {
                     var template = $(contenuto).filter('#carica_album').html();
                     $('#galleria').html(Mustache.render(template, risposta));
                 });
@@ -31,12 +32,13 @@ home = {
     
     formatta_album: function(lista_album) {
         if (lista_album) {
-            var nuova_lista, album;
-            for (var i = 0; i < lista_album.length; i++) {
+            var nuova_lista = [];
+            var i, album;
+            for (i = 0; i < lista_album.length; i++) {
                 album = lista_album[i];
                 nuova_lista[i] = {
                     nome: album[0],
-                    copertina: false
+                    copertina: album[1]
                 };
             }
             return nuova_lista;
