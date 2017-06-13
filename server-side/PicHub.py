@@ -28,6 +28,8 @@ class PicHub:
             CREATE TABLE IF NOT EXISTS foto (
                 id TEXT PRIMARY KEY,
                 sorgente TEXT NOT NULL,
+                copertina TEXT NOT NULL,
+                album TEXT NOT NULL,
                 data_ora DATETIME DEFAULT CURRENT_TIMESTAMP
             )
         ''')
@@ -67,7 +69,7 @@ class PicHub:
         self.g.db.commit()
         cursore.close()
     
-    def carica_album(self):
+    def leggi_album(self):
         return self.leggi_righe('''
             SELECT nome, copertina
             FROM album
@@ -86,3 +88,16 @@ class PicHub:
             INSERT INTO album (nome, descrizione, copertina)
             VALUES (?, ?, ?)
         ''', (nome, descrizione, copertina))
+    
+    def leggi_foto(self, album):
+        return self.leggi_righe('''
+            SELECT sorgente, copertina
+            FROM foto
+            WHERE album = ?
+        ''', (album,))
+    
+    def carica_foto(self, sorgente, copertina, album):
+        self.scrivi('''
+            INSERT INTO foto (sorgente, copertina, album)
+            VALUES (?, ?, ?)
+        ''', (sorgente, copertina, album))

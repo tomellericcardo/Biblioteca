@@ -18,11 +18,18 @@ a:hover, a:active {
 }
 
 
-/*** OMBRA **/
+/*** HEADER **/
 
-.ombra {
+header {
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-    margin-bottom: 10px;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+}
+
+body {
+    padding-top: 60px;
 }
 
 
@@ -71,6 +78,10 @@ input::placeholder {
     padding-top: 30vh;
 }
 
+#spazio {
+    height: 100px;
+}
+
 .sfondo_modal {
     position: fixed;
     top: 0px;
@@ -102,4 +113,11 @@ input::placeholder {
 
 .immagine_copertina {
     width: 100%;
+}
+
+
+/*** PROGRESS BAR ***/
+
+#progress_bar {
+    width: 0%;
 }

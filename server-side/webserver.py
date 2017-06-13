@@ -40,9 +40,9 @@ def invia_file(nome_cartella, nome_file):
 
 # CONTESTI
 
-@app.route('/carica_album', methods = ['POST'])
-def carica_album():
-    return dumps({'lista_album': pichub.carica_album()})
+@app.route('/leggi_album', methods = ['POST'])
+def leggi_album():
+    return dumps({'lista_album': pichub.leggi_album()})
 
 @app.route('/nuovo_album', methods = ['POST'])
 def nuovo_album():
@@ -53,6 +53,22 @@ def nuovo_album():
     descrizione = richiesta['descrizione']
     copertina = richiesta['copertina']
     pichub.nuovo_album(nome, descrizione, copertina)
+    return dumps({'successo': True})
+
+@app.route('/leggi_foto', methods = ['POST'])
+def leggi_foto():
+    richiesta = request.get_json(force = True)
+    album = richiesta['album']
+    print pichub.leggi_foto(album)
+    return dumps({'lista_foto': pichub.leggi_foto(album)})
+
+@app.route('/carica_foto', methods = ['POST'])
+def carica_foto():
+    richiesta = request.get_json(force = True)
+    sorgente = richiesta['sorgente']
+    copertina = richiesta['sorgente']
+    album = richiesta['album']
+    pichub.carica_foto(sorgente, copertina, album)
     return dumps({'successo': True})
 
 

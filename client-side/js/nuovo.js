@@ -1,14 +1,13 @@
 nuovo = {
     
     init: function() {
+        nuovo.copertina_selezionata = false;
+        nuovo.sorgente_copertina = '';
         nuovo.init_home();
         nuovo.init_seleziona_copertina();
         nuovo.init_leggi_copertina();
         nuovo.init_conferma();
     },
-    
-    copertina_selezionata: false,
-    sorgente_copertina: '',
     
     init_home: function() {
         $('#home').on('click', function() {

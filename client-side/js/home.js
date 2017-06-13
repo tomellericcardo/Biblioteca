@@ -2,7 +2,7 @@ home = {
     
     init: function() {
         home.init_nuovo();
-        home.carica_album();
+        home.leggi_album();
     },
     
     init_nuovo: function() {
@@ -11,14 +11,14 @@ home = {
         });
     },
     
-    carica_album: function() {
+    leggi_album: function() {
         $.ajax({
-            url: 'carica_album',
+            url: 'leggi_album',
             method: 'POST',
             contentType: 'application/json',
             dataType: 'json',
             success: function(risposta) {
-                risposta.lista_album = home.formatta_album(risposta.lista_album);
+                risposta = home.formatta_album(risposta);
                 $.get('/html/templates.html', function(contenuto) {
                     var template = $(contenuto).filter('#carica_album').html();
                     $('#galleria').html(Mustache.render(template, risposta));
@@ -30,7 +30,8 @@ home = {
         });
     },
     
-    formatta_album: function(lista_album) {
+    formatta_album: function(risposta) {
+        var lista_album = risposta.lista_album;
         if (lista_album) {
             var nuova_lista = [];
             var i, album;
@@ -41,7 +42,9 @@ home = {
                     copertina: album[1]
                 };
             }
-            return nuova_lista;
+            risposta.lista_album = nuova_lista;
+            risposta.spazio = true;
+            return risposta;
         }
         return [];
     },
