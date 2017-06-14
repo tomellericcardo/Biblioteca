@@ -67,6 +67,10 @@ input::placeholder {
     cursor: pointer;
 }
 
+#home {
+    cursor: pointer;
+}
+
 
 /*** SPAZIATORI ***/
 
@@ -113,11 +117,9 @@ input::placeholder {
 
 .immagine_copertina {
     width: 100%;
+    cursor: pointer;
 }
 
-
-/*** PROGRESS BAR ***/
-
-#progress_bar {
-    width: 0%;
+.contenitore_copertina {
+    padding: 2px;
 }

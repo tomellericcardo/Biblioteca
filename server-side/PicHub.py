@@ -91,7 +91,7 @@ class PicHub:
     
     def leggi_foto(self, album):
         return self.leggi_righe('''
-            SELECT sorgente, copertina
+            SELECT id, copertina
             FROM foto
             WHERE album = ?
         ''', (album,))

@@ -59,14 +59,13 @@ def nuovo_album():
 def leggi_foto():
     richiesta = request.get_json(force = True)
     album = richiesta['album']
-    print pichub.leggi_foto(album)
     return dumps({'lista_foto': pichub.leggi_foto(album)})
 
 @app.route('/carica_foto', methods = ['POST'])
 def carica_foto():
     richiesta = request.get_json(force = True)
     sorgente = richiesta['sorgente']
-    copertina = richiesta['sorgente']
+    copertina = richiesta['copertina']
     album = richiesta['album']
     pichub.carica_foto(sorgente, copertina, album)
     return dumps({'successo': True})

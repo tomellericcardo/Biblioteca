@@ -35,47 +35,29 @@
         </div>
         
         <!-- SELEZIONA -->
-        <input type="file" id="seleziona" accept="image/*">
+        <input type="file" id="seleziona" accept="image/*" multiple>
         
         <!-- GALLERIA -->
-        <div class="w3-container w3-white">
-            <div class="w3-third w3-hide-small">&nbsp;</div>
-            <div id="galleria" class="w3-third">
-                <div class="w3-display-container vuoto">
-                    <div class="w3-display-middle w3-center">
-                        <p class="w3-text-grey">
-                            <i class="material-icons w3-spin">refresh</i>
-                            <br>Caricamento foto
-                        </p>
-                    </div>
+        <div id="galleria" class="w3-container w3-padding-top w3-white">
+            <div class="w3-display-container vuoto">
+                <div class="w3-display-middle w3-center">
+                    <p class="w3-text-grey">
+                        <i class="material-icons w3-spin">refresh</i>
+                        <br>Caricamento foto
+                    </p>
                 </div>
-            </div>
-        </div>
-        
-        <!-- CARICAMENTO -->
-        <div id="caricamento" class="w3-light-grey">
-            <div class="w3-third w3-hide-small">&nbsp;</div>
-            <div class="w3-third w3-container w3-center w3-light-grey">
-                <p>
-                    <i class="material-icons w3-spin w3-text-grey">refresh</i>
-                    Caricamento in corso...
-                </p>
             </div>
         </div>
         
         <!-- ERRORE -->
         <div id="errore" class="w3-modal">
-            <div id="sfondo_errore" class="sfondo_modal"></div>
-            <div class="w3-third w3-hide-small">&nbsp;</div>
-            <div class="w3-third">
-                <div class="w3-modal-content w3-card-8">
-                    <div class="w3-container w3-red">
-                        <span id="chiudi_errore" class="w3-closebtn">&times;</span>
-                        <h1 class="w3-xlarge">Errore!</h1>
-                    </div>
-                    <div class="w3-container w3-padding-bottom w3-white">
-                        <p id="messaggio"></p>
-                    </div>
+            <div class="w3-modal-content w3-card-8">
+                <div class="w3-container w3-red">
+                    <span id="chiudi_errore" class="w3-closebtn">&times;</span>
+                    <h1 class="w3-xlarge">Errore!</h1>
+                </div>
+                <div class="w3-container w3-padding-bottom w3-white">
+                    <p id="messaggio"></p>
                 </div>
             </div>
         </div>
