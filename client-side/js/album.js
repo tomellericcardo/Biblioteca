@@ -3,6 +3,7 @@ album = {
     init: function() {
         album.init_album();
         album.init_home();
+        album.init_spegni();
         album.leggi_foto();
         album.init_seleziona_immagini();
         album.init_leggi_immagini();
@@ -36,6 +37,17 @@ album = {
     init_home: function() {
         $('#home').on('click', function() {
             window.location.href = '/home';
+        });
+    },
+    
+    init_spegni: function() {
+        $('#spegni').on('click', function() {
+            $('#arresto').css('display', 'block');
+            $('#carica').css('bottom', '65px');
+            $.ajax({
+                url: 'spegni',
+                method: 'POST'
+            });
         });
     },
     

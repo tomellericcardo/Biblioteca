@@ -108,9 +108,9 @@ input::placeholder {
 }
 
 
-/*** CARICAMENTO ***/
+/*** CARICAMENTO & ARRESTO ***/
 
-#caricamento {
+#caricamento, #arresto {
     display: none;
     position: fixed;
     bottom: 0px;

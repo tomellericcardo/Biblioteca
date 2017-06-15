@@ -1,8 +1,20 @@
 home = {
     
     init: function() {
+        home.init_spegni();
         home.init_nuovo();
         home.leggi_album();
+    },
+    
+    init_spegni: function() {
+        $('#spegni').on('click', function() {
+            $('#arresto').css('display', 'block');
+            $('#nuovo').css('bottom', '65px');
+            $.ajax({
+                url: 'spegni',
+                method: 'POST'
+            });
+        });
     },
     
     init_nuovo: function() {

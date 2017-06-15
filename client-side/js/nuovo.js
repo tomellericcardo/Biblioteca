@@ -4,6 +4,7 @@ nuovo = {
         nuovo.copertina_selezionata = false;
         nuovo.sorgente_copertina = '';
         nuovo.init_home();
+        nuovo.init_spegni();
         nuovo.init_seleziona_copertina();
         nuovo.init_leggi_copertina();
         nuovo.init_conferma();
@@ -12,6 +13,17 @@ nuovo = {
     init_home: function() {
         $('#home').on('click', function() {
             window.location.href = '/home';
+        });
+    },
+    
+    init_spegni: function() {
+        $('#spegni').on('click', function() {
+            $('#arresto').css('display', 'block');
+            $('#conferma').css('bottom', '65px');
+            $.ajax({
+                url: 'spegni',
+                method: 'POST'
+            });
         });
     },
     

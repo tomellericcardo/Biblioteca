@@ -3,6 +3,7 @@
 from flask import Flask, g, send_from_directory, request
 from PicHub import PicHub
 from json import dumps
+from subprocess import call
 
 
 # VARIABILI GLOBALI
@@ -76,8 +77,13 @@ def carica_foto():
     pichub.carica_foto(sorgente, copertina, album)
     return dumps({'successo': True})
 
+@app.route('/spegni', methods = ['POST'])
+def spegni():
+    call(['shutdown', 'now'])
+    return dumps({'success': True})
+
 
 # AVVIO DEL SERVER
 
 if __name__ == '__main__':
-    app.run(host = 'localhost', port = 80, threaded = True, debug = True)
+    app.run(host = '192.168.100.1', port = 80, threaded = True, debug = True)
