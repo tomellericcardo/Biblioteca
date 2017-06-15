@@ -8,7 +8,7 @@
                 <div class="w3-card-2" onclick="home.apri_album('{{nome}}')">
                     <img src="{{copertina}}" class="immagine_copertina">
                     <div class="w3-container w3-center">
-                        <p>{{nome}}</p>
+                        <p>{{etichetta}}</p>
                     </div>
                 </div>
             </div>
@@ -29,7 +29,7 @@
     <script type="text/html" id="carica_foto">
         {{#lista_foto}}
             <div class="w3-col s4 m2 l1 contenitore_copertina">
-                <div class="w3-card-2" onclick="album.apri_foto('{{id}}')">
+                <div class="w3-card-2" onclick="album.apri_foto({{id}})">
                     <img src="{{copertina}}" class="immagine_copertina">
                 </div>
             </div>

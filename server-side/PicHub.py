@@ -26,7 +26,7 @@ class PicHub:
         database.commit()
         cursore.execute('''
             CREATE TABLE IF NOT EXISTS foto (
-                id TEXT PRIMARY KEY,
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
                 sorgente TEXT NOT NULL,
                 copertina TEXT NOT NULL,
                 album TEXT NOT NULL,
@@ -95,6 +95,13 @@ class PicHub:
             FROM foto
             WHERE album = ?
         ''', (album,))
+    
+    def leggi_sorgente(self, id_foto):
+        return self.leggi_dato('''
+            SELECT sorgente
+            FROM foto
+            WHERE id = ?
+        ''', (id_foto,))
     
     def carica_foto(self, sorgente, copertina, album):
         self.scrivi('''

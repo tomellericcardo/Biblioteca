@@ -34,11 +34,17 @@ home = {
         var lista_album = risposta.lista_album;
         if (lista_album) {
             var nuova_lista = [];
-            var i, album;
+            var i, album, nome, etichetta;
             for (i = 0; i < lista_album.length; i++) {
                 album = lista_album[i];
+                nome = album[0];
+                etichetta = nome;
+                if (nome.length > 10) {
+                    etichetta = nome.substring(0, 8) + '...';
+                }
                 nuova_lista[i] = {
-                    nome: album[0],
+                    nome: nome,
+                    etichetta: etichetta,
                     copertina: album[1]
                 };
             }

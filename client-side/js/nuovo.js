@@ -33,29 +33,33 @@ nuovo = {
         });
     },
     
-    ridimensiona_mostra: function(sorgente, dimensione_massima) {
+    ridimensiona_mostra: function(sorgente, dimensione) {
         var immagine = document.createElement('img');
         var canvas = document.createElement('canvas');
         immagine.onload = function() {
             var larghezza_immagine = immagine.width;
             var altezza_immagine = immagine.height;
-            var dimensione_canvas = dimensione_massima;
-            var dimensione_taglio = 0;
+            var dimensione_canvas = dimensione;
+            var dimensione_taglio, x, y;
             if (larghezza_immagine >= altezza_immagine) {
-                if (altezza_immagine < dimensione_massima) {
+                if (altezza_immagine < dimensione) {
                     dimensione_canvas = altezza_immagine;
                 }
                 dimensione_taglio = altezza_immagine;
-            } else if (altezza_immagine > larghezza_immagine) {
-                if (larghezza_immagine < dimensione_massima) {
+                x = (larghezza_immagine - dimensione_taglio) / 2;
+                y = 0;
+            } else {
+                if (larghezza_immagine < dimensione) {
                     dimensione_canvas = larghezza_immagine;
                 }
                 dimensione_taglio = larghezza_immagine;
+                x = 0;
+                y = (altezza_immagine - dimensione_taglio) / 2;
             }
             canvas.width = dimensione_canvas;
             canvas.height = dimensione_canvas;
             var contesto = canvas.getContext('2d');
-            contesto.drawImage(immagine, 0, 0, dimensione_taglio, dimensione_taglio, 0, 0, dimensione_canvas, dimensione_canvas);
+            contesto.drawImage(immagine, x, y, dimensione_taglio, dimensione_taglio, 0, 0, dimensione_canvas, dimensione_canvas);
             nuovo.mostra_immagine(canvas.toDataURL('image/png'));
         };
         immagine.src = sorgente;

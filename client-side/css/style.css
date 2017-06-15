@@ -78,12 +78,24 @@ input::placeholder {
     height: 70vh;
 }
 
+#spazio {
+    height: 100px;
+}
+
+#placeholder_copertina {
+    padding: 80px 0 80px 0;
+    cursor: pointer;
+}
+
+
+/*** ERRORE ***/
+
 #errore {
     padding-top: 30vh;
 }
 
-#spazio {
-    height: 100px;
+.w3-modal-content {
+    max-width: 450px;
 }
 
 .sfondo_modal {
@@ -92,11 +104,6 @@ input::placeholder {
     left: 0px;
     width: 100%;
     height: 100%;
-    cursor: pointer;
-}
-
-#placeholder_copertina {
-    padding: 80px 0 80px 0;
     cursor: pointer;
 }
 
@@ -122,4 +129,41 @@ input::placeholder {
 
 .contenitore_copertina {
     padding: 2px;
+}
+
+
+/*** GALLERIA ALBUM ***/
+
+.galleria_album {
+    padding: 10px 3px 0px 3px;
+}
+
+
+/*** PROGRESS BAR ***/
+
+#progress_bar_container {
+    padding: 15px;
+}
+
+#progress_bar {
+    height: 20px;
+    width: 0%;
+}
+
+
+/*** MOSTRA FOTO ***/
+
+#mostra_foto {
+    padding-top: 50px;
+}
+
+#chiudi_mostra {
+    position: fixed;
+    top: 4px;
+    right: 12px;
+}
+
+#foto_aperta {
+    max-height: 500px;
+    max-width: 100%;
 }
