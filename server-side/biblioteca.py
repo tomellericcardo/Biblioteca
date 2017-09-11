@@ -4,7 +4,7 @@ from os.path import realpath, dirname, join
 from sqlite3 import connect
 
 
-class PicHub:
+class Biblioteca:
     
     def __init__(self, g, database_filename):
         self.g = g
@@ -16,8 +16,10 @@ class PicHub:
         database = connect(self.percorso)
         cursore = database.cursor()
         cursore.execute('''
-            CREATE TABLE IF NOT EXISTS album (
-                nome TEXT PRIMARY KEY,
+            CREATE TABLE IF NOT EXISTS libro (
+                codice TEXT PRIMARY KEY,
+                titolo TEXT NOT NULL,
+                autore TEXT NOT NULL,
                 descrizione TEXT NOT NULL,
                 copertina TEXT NOT NULL,
                 data_ora DATETIME DEFAULT CURRENT_TIMESTAMP
@@ -25,13 +27,10 @@ class PicHub:
         ''')
         database.commit()
         cursore.execute('''
-            CREATE TABLE IF NOT EXISTS foto (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                sorgente TEXT NOT NULL,
-                copertina TEXT NOT NULL,
-                album TEXT NOT NULL,
-                data_ora DATETIME DEFAULT CURRENT_TIMESTAMP
-            )
+            CREATE VIEW IF NOT EXISTS galleria AS
+            SELECT codice, titolo, autore, copertina
+            FROM libro
+            LIMIT 20
         ''')
         database.commit()
         cursore.close()
@@ -63,48 +62,48 @@ class PicHub:
     def leggi_dato(self, query, parametri = ()):
         return self.leggi_riga(query, parametri)[0]
     
+    def leggi_presenza(self, query, parametri = ()):
+        return self.leggi_righe(query, parametri) > 0
+    
     def scrivi(self, query, parametri = ()):
         cursore = self.g.db.cursor()
         cursore.execute(query, parametri)
         self.g.db.commit()
         cursore.close()
     
-    def leggi_album(self):
+    def leggi_galleria(self):
         return self.leggi_righe('''
-            SELECT nome, copertina
-            FROM album
+            SELECT *
+            FROM galleria
         ''')
     
-    def nome_presente(self, nome):
-        presente = self.leggi_dato('''
-            SELECT COUNT(*)
-            FROM album
-            WHERE nome = ?
-        ''', (nome,))
-        return presente == 1
-    
-    def nuovo_album(self, nome, descrizione, copertina):
+    def nuovo_libro(self, titolo, autore, descrizione, copertina):
+        codice = self.genera_codice(autore, titolo)
         self.scrivi('''
-            INSERT INTO album (nome, descrizione, copertina)
-            VALUES (?, ?, ?)
-        ''', (nome, descrizione, copertina))
+            INSERT INTO libro (codice, titolo, autore, descrizione, copertina)
+            VALUES (?, ?, ?, ?, ?)
+        ''', (codice, titolo, autore, descrizione, copertina))
+        return codice
     
-    def leggi_foto(self, album):
-        return self.leggi_righe('''
-            SELECT id, copertina
-            FROM foto
-            WHERE album = ?
-        ''', (album,))
-    
-    def leggi_sorgente(self, id_foto):
-        return self.leggi_dato('''
-            SELECT sorgente
-            FROM foto
-            WHERE id = ?
-        ''', (id_foto,))
-    
-    def carica_foto(self, sorgente, copertina, album):
-        self.scrivi('''
-            INSERT INTO foto (sorgente, copertina, album)
-            VALUES (?, ?, ?)
-        ''', (sorgente, copertina, album))
+    def genera_codice(self, autore, titolo):
+        codice = ''
+        autore = autore.replace(' ', '').upper()
+        titolo = titolo.replace(' ', '').upper()
+        if len(autore) > 3:
+            codice += autore[:3]
+        else:
+            codice += autore
+        if len(titolo) > 3:
+            codice += titolo[:3]
+        else:
+            codice += titolo
+        presente = True
+        i = -1
+        while presente:
+            i += 1
+            presente = self.leggi_presenza('''
+                SELECT codice
+                FROM libro
+                WHERE codice = ?
+            ''', (codice + str(i),))
+        return codice + str(i)

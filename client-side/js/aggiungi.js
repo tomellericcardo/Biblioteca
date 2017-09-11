@@ -1,29 +1,17 @@
-nuovo = {
+aggiungi = {
     
     init: function() {
-        nuovo.copertina_selezionata = false;
-        nuovo.sorgente_copertina = '';
-        nuovo.init_home();
-        nuovo.init_spegni();
-        nuovo.init_seleziona_copertina();
-        nuovo.init_leggi_copertina();
-        nuovo.init_conferma();
+        aggiungi.copertina_selezionata = false;
+        aggiungi.sorgente_copertina = '';
+        aggiungi.init_home();
+        aggiungi.init_seleziona_copertina();
+        aggiungi.init_leggi_copertina();
+        aggiungi.init_conferma();
     },
     
     init_home: function() {
         $('#home').on('click', function() {
             window.location.href = '/home';
-        });
-    },
-    
-    init_spegni: function() {
-        $('#spegni').on('click', function() {
-            $('#arresto').css('display', 'block');
-            $('#conferma').css('bottom', '65px');
-            $.ajax({
-                url: 'spegni',
-                method: 'POST'
-            });
         });
     },
     
@@ -39,7 +27,7 @@ nuovo = {
             lettore.onload = function(e) {
                 $('#caricamento').css('display', 'block');
                 $('#conferma').css('bottom', '65px');
-                nuovo.ridimensiona_mostra(e.target.result, 200);
+                aggiungi.ridimensiona_mostra(e.target.result, 200);
             };
             lettore.readAsDataURL(evento.target.files[0]);
         });
@@ -72,7 +60,7 @@ nuovo = {
             canvas.height = dimensione_canvas;
             var contesto = canvas.getContext('2d');
             contesto.drawImage(immagine, x, y, dimensione_taglio, dimensione_taglio, 0, 0, dimensione_canvas, dimensione_canvas);
-            nuovo.mostra_immagine(canvas.toDataURL('image/png'));
+            aggiungi.mostra_immagine(canvas.toDataURL('image/png'));
         };
         immagine.src = sorgente;
     },
@@ -81,49 +69,52 @@ nuovo = {
         $('#caricamento').css('display', 'none');
         $('#conferma').css('bottom', '20px');
         $('#copertina').html('<img src="' + sorgente + '" id="immagine_copertina">');
-        nuovo.copertina_selezionata = true;
-        nuovo.sorgente_copertina = sorgente;
+        aggiungi.copertina_selezionata = true;
+        aggiungi.sorgente_copertina = sorgente;
     },
     
     init_conferma: function() {
         $('#conferma').on('click', function() {
-            nuovo.conferma();
+            aggiungi.conferma();
         });
-        $('#nome, #descrizione').on('keyup', function(e) {
+        $('#titolo, #autore, #descrizione').on('keyup', function(e) {
             if (e.keyCode == 13) {
-                nuovo.conferma();
+                aggiungi.conferma();
             }
         });
     },
     
     conferma: function() {
-        $('#nome').css('border-color', '#757575');
-        var nome = $('#nome').val();
+        $('#titolo, #autore').css('border-color', '#757575');
+        var titolo = $('#titolo').val();
+        var autore = $('#autore').val();
         var descrizione = $('#descrizione').val();
         if (!descrizione) {
             descrizione = '';
         }
-        if (nome.length == 0) {
-            $('#nome').css('border-color', 'red');
-            errore.messaggio('Devi inserire il nome dell\'album!');
-        } else if (!nuovo.copertina_selezionata) {
-            errore.messaggio('Devi selezionare una copertina per l\'album!');
+        if (titolo.length == 0) {
+            $('#titolo').css('border-color', 'red');
+            errore.messaggio('Devi inserire il titolo del libro!');
+        } else if (autore.length == 0) {
+            $('#autore').css('border-color', 'red');
+            errore.messaggio('Devi inserire l\'autore del libro!');
+        } else if (!aggiungi.copertina_selezionata) {
+            errore.messaggio('Devi selezionare una copertina per il libro!');
         } else {
             $.ajax({
-                url: 'nuovo_album',
+                url: 'nuovo_libro',
                 method: 'POST',
                 contentType: 'application/json',
                 dataType: 'json',
                 data: JSON.stringify({
-                    nome: nome,
+                    titolo: titolo,
+                    autore: autore,
                     descrizione: descrizione,
-                    copertina: nuovo.sorgente_copertina
+                    copertina: aggiungi.sorgente_copertina
                 }),
                 success: function(risposta) {
-                    if (risposta.nome_presente) {
-                        errore.messaggio('Nome album gi&agrave; presente!');
-                    } else if (risposta.successo) {
-                        window.location.href = '/album?nome=' + nome;
+                    if (risposta.codice) {
+                        window.location.href = '/libro?codice=' + risposta.codice;
                     }
                 },
                 error: function() {
@@ -136,4 +127,4 @@ nuovo = {
 };
 
 
-$(document).ready(nuovo.init());
+$(document).ready(aggiungi.init());

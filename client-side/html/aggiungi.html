@@ -2,7 +2,7 @@
 <html>
     <head>
         
-        <title>Nuovo - PicHub</title>
+        <title>Aggiungi - Biblioteca</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
         <meta charset="UTF-8">
         
@@ -11,23 +11,22 @@
         <link rel="stylesheet" href="/css/style.css">
         
         <!-- FONTS -->
-        <link rel="stylesheet" href="/css/icone.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
         
         <!-- ANDROID -->
         <link rel="manifest" href="/json/manifest.json">
         <meta name="mobile-web-app-capable" content="yes">
         <link rel="icon" type="image/png" sizes="128x128" href="/img/icona128.png">
         <link rel="icon" type="image/png" sizes="192x192" href="/img/icona192.png">
-        <meta name="theme-color" content="#3f51b5">
+        <meta name="theme-color" content="#2196f3">
         
     </head>
     <body>
         
         <!-- HEADER -->
-        <header class="w3-container w3-center w3-indigo ombra">
+        <header class="w3-container w3-center w3-blue ombra">
             <i id="home" class="w3-margin w3-display-topleft material-icons">arrow_back</i>
-            <h1 class="w3-xlarge">Nuovo album</h1>
-            <i id="spegni" class="w3-margin w3-display-topright material-icons">power_settings_new</i>
+            <h1 class="w3-xlarge">Aggiungi libro</h1>
         </header>
         
         <!-- CONFERMA -->
@@ -38,20 +37,21 @@
         <!-- SELEZIONA -->
         <input type="file" id="seleziona" accept="image/*">
         
-        <!-- NUOVO -->
+        <!-- AGGIUNGI -->
         <div class="w3-container w3-white">
             <div class="w3-third w3-hide-small">&nbsp;</div>
             <div class="w3-third">
                 <div class="w3-row w3-margin-top w3-margin-bottom w3-center">
-                    <div class="w3-col s1 m1 l1">&nbsp;</div>
-                    <div id="copertina" class="w3-col s10 m10 l10">
+                    <div class="w3-col s3 m3 l4">&nbsp;</div>
+                    <div id="copertina" class="w3-col s6 m6 l4">
                         <div id="placeholder_copertina" class="w3-light-grey">
                             <p class="w3-text-grey">Seleziona la copertina</p>
                         </div>
                     </div>
-                    <div class="w3-col s1 m1 l1">&nbsp;</div>
+                    <div class="w3-col s3 m3 l4">&nbsp;</div>
                 </div>
-                <input type="text" id="nome" class="w3-input" placeholder="Inserisci il nome">
+                <input type="text" id="titolo" class="w3-input" placeholder="Inserisci il titolo">
+                <input type="text" id="autore" class="w3-input" placeholder="Inserisci l'autore">
                 <textarea id="descrizione" rows="4" placeholder="Inserisci una descrizione" maxlength="150" class="w3-input"></textarea>
             </div>
         </div>
@@ -63,17 +63,6 @@
                 <p>
                     <i class="material-icons w3-spin w3-text-grey">refresh</i>
                     Caricamento in corso...
-                </p>
-            </div>
-        </div>
-        
-        <!-- ARRESTO -->
-        <div id="arresto" class="w3-light-grey">
-            <div class="w3-third w3-hide-small">&nbsp;</div>
-            <div class="w3-third w3-container w3-center w3-light-grey">
-                <p>
-                    <i class="material-icons w3-spin w3-text-grey">refresh</i>
-                    Arresto in corso...
                 </p>
             </div>
         </div>
@@ -96,7 +85,7 @@
         <script type="text/javascript" src="/js/jquery.js"></script>
         <script type="text/javascript" src="/js/mustache.js"></script>
         <script type="text/javascript" src="/js/errore.js"></script>
-        <script type="text/javascript" src="/js/nuovo.js"></script>
+        <script type="text/javascript" src="/js/aggiungi.js"></script>
         
     </body>
 </html>

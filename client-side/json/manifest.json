@@ -1,12 +1,12 @@
 {
-    "name": "PicHub",
-    "short_name": "PicHub",
-    "description": "A web application for a wireless NAT",
+    "name": "Biblioteca",
+    "short_name": "Biblioteca",
+    "description": "Biblioteca digitale per Casa Laura",
     "start_url": "/",
     "display": "standalone",
     "orientation": "portrait",
-    "theme_color": "#3f51b5",
-    "background_color": "#3f51b5",
+    "theme_color": "#2196f3",
+    "background_color": "#2196f3",
     "icons": [
         {
             "src": "/img/icona128.png",

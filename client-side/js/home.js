@@ -1,38 +1,33 @@
 home = {
     
     init: function() {
-        home.init_spegni();
-        home.init_nuovo();
-        home.leggi_album();
+        home.init_cerca();
+        home.init_aggiungi();
+        home.leggi_galleria();
     },
     
-    init_spegni: function() {
-        $('#spegni').on('click', function() {
-            $('#arresto').css('display', 'block');
-            $('#nuovo').css('bottom', '65px');
-            $.ajax({
-                url: 'spegni',
-                method: 'POST'
-            });
+    init_cerca: function() {
+        $('#cerca').on('click', function() {
+            window.location.href = '/cerca';
         });
     },
     
-    init_nuovo: function() {
-        $('#nuovo').on('click', function() {
-            window.location.href = '/nuovo';
+    init_aggiungi: function() {
+        $('#aggiungi').on('click', function() {
+            window.location.href = '/aggiungi';
         });
     },
     
-    leggi_album: function() {
+    leggi_galleria: function() {
         $.ajax({
-            url: 'leggi_album',
+            url: 'leggi_galleria',
             method: 'POST',
             contentType: 'application/json',
             dataType: 'json',
             success: function(risposta) {
-                risposta = home.formatta_album(risposta);
+                risposta = home.formatta_galleria(risposta);
                 $.get('/html/templates.html', function(contenuto) {
-                    var template = $(contenuto).filter('#carica_album').html();
+                    var template = $(contenuto).filter('#leggi_galleria').html();
                     $('#galleria').html(Mustache.render(template, risposta));
                 });
             },
@@ -42,33 +37,38 @@ home = {
         });
     },
     
-    formatta_album: function(risposta) {
-        var lista_album = risposta.lista_album;
-        if (lista_album) {
+    formatta_galleria: function(risposta) {
+        var lista_libri = risposta.lista_libri;
+        if (lista_libri) {
             var nuova_lista = [];
-            var i, album, nome, etichetta;
-            for (i = 0; i < lista_album.length; i++) {
-                album = lista_album[i];
-                nome = album[0];
-                etichetta = nome;
-                if (nome.length > 10) {
-                    etichetta = nome.substring(0, 8) + '...';
+            var i, libro, codice, titolo, autore;
+            for (i = 0; i < lista_libri.length; i++) {
+                libro = lista_libri[i];
+                codice = libro[0];
+                titolo = libro[1];
+                autore = libro[2];
+                if (titolo.length > 10) {
+                    titolo = titolo.substring(0, 8) + '...';
+                }
+                if (autore.length > 10) {
+                    autore = autore.substring(0, 8) + '...';
                 }
                 nuova_lista[i] = {
-                    nome: nome,
-                    etichetta: etichetta,
-                    copertina: album[1]
+                    codice: codice,
+                    titolo: titolo,
+                    autore: autore,
+                    copertina: libro[3]
                 };
             }
-            risposta.lista_album = nuova_lista;
+            risposta.lista_libri = nuova_lista;
             risposta.spazio = true;
             return risposta;
         }
         return [];
     },
     
-    apri_album: function(nome) {
-        window.location.href = '/album?nome=' + nome;
+    apri_libro: function(codice) {
+        window.location.href = '/libro?codice=' + codice;
     }
     
 };
