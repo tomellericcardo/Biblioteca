@@ -9,13 +9,8 @@
     "background_color": "#2196f3",
     "icons": [
         {
-            "src": "/img/icona128.png",
-            "sizes": "128x128",
-            "type": "image/png"
-        },
-        {
-            "src": "/img/icona192.png",
-            "sizes": "192x192",
+            "src": "/img/icona.png",
+            "sizes": "266x266",
             "type": "image/png"
         }
     ]
