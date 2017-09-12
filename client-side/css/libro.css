@@ -1,0 +1,16 @@
+/*** MOSTRA FOTO ***/
+
+#mostra_foto {
+    padding-top: 50px;
+}
+
+#chiudi_mostra {
+    position: fixed;
+    top: 4px;
+    right: 12px;
+}
+
+#foto_aperta {
+    max-height: 500px;
+    max-width: 100%;
+}

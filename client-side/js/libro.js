@@ -1,24 +1,31 @@
-home = {
+libro = {
     
     init: function() {
-        home.init_cerca();
-        home.init_aggiungi();
-        home.leggi_galleria();
+        libro.init_home();
+        libro.init_modifica();
+        libro.init_conferma();
+        libro.carica_scheda();
     },
     
-    init_cerca: function() {
-        $('#cerca').on('click', function() {
-            window.location.href = '/cerca';
+    init_home: function() {
+        $('#home').on('click', function() {
+            window.location.href = '/home';
         });
     },
     
-    init_aggiungi: function() {
-        $('#aggiungi').on('click', function() {
-            window.location.href = '/aggiungi';
+    init_modifica: function() {
+        $('#modifica').on('click', function() {
+            
         });
     },
     
-    leggi_galleria: function() {
+    init_conferma: function() {
+        $('#modifica').on('click', function() {
+            
+        });
+    },
+    
+    carica_scheda: function() {
         $.ajax({
             url: 'leggi_galleria',
             method: 'POST',
@@ -74,4 +81,4 @@ home = {
 };
 
 
-$(document).ready(home.init());
+$(document).ready(libro.init());

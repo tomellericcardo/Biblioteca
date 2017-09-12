@@ -49,12 +49,15 @@ def nuovo_libro():
     richiesta = request.get_json(force = True)
     titolo = richiesta['titolo']
     autore = richiesta['autore']
+    genere = richiesta['genere']
     descrizione = richiesta['descrizione']
+    editore = richiesta['editore']
+    anno = richiesta['anno']
     copertina = richiesta['copertina']
-    return dumps({'codice': titolo+autore+descrizione+copertina})
+    return dumps({'codice': biblioteca.nuovo_libro(titolo, autore, genere, descrizione, editore, anno, copertina)})
 
 
 # AVVIO DEL SERVER
 
 if __name__ == '__main__':
-    app.run(host = '192.168.1.67', port = 80, threaded = True, debug = True)
+    app.run(host = '192.168.1.24', port = 80, threaded = True, debug = True)

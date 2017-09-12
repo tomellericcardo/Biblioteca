@@ -71,7 +71,7 @@ input::placeholder {
     cursor: pointer;
 }
 
-#home, #mostra_isbn {
+.bottone_header {
     cursor: pointer;
 }
 
@@ -86,15 +86,10 @@ input::placeholder {
     height: 100px;
 }
 
-#placeholder_copertina {
-    padding: 70px 10px 70px 10px;
-    cursor: pointer;
-}
-
 
 /*** MODALS ***/
 
-#errore, #isbn {
+.w3-modal {
     padding-top: 30vh;
 }
 
@@ -121,41 +116,4 @@ input::placeholder {
     width: 100%;
     font-size: 12px;
     box-shadow: 0 -4px 8px 0 rgba(0, 0, 0, 0.2);
-}
-
-
-/*** COPERTINA ***/
-
-.immagine_copertina {
-    width: 100%;
-    cursor: pointer;
-}
-
-.contenitore_copertina {
-    padding: 2px;
-}
-
-
-/*** GALLERIA ALBUM ***/
-
-.galleria_album {
-    padding: 10px 3px 0px 3px;
-}
-
-
-/*** MOSTRA FOTO ***/
-
-#mostra_foto {
-    padding-top: 50px;
-}
-
-#chiudi_mostra {
-    position: fixed;
-    top: 4px;
-    right: 12px;
-}
-
-#foto_aperta {
-    max-height: 500px;
-    max-width: 100%;
 }

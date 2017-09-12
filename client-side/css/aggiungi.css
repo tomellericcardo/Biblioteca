@@ -1,0 +1,15 @@
+/*** AGGIUNGI ***/
+
+#placeholder_copertina {
+    padding: 70px 10px 70px 10px;
+    cursor: pointer;
+}
+
+#immagine_copertina {
+    width: 100%;
+    cursor: pointer;
+}
+
+#attesa {
+    display: none;
+}

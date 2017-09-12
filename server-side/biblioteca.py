@@ -20,7 +20,10 @@ class Biblioteca:
                 codice TEXT PRIMARY KEY,
                 titolo TEXT NOT NULL,
                 autore TEXT NOT NULL,
+                genere TEXT NOT NULL,
                 descrizione TEXT NOT NULL,
+                editore TEXT NOT NULL,
+                anno INT,
                 copertina TEXT NOT NULL,
                 data_ora DATETIME DEFAULT CURRENT_TIMESTAMP
             )
@@ -63,7 +66,7 @@ class Biblioteca:
         return self.leggi_riga(query, parametri)[0]
     
     def leggi_presenza(self, query, parametri = ()):
-        return self.leggi_righe(query, parametri) > 0
+        return len(self.leggi_righe(query, parametri)) > 0
     
     def scrivi(self, query, parametri = ()):
         cursore = self.g.db.cursor()
@@ -77,12 +80,12 @@ class Biblioteca:
             FROM galleria
         ''')
     
-    def nuovo_libro(self, titolo, autore, descrizione, copertina):
+    def nuovo_libro(self, titolo, autore, genere, descrizione, editore, anno, copertina):
         codice = self.genera_codice(autore, titolo)
         self.scrivi('''
-            INSERT INTO libro (codice, titolo, autore, descrizione, copertina)
-            VALUES (?, ?, ?, ?, ?)
-        ''', (codice, titolo, autore, descrizione, copertina))
+            INSERT INTO libro (codice, titolo, autore, genere, descrizione, editore, anno, copertina)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        ''', (codice, titolo, autore, genere, descrizione, editore, anno, copertina))
         return codice
     
     def genera_codice(self, autore, titolo):

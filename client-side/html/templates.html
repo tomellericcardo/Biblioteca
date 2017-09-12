@@ -5,8 +5,13 @@
     <script type="text/html" id="leggi_galleria">
         {{#lista_libri}}
             <div class="w3-col s6 m3 l2 w3-margin-top">
-                <div class="w3-card-2" onclick="home.apri_libro('{{codice}}')">
-                    <img src="{{copertina}}" class="immagine_copertina">
+                <div class="w3-card-2 w3-center libro" onclick="home.apri_libro('{{codice}}')">
+                    {{#copertina}}
+                        <img src="{{copertina}}" class="immagine_copertina">
+                    {{/copertina}}
+                    {{^copertina}}
+                        <img src="/img/nessuna_copertina.png" class="immagine_copertina">
+                    {{/copertina}}
                     <div class="w3-container w3-center">
                         <p>
                             <b>{{titolo}}</b>
@@ -23,27 +28,6 @@
                 </div>
             </div>
         {{/lista_libri}}
-        {{#spazio}}
-            <div class="w3-col s12 m12 l12" id="spazio">&nbsp;</div>
-        {{/spazio}}
-    </script>
-    
-    <!-- CARICA FOTO -->
-    <script type="text/html" id="carica_foto">
-        {{#lista_foto}}
-            <div class="w3-col s4 m2 l1 contenitore_copertina">
-                <div class="w3-card-2" onclick="album.apri_foto({{id}})">
-                    <img src="{{copertina}}" class="immagine_copertina">
-                </div>
-            </div>
-        {{/lista_foto}}
-        {{^lista_foto}}
-            <div class="w3-display-container vuoto">
-                <div class="w3-display-middle w3-center">
-                    <p class="w3-text-grey">Nessuna foto</p>
-                </div>
-            </div>
-        {{/lista_foto}}
         {{#spazio}}
             <div class="w3-col s12 m12 l12" id="spazio">&nbsp;</div>
         {{/spazio}}

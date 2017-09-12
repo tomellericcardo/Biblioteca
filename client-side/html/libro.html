@@ -2,14 +2,14 @@
 <html>
     <head>
         
-        <title>Biblioteca</title>
+        <title>Scheda Libro</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
         <meta charset="UTF-8">
         
         <!-- STYLES -->
         <link rel="stylesheet" href="/css/w3.css">
         <link rel="stylesheet" href="/css/style.css">
-        <link rel="stylesheet" href="/css/home.css">
+        <link rel="stylesheet" href="/css/libro.css">
         
         <!-- FONTS -->
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
@@ -25,13 +25,18 @@
         
         <!-- HEADER -->
         <header class="w3-container w3-center w3-blue ombra">
-            <h1 class="w3-xlarge">Biblioteca</h1>
-            <i id="cerca" class="w3-margin w3-display-topright material-icons bottone_header">search</i>
+            <i id="home" class="w3-margin w3-display-topleft material-icons bottone_header">arrow_back</i>
+            <h1 class="w3-xlarge">Scheda Libro</h1>
         </header>
         
         <!-- AGGIUNGI -->
-        <div id="aggiungi" class="w3-circle w3-card-2 w3-indigo bottone_circolare">
-            <i class="material-icons">add</i>
+        <div id="modifica" class="w3-circle w3-card-2 w3-indigo bottone_circolare">
+            <i class="material-icons">edit</i>
+        </div>
+        
+        <!-- CONFERMA -->
+        <div id="conferma" class="w3-circle w3-card-2 w3-indigo bottone_circolare">
+            <i class="material-icons">done</i>
         </div>
         
         <!-- GALLERIA -->
@@ -41,7 +46,7 @@
                     <p class="w3-text-grey">
                         <i class="material-icons w3-spin">refresh</i>
                         <br><br>Caricamento
-                        <br>scaffali...
+                        <br>scheda...
                     </p>
                 </div>
             </div>
@@ -65,7 +70,7 @@
         <script type="text/javascript" src="/js/jquery.js"></script>
         <script type="text/javascript" src="/js/mustache.js"></script>
         <script type="text/javascript" src="/js/errore.js"></script>
-        <script type="text/javascript" src="/js/home.js"></script>
+        <script type="text/javascript" src="/js/libro.js"></script>
         
     </body>
 </html>

@@ -46,24 +46,53 @@ aggiungi = {
             $('#isbn').css('display', 'none');
             errore.messaggio('Devi inserire un codice ISBN!');
         } else {
+            $('#attesa').css('display', 'inline');
             var url = 'https://www.googleapis.com/books/v1/volumes?q=isbn:' + isbn;
             $.ajax({
                 url: url,
                 method: 'GET',
                 success: function(risposta) {
-                    var libro = risposta.items[0].volumeInfo;
-                    var titolo = libro.title;
-                    var autore = libro.authors[0];
-                    $('#titolo').val(titolo);
-                    $('#autore').val(autore);
-                    $('#isbn').css('display', 'none');
+                    if (risposta.totalItems == 0) {
+                        $('#isbn').css('display', 'none');
+                        errore.messaggio('Errore durante il caricamento delle informazioni!');
+                    } else {
+                        var libro = risposta.items[0].volumeInfo;
+                        var titolo = libro.title;
+                        var autore = aggiungi.formatta_autore(libro.authors[0]);
+                        var genere = libro.categories[0];
+                        var descrizione = libro.description;
+                        var editore = libro.publisher;
+                        var anno = libro.publishedDate;
+                        var copertina = libro.imageLinks.thumbnail;
+                        $('#titolo').val(titolo);
+                        $('#autore').val(autore);
+                        $('#genere').val(genere);
+                        $('#descrizione').val(descrizione);
+                        $('#editore').val(editore);
+                        $('#anno').val(anno);
+                        $('#copertina').html('<img src="' + copertina + '" id="immagine_copertina">');
+                        aggiungi.sorgente_copertina = copertina;
+                        $('#isbn').css('display', 'none');
+                    }
+                    $('#codice_isbn').val('');
                 },
                 error: function() {
                     $('#isbn').css('display', 'none');
                     errore.messaggio('Errore durante il caricamento delle informazioni!');
                 }
+            }).then(function() {
+                $('#attesa').css('display', 'none');
             });
         }
+    },
+    
+    formatta_autore: function(autore) {
+        var lista = autore.split(' ');
+        var nuovo_autore = lista[lista.length - 1];
+        for (var i = 0; i < lista.length - 1; i++) {
+            nuovo_autore += ' ' + lista[i];
+        }
+        return nuovo_autore;
     },
     
     init_seleziona_copertina: function() {
@@ -74,43 +103,37 @@ aggiungi = {
     
     init_leggi_copertina: function() {
         $('#seleziona').change(function(evento) {
+            $('#caricamento').css('display', 'block');
+            $('#conferma').css('bottom', '65px');
             var lettore = new FileReader();
             lettore.onload = function(e) {
-                $('#caricamento').css('display', 'block');
-                $('#conferma').css('bottom', '65px');
-                aggiungi.ridimensiona_mostra(e.target.result, 200);
+                aggiungi.ridimensiona_mostra(e.target.result, 200, 350);
             };
             lettore.readAsDataURL(evento.target.files[0]);
         });
     },
     
-    ridimensiona_mostra: function(sorgente, dimensione) {
+    ridimensiona_mostra: function(sorgente, larghezza_massima, altezza_massima) {
         var immagine = document.createElement('img');
         var canvas = document.createElement('canvas');
         immagine.onload = function() {
-            var larghezza_immagine = immagine.width;
-            var altezza_immagine = immagine.height;
-            var dimensione_canvas = dimensione;
-            var dimensione_taglio, x, y;
-            if (larghezza_immagine >= altezza_immagine) {
-                if (altezza_immagine < dimensione) {
-                    dimensione_canvas = altezza_immagine;
+            var larghezza = immagine.width;
+            var altezza = immagine.height;
+            if (larghezza > altezza) {
+                if (larghezza > larghezza_massima) {
+                    altezza *= larghezza_massima / larghezza;
+                    larghezza = larghezza_massima;
                 }
-                dimensione_taglio = altezza_immagine;
-                x = (larghezza_immagine - dimensione_taglio) / 2;
-                y = 0;
             } else {
-                if (larghezza_immagine < dimensione) {
-                    dimensione_canvas = larghezza_immagine;
+                if (altezza > altezza_massima) {
+                    larghezza *= altezza_massima / altezza;
+                    altezza = altezza_massima;
                 }
-                dimensione_taglio = larghezza_immagine;
-                x = 0;
-                y = (altezza_immagine - dimensione_taglio) / 2;
             }
-            canvas.width = dimensione_canvas;
-            canvas.height = dimensione_canvas;
+            canvas.width = larghezza;
+            canvas.height = altezza;
             var contesto = canvas.getContext('2d');
-            contesto.drawImage(immagine, x, y, dimensione_taglio, dimensione_taglio, 0, 0, dimensione_canvas, dimensione_canvas);
+            contesto.drawImage(immagine, 0, 0, larghezza, altezza);
             aggiungi.mostra_immagine(canvas.toDataURL('image/png'));
         };
         immagine.src = sorgente;
@@ -138,7 +161,10 @@ aggiungi = {
         $('#titolo, #autore').css('border-color', '#757575');
         var titolo = $('#titolo').val();
         var autore = $('#autore').val();
+        var genere = $('#genere').val();
         var descrizione = $('#descrizione').val();
+        var editore = $('#editore').val();
+        var anno = $('#anno').val();
         var copertina = aggiungi.sorgente_copertina;
         if (titolo.length == 0) {
             $('#titolo').css('border-color', 'red');
@@ -155,7 +181,10 @@ aggiungi = {
                 data: JSON.stringify({
                     titolo: titolo,
                     autore: autore,
+                    genere: genere,
                     descrizione: descrizione,
+                    editore: editore,
+                    anno: anno,
                     copertina: copertina
                 }),
                 success: function(risposta) {
