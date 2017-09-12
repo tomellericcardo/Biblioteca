@@ -1,9 +1,11 @@
 aggiungi = {
     
     init: function() {
-        aggiungi.copertina_selezionata = false;
         aggiungi.sorgente_copertina = '';
         aggiungi.init_home();
+        aggiungi.init_mostra_isbn();
+        aggiungi.init_chiudi_isbn();
+        aggiungi.init_carica_isbn();
         aggiungi.init_seleziona_copertina();
         aggiungi.init_leggi_copertina();
         aggiungi.init_conferma();
@@ -13,6 +15,55 @@ aggiungi = {
         $('#home').on('click', function() {
             window.location.href = '/home';
         });
+    },
+    
+    init_mostra_isbn: function() {
+        $('#mostra_isbn').on('click', function() {
+            $('#isbn').css('display', 'block');
+        });
+    },
+    
+    init_chiudi_isbn: function() {
+        $('#chiudi_isbn, #sfondo_isbn').on('click', function() {
+            $('#isbn').css('display', 'none');
+        });
+    },
+    
+    init_carica_isbn: function() {
+        $('#carica_isbn').on('click', function() {
+            aggiungi.carica_isbn();
+        });
+        $('#codice_isbn').on('keyup', function(e) {
+            if (e.keyCode == 13) {
+                aggiungi.carica_isbn();
+            }
+        });
+    },
+    
+    carica_isbn: function() {
+        var isbn = $('#codice_isbn').val();
+        if (isbn.length == 0) {
+            $('#isbn').css('display', 'none');
+            errore.messaggio('Devi inserire un codice ISBN!');
+        } else {
+            var url = 'https://www.googleapis.com/books/v1/volumes?q=isbn:' + isbn;
+            $.ajax({
+                url: url,
+                method: 'GET',
+                success: function(risposta) {
+                    var libro = risposta.items[0].volumeInfo;
+                    var titolo = libro.title;
+                    var autore = libro.authors[0];
+                    $('#titolo').val(titolo);
+                    $('#autore').val(autore);
+                    $('#isbn').css('display', 'none');
+                },
+                error: function() {
+                    $('#isbn').css('display', 'none');
+                    errore.messaggio('Errore durante il caricamento delle informazioni!');
+                }
+            });
+        }
     },
     
     init_seleziona_copertina: function() {
@@ -69,7 +120,6 @@ aggiungi = {
         $('#caricamento').css('display', 'none');
         $('#conferma').css('bottom', '20px');
         $('#copertina').html('<img src="' + sorgente + '" id="immagine_copertina">');
-        aggiungi.copertina_selezionata = true;
         aggiungi.sorgente_copertina = sorgente;
     },
     
@@ -89,17 +139,13 @@ aggiungi = {
         var titolo = $('#titolo').val();
         var autore = $('#autore').val();
         var descrizione = $('#descrizione').val();
-        if (!descrizione) {
-            descrizione = '';
-        }
+        var copertina = aggiungi.sorgente_copertina;
         if (titolo.length == 0) {
             $('#titolo').css('border-color', 'red');
             errore.messaggio('Devi inserire il titolo del libro!');
         } else if (autore.length == 0) {
             $('#autore').css('border-color', 'red');
             errore.messaggio('Devi inserire l\'autore del libro!');
-        } else if (!aggiungi.copertina_selezionata) {
-            errore.messaggio('Devi selezionare una copertina per il libro!');
         } else {
             $.ajax({
                 url: 'nuovo_libro',
@@ -110,7 +156,7 @@ aggiungi = {
                     titolo: titolo,
                     autore: autore,
                     descrizione: descrizione,
-                    copertina: aggiungi.sorgente_copertina
+                    copertina: copertina
                 }),
                 success: function(risposta) {
                     if (risposta.codice) {

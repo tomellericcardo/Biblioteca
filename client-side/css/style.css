@@ -1,5 +1,9 @@
 /*** FONTS ***/
 
+p, h1, button {
+    font-family: 'Roboto', sans-serif;
+}
+
 i {
     vertical-align: middle;
 }
@@ -67,7 +71,7 @@ input::placeholder {
     cursor: pointer;
 }
 
-#home {
+#home, #mostra_isbn {
     cursor: pointer;
 }
 
@@ -83,14 +87,14 @@ input::placeholder {
 }
 
 #placeholder_copertina {
-    padding: 100px 0 100px 0;
+    padding: 70px 10px 70px 10px;
     cursor: pointer;
 }
 
 
-/*** ERRORE ***/
+/*** MODALS ***/
 
-#errore {
+#errore, #isbn {
     padding-top: 30vh;
 }
 
@@ -108,9 +112,9 @@ input::placeholder {
 }
 
 
-/*** CARICAMENTO & ARRESTO ***/
+/*** CARICAMENTO ***/
 
-#caricamento, #arresto {
+#caricamento {
     display: none;
     position: fixed;
     bottom: 0px;
@@ -136,18 +140,6 @@ input::placeholder {
 
 .galleria_album {
     padding: 10px 3px 0px 3px;
-}
-
-
-/*** PROGRESS BAR ***/
-
-#progress_bar_container {
-    padding: 15px;
-}
-
-#progress_bar {
-    height: 20px;
-    width: 0%;
 }
 
 
