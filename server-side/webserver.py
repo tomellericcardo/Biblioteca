@@ -51,10 +51,10 @@ def nuovo_libro():
     autore = richiesta['autore']
     descrizione = richiesta['descrizione']
     copertina = richiesta['copertina']
-    return dumps({'codice': biblioteca.nuovo_libro(titolo, autore, descrizione, copertina)})
+    return dumps({'codice': titolo+autore+descrizione+copertina})
 
 
 # AVVIO DEL SERVER
 
 if __name__ == '__main__':
-    app.run(host = '192.168.1.67', port = 80, threaded = True)
+    app.run(host = '192.168.1.67', port = 80, threaded = True, debug = True)
