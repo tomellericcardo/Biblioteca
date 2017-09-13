@@ -150,7 +150,7 @@ aggiungi = {
         $('#conferma').on('click', function() {
             aggiungi.conferma();
         });
-        $('#titolo, #autore, #descrizione').on('keyup', function(e) {
+        $('#titolo, #autore, #genere, #editore, #anno').on('keyup', function(e) {
             if (e.keyCode == 13) {
                 aggiungi.conferma();
             }

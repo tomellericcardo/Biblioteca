@@ -2,26 +2,27 @@
 
 #immagine_copertina {
     width: 100%;
+    cursor: pointer;
 }
 
-#conferma {
+#conferma_modifiche {
     display: none;
 }
 
 
 /*** MOSTRA FOTO ***/
 
-#mostra_foto {
-    padding-top: 50px;
+#mostra_copertina {
+    padding-top: 100px;
 }
 
 #chiudi_mostra {
     position: fixed;
-    top: 4px;
+    top: 60px;
     right: 12px;
 }
 
-#foto_aperta {
+#copertina_aperta {
     max-height: 500px;
     max-width: 100%;
 }

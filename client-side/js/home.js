@@ -50,8 +50,8 @@ home = {
                 if (titolo.length > 12) {
                     titolo = titolo.substring(0, 10) + '...';
                 }
-                if (autore.length > 14) {
-                    autore = autore.substring(0, 12) + '...';
+                if (autore.length > 13) {
+                    autore = autore.substring(0, 11) + '...';
                 }
                 nuova_lista[i] = {
                     codice: codice,

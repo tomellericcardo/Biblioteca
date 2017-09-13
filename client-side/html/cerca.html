@@ -2,7 +2,7 @@
 <html>
     <head>
         
-        <title>Biblioteca</title>
+        <title>Cerca</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
         <meta charset="UTF-8">
         
@@ -25,26 +25,30 @@
         
         <!-- HEADER -->
         <header class="w3-container w3-center w3-blue ombra">
-            <h1 class="w3-xlarge">Biblioteca</h1>
-            <i id="cerca" class="w3-margin w3-display-topright material-icons bottone_header">search</i>
+            <i id="home" class="w3-margin w3-display-topleft material-icons bottone_header">arrow_back</i>
+            <h1 class="w3-xlarge">Cerca</h1>
+            <i id="liste" class="w3-margin w3-display-topright material-icons bottone_header">view_list</i>
         </header>
         
-        <!-- AGGIUNGI -->
-        <div id="aggiungi" class="w3-circle w3-card-2 w3-indigo bottone_circolare">
-            <i class="material-icons">add</i>
+        <!-- RICERCA -->
+        <div class="w3-container w3-padding-top w3-white">
+            <label for="filtro" class="w3-label">Cerca per:</label>
+            <select id="filtro" name="filtro" class="w3-select">
+                <option value="titolo">Titolo</option>
+                <option value="autore">Autore</option>
+                <option value="genere">Genere</option>
+                <option value="editore">Editore</option>
+                <option value="anno">Anno di pubblicazione</option>
+            </select>
+            <input type="text" id="richiesta" class="w3-input" placeholder="Inserisci una parola chiave">
+            <div class="w3-margin w3-right">
+                <span id="attesa"><i class="material-icons w3-margin-right w3-spin w3-text-grey">refresh</i></span>
+                <button id="cerca" class="w3-btn w3-right w3-indigo">Cerca</button>
+            </div>
         </div>
         
-        <!-- GALLERIA -->
-        <div id="galleria" class="w3-row-padding w3-white">
-            <div class="w3-display-container vuoto">
-                <div class="w3-display-middle w3-center">
-                    <p class="w3-text-grey">
-                        <i class="w3-xxlarge material-icons w3-spin">refresh</i>
-                        <br><br>Caricamento
-                        <br>scaffali...
-                    </p>
-                </div>
-            </div>
+        <!-- RISULTATI -->
+        <div id="risultati" class="w3-row-padding w3-white">
         </div>
         
         <!-- ERRORE -->
@@ -65,7 +69,7 @@
         <script type="text/javascript" src="/js/jquery.js"></script>
         <script type="text/javascript" src="/js/mustache.js"></script>
         <script type="text/javascript" src="/js/errore.js"></script>
-        <script type="text/javascript" src="/js/home.js"></script>
+        <script type="text/javascript" src="/js/cerca.js"></script>
         
     </body>
 </html>

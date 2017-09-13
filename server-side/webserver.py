@@ -15,11 +15,11 @@ biblioteca = Biblioteca(g, 'database.db')
 
 @app.before_request
 def apri_connessione():
-    biblioteca.apri_connessione()
+    biblioteca.manager.apri_connessione()
 
 @app.teardown_request
 def chiudi_connessione(exception):
-    biblioteca.chiudi_connessione()
+    biblioteca.manager.chiudi_connessione()
 
 
 # INVIO FILES
@@ -50,6 +50,31 @@ def leggi_scheda():
     codice = richiesta['codice']
     return dumps({'scheda': biblioteca.leggi_scheda(codice)})
 
+@app.route('/elimina_scheda', methods = ['POST'])
+def elimina_scheda():
+    richiesta = request.get_json(force = True)
+    codice = richiesta['codice']
+    if biblioteca.codice_presente(codice):
+        biblioteca.elimina_scheda(codice)
+        return dumps({'successo': True})
+    return dumps({'errore': True})
+
+@app.route('/modifica_scheda', methods = ['POST'])
+def modifica_scheda():
+    richiesta = request.get_json(force = True)
+    codice = richiesta['codice']
+    titolo = richiesta['titolo']
+    autore = richiesta['autore']
+    genere = richiesta['genere']
+    descrizione = richiesta['descrizione']
+    editore = richiesta['editore']
+    anno = richiesta['anno']
+    if biblioteca.codice_presente(codice):
+        copertina = biblioteca.leggi_copertina(codice)
+        biblioteca.elimina_scheda(codice)
+        return dumps({'codice': biblioteca.nuovo_libro(titolo, autore, genere, descrizione, editore, anno, copertina)})
+    return dumps({'errore': True})
+
 @app.route('/nuovo_libro', methods = ['POST'])
 def nuovo_libro():
     richiesta = request.get_json(force = True)
@@ -62,8 +87,15 @@ def nuovo_libro():
     copertina = richiesta['copertina']
     return dumps({'codice': biblioteca.nuovo_libro(titolo, autore, genere, descrizione, editore, anno, copertina)})
 
+@app.route('/esegui_ricerca', methods = ['POST'])
+def esegui_ricerca():
+    richiesta = request.get_json(force = True)
+    filtro = richiesta['filtro']
+    richiesta = richiesta['richiesta']
+    return dumps({'lista_libri': biblioteca.esegui_ricerca(filtro, richiesta)})
+
 
 # AVVIO DEL SERVER
 
 if __name__ == '__main__':
-    app.run(host = '192.168.1.22', port = 80, threaded = True, debug = True)
+    app.run(host = '192.168.1.24', port = 80, threaded = True, debug = True)
