@@ -1,36 +1,70 @@
 <!DOCTYPE html>
-<html>
     
-    <!-- GALLERIA -->
-    <script type="text/html" id="leggi_galleria">
-        {{#lista_libri}}
-            <div class="w3-col s6 m3 l2 w3-margin-top">
-                <div class="w3-card-2 w3-center libro" onclick="home.apri_libro('{{codice}}')">
-                    {{#copertina}}
-                        <img src="{{copertina}}" class="immagine_copertina">
-                    {{/copertina}}
-                    {{^copertina}}
-                        <img src="/img/nessuna_copertina.png" class="immagine_copertina">
-                    {{/copertina}}
-                    <div class="w3-container w3-center">
-                        <p>
-                            <b>{{titolo}}</b>
-                            <br><i>{{autore}}</i>
-                        </p>
-                    </div>
+<!-- GALLERIA -->
+<script type="text/html" id="leggi_galleria">
+    {{#lista_libri}}
+        <div class="w3-col s6 m3 l2 w3-margin-top">
+            <div class="w3-card-2 w3-center libro" onclick="home.apri_libro('{{codice}}')">
+                {{#copertina}}
+                    <img src="{{copertina}}" class="immagine_copertina">
+                {{/copertina}}
+                {{^copertina}}
+                    <img src="/img/copertina.png" class="immagine_copertina">
+                {{/copertina}}
+                <div class="w3-container w3-center">
+                    <p>
+                        <b>{{titolo}}</b>
+                        <br><i>{{autore}}</i>
+                    </p>
                 </div>
             </div>
-        {{/lista_libri}}
-        {{^lista_libri}}
-            <div class="w3-display-container vuoto">
-                <div class="w3-display-middle w3-center">
-                    <p class="w3-text-grey">Nessun libro trovato...</p>
-                </div>
+        </div>
+    {{/lista_libri}}
+    {{^lista_libri}}
+        <div class="w3-display-container vuoto">
+            <div class="w3-display-middle w3-center">
+                <p class="w3-text-grey">Nessun libro trovato...</p>
             </div>
-        {{/lista_libri}}
-        {{#spazio}}
-            <div class="w3-col s12 m12 l12" id="spazio">&nbsp;</div>
-        {{/spazio}}
-    </script>
-    
-</html>
+        </div>
+    {{/lista_libri}}
+    {{#spazio}}
+        <div class="w3-col s12 m12 l12" id="spazio">&nbsp;</div>
+    {{/spazio}}
+</script>
+
+<!-- LEGGI SCHEDA -->
+<script type="text/html" id="leggi_scheda">
+    {{#scheda}}
+        <div class="w3-row-padding w3-padding-32">
+            <div id="copertina" class="w3-col s4 m2 l1">
+                {{#copertina}}
+                    <img src="{{copertina}}" id="immagine_copertina">
+                {{/copertina}}
+                {{^copertina}}
+                    <img src="/img/copertina.png" id="immagine_copertina">
+                {{/copertina}}
+            </div>
+            <div class="w3-col s8 m10 l11">
+                <input type="text" id="codice" value="{{codice}}" placeholder="Codice" class="w3-input" disabled><br>
+                <input type="text" id="titolo" value="{{titolo}}" placeholder="Titolo" class="w3-input" disabled>
+                <input type="text" id="autore" value="{{autore}}" placeholder="Autore" class="w3-input" disabled>
+            </div>
+        </div>
+        <div class="w3-container">
+            <textarea id="descrizione" rows="10" placeholder="Nessuna descrizione..." class="w3-input" disabled>{{descrizione}}</textarea><br>
+            <input type="text" id="genere" value="{{genere}}" placeholder="Genere" class="w3-input" disabled><br>
+            <input type="text" id="editore" value="{{editore}}" placeholder="Editore" class="w3-input" disabled>
+            <input type="number" id="anno" value="{{anno}}" placeholder="Anno di pubblicazione" class="w3-input" disabled>
+        </div>
+    {{/scheda}}
+    {{^scheda}}
+        <div class="w3-display-container vuoto">
+            <div class="w3-display-middle w3-center">
+                <p class="w3-text-grey">Libro non trovato...</p>
+            </div>
+        </div>
+    {{/scheda}}
+    {{#spazio}}
+        <div class="w3-col s12 m12 l12" id="spazio">&nbsp;</div>
+    {{/spazio}}
+</script>

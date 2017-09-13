@@ -101,7 +101,7 @@ class Biblioteca:
         else:
             codice += titolo
         presente = True
-        i = -1
+        i = 0
         while presente:
             i += 1
             presente = self.leggi_presenza('''
@@ -110,3 +110,10 @@ class Biblioteca:
                 WHERE codice = ?
             ''', (codice + str(i),))
         return codice + str(i)
+    
+    def leggi_scheda(self, codice):
+        return self.leggi_righe('''
+            SELECT codice, titolo, autore, genere, descrizione, editore, anno, copertina
+            FROM libro
+            WHERE codice = ?
+        ''', (codice,))

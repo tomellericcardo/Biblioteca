@@ -1,3 +1,14 @@
+/*** SCHEDA ***/
+
+#immagine_copertina {
+    width: 100%;
+}
+
+#conferma {
+    display: none;
+}
+
+
 /*** MOSTRA FOTO ***/
 
 #mostra_foto {

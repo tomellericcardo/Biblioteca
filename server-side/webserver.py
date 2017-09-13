@@ -44,6 +44,12 @@ def invia_file(nome_cartella, nome_file):
 def leggi_galleria():
     return dumps({'lista_libri': biblioteca.leggi_galleria()})
 
+@app.route('/leggi_scheda', methods = ['POST'])
+def leggi_scheda():
+    richiesta = request.get_json(force = True)
+    codice = richiesta['codice']
+    return dumps({'scheda': biblioteca.leggi_scheda(codice)})
+
 @app.route('/nuovo_libro', methods = ['POST'])
 def nuovo_libro():
     richiesta = request.get_json(force = True)
@@ -60,4 +66,4 @@ def nuovo_libro():
 # AVVIO DEL SERVER
 
 if __name__ == '__main__':
-    app.run(host = '192.168.1.24', port = 80, threaded = True, debug = True)
+    app.run(host = '192.168.1.22', port = 80, threaded = True, debug = True)

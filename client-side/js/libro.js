@@ -4,7 +4,7 @@ libro = {
         libro.init_home();
         libro.init_modifica();
         libro.init_conferma();
-        libro.carica_scheda();
+        libro.leggi_scheda();
     },
     
     init_home: function() {
@@ -25,17 +25,31 @@ libro = {
         });
     },
     
-    carica_scheda: function() {
+    leggi_parametro: function(parametro) {
+        var indirizzo_pagina = decodeURIComponent(window.location.search.substring(1));
+        var variabili = indirizzo_pagina.split('&');
+        var nome_parametro, i;
+        for (i = 0; i < variabili.length; i++) {
+            nome_parametro = variabili[i].split('=');
+            if (nome_parametro[0] === parametro) {
+                return nome_parametro[1] === undefined ? true : nome_parametro[1];
+            }
+        }
+    },
+    
+   leggi_scheda: function() {
+        var codice = libro.leggi_parametro('codice');
         $.ajax({
-            url: 'leggi_galleria',
+            url: 'leggi_scheda',
             method: 'POST',
             contentType: 'application/json',
             dataType: 'json',
+            data: JSON.stringify({codice: codice}),
             success: function(risposta) {
-                risposta = home.formatta_galleria(risposta);
+                risposta = libro.formatta_scheda(risposta);
                 $.get('/html/templates.html', function(contenuto) {
-                    var template = $(contenuto).filter('#leggi_galleria').html();
-                    $('#galleria').html(Mustache.render(template, risposta));
+                    var template = $(contenuto).filter('#leggi_scheda').html();
+                    $('#scheda').html(Mustache.render(template, risposta));
                 });
             },
             error: function() {
@@ -44,38 +58,24 @@ libro = {
         });
     },
     
-    formatta_galleria: function(risposta) {
-        var lista_libri = risposta.lista_libri;
-        if (lista_libri) {
-            var nuova_lista = [];
-            var i, libro, codice, titolo, autore;
-            for (i = 0; i < lista_libri.length; i++) {
-                libro = lista_libri[i];
-                codice = libro[0];
-                titolo = libro[1];
-                autore = libro[2];
-                if (titolo.length > 12) {
-                    titolo = titolo.substring(0, 10) + '...';
-                }
-                if (autore.length > 14) {
-                    autore = autore.substring(0, 12) + '...';
-                }
-                nuova_lista[i] = {
-                    codice: codice,
-                    titolo: titolo,
-                    autore: autore,
-                    copertina: libro[3]
-                };
-            }
-            risposta.lista_libri = nuova_lista;
+    formatta_scheda: function(risposta) {
+        var scheda = risposta.scheda[0];
+        if (scheda) {
+            var nuova_scheda = {
+                codice: scheda[0],
+                titolo: scheda[1],
+                autore: scheda[2],
+                genere: scheda[3],
+                descrizione: scheda[4],
+                editore: scheda[5],
+                anno: scheda[6],
+                copertina: scheda[7]
+            };
+            risposta.scheda = nuova_scheda;
             risposta.spazio = true;
             return risposta;
         }
         return [];
-    },
-    
-    apri_libro: function(codice) {
-        window.location.href = '/libro?codice=' + codice;
     }
     
 };
