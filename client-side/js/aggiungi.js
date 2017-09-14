@@ -168,10 +168,10 @@ aggiungi = {
         var copertina = aggiungi.sorgente_copertina;
         if (titolo.length == 0) {
             $('#titolo').css('border-color', 'red');
-            errore.messaggio('Devi inserire il titolo del libro!');
+            errore.messaggio('Devi inserire il titolo del libro per poterlo catalogare!');
         } else if (autore.length == 0) {
             $('#autore').css('border-color', 'red');
-            errore.messaggio('Devi inserire l\'autore del libro!');
+            errore.messaggio('Devi inserire l\'autore del libro per poterlo catalogare!');
         } else {
             $.ajax({
                 url: 'nuovo_libro',

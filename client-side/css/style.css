@@ -43,7 +43,7 @@ input:focus {
     outline: none;
 }
 
-input::placeholder {
+input::placeholder, textarea::placeholder {
     opacity: 1;
     color: #989898;
 }
@@ -79,7 +79,7 @@ input::placeholder {
 /*** SPAZIATORI ***/
 
 .vuoto {
-    height: 70vh;
+    height: 60vh;
 }
 
 #spazio {

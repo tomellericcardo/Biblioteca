@@ -15,7 +15,7 @@ class Biblioteca:
         ''')
     
     def leggi_scheda(self, codice):
-        return self.manager.leggi_righe('''
+        return self.manager.leggi_riga('''
             SELECT codice, titolo, autore, genere, descrizione, editore, anno, copertina
             FROM libro
             WHERE codice = ?
@@ -87,3 +87,34 @@ class Biblioteca:
             WHERE LOWER(''' + filtro + ''')
             REGEXP ?
         ''', (richiesta,))
+    
+    def invia_recensione(self, libro, valore, autore, testo):
+        self.manager.scrivi('''
+            INSERT INTO recensione (libro, valore, autore, testo)
+            VALUES (?, ?, ?, ?)
+        ''', (libro, valore, autore, testo))
+    
+    def leggi_sommario(self, libro):
+        return self.manager.leggi_riga('''
+            SELECT l.titolo, l.autore, l.copertina, AVG(r.valore)
+            FROM libro l
+            INNER JOIN recensione r
+            ON l.codice = r.libro
+            WHERE r.libro = ?
+            GROUP BY r.libro
+        ''', (libro,))
+    
+    def leggi_recensioni(self, libro):
+        return self.manager.leggi_righe('''
+            SELECT id, valore, autore, testo
+            FROM recensione
+            WHERE libro = ?
+            ORDER BY valore DESC
+        ''', (libro,))
+    
+    def elimina_recensione(self, id_recensione):
+        self.manager.scrivi('''
+            DELETE
+            FROM recensione
+            WHERE id = ?
+        ''', (id_recensione,))

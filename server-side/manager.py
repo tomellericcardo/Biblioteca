@@ -31,9 +31,21 @@ class Manager:
         ''')
         database.commit()
         cursore.execute('''
+            CREATE TABLE IF NOT EXISTS recensione (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                libro TEXT NOT NULL,
+                valore INT NOT NULL,
+                autore TEXT NOT NULL,
+                testo TEXT NOT NULL,
+                data_ora DATETIME DEFAULT CURRENT_TIMESTAMP
+            )
+        ''')
+        database.commit()
+        cursore.execute('''
             CREATE VIEW IF NOT EXISTS galleria AS
             SELECT codice, titolo, autore, copertina
             FROM libro
+            ORDER BY data_ora DESC
             LIMIT 20
         ''')
         database.commit()

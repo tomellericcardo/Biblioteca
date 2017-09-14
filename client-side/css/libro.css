@@ -9,6 +9,10 @@
     display: none;
 }
 
+#recensioni, #mostra_elimina {
+    width: 100%;
+}
+
 
 /*** MOSTRA FOTO ***/
 

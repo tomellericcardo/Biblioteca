@@ -94,8 +94,31 @@ def esegui_ricerca():
     richiesta = richiesta['richiesta']
     return dumps({'lista_libri': biblioteca.esegui_ricerca(filtro, richiesta)})
 
+@app.route('/invia_recensione', methods = ['POST'])
+def invia_recensione():
+    richiesta = request.get_json(force = True)
+    libro = richiesta['libro']
+    valore = richiesta['valore']
+    autore = richiesta['autore']
+    testo = richiesta['testo']
+    biblioteca.invia_recensione(libro, valore, autore, testo)
+    return dumps({'successo': True})
+
+@app.route('/leggi_recensioni', methods = ['POST'])
+def leggi_recensioni():
+    richiesta = request.get_json(force = True)
+    libro = richiesta['libro']
+    return dumps({'sommario': biblioteca.leggi_sommario(libro), 'recensioni': biblioteca.leggi_recensioni(libro)})
+
+@app.route('/elimina_recensione', methods = ['POST'])
+def elimina_recensione():
+    richiesta = request.get_json(force = True)
+    id_recensione = richiesta['id']
+    biblioteca.elimina_recensione(id_recensione)
+    return dumps({'successo': True})
+
 
 # AVVIO DEL SERVER
 
 if __name__ == '__main__':
-    app.run(host = '192.168.1.24', port = 80, threaded = True, debug = True)
+    app.run(host = '192.168.1.67', port = 80, threaded = True, debug = True)

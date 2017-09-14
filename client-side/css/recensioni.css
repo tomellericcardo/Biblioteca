@@ -1,0 +1,17 @@
+/*** SOMMARIO ***/
+
+#immagine_copertina {
+    width: 100%;
+    cursor: pointer;
+}
+
+
+/*** NUOVA RECENSIONE ***/
+
+#nuova_recensione {
+    padding-top: 15vh;
+}
+
+.stella {
+    cursor: pointer;
+}

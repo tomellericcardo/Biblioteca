@@ -91,11 +91,13 @@
                 <input type="text" id="autore" value="{{autore}}" placeholder="Autore" class="w3-input" disabled>
             </div>
         </div>
-        <div class="w3-container">
+        <div class="w3-container w3-white">
             <textarea id="descrizione" rows="10" placeholder="Nessuna descrizione..." class="w3-input" disabled>{{descrizione}}</textarea><br>
             <input type="text" id="genere" value="{{genere}}" placeholder="Genere" class="w3-input" disabled><br>
             <input type="text" id="editore" value="{{editore}}" placeholder="Editore" class="w3-input" disabled>
-            <input type="number" id="anno" value="{{anno}}" placeholder="Anno di pubblicazione" class="w3-input" disabled>
+            <input type="number" id="anno" value="{{anno}}" placeholder="Anno di pubblicazione" class="w3-input" disabled><br>
+            <button id="recensioni" class="w3-btn w3-margin-top w3-amber w3-text-white"><i class="material-icons">star</i> <b>Recensioni</b></button>
+            <button id="mostra_elimina" class="w3-btn w3-margin-top w3-red"><i class="material-icons">delete</i> <b>Elimina Scheda</b></button>
         </div>
     {{/scheda}}
     {{^scheda}}
@@ -109,6 +111,61 @@
             </div>
         </div>
     {{/scheda}}
+    {{#spazio}}
+        <div class="w3-col s12 m12 l12" id="spazio">&nbsp;</div>
+    {{/spazio}}
+</script>
+
+<!-- LEGGI SOMMARIO -->
+<script type="text/html" id="leggi_sommario">
+    {{#sommario}}
+        <div class="w3-row-padding w3-margin-top">
+            <div id="copertina" class="w3-col s4 m2 l1">
+                {{#copertina}}
+                    <img src="{{copertina}}" id="immagine_copertina">
+                {{/copertina}}
+                {{^copertina}}
+                    <img src="/img/copertina.png" id="immagine_copertina">
+                {{/copertina}}
+            </div>
+            <div class="w3-col s8 m10 l11">
+                <p class="w3-large">
+                    <b>{{titolo}}</b>
+                    <br><i>{{autore}}</i>
+                    <br><span class="w3-xxlarge w3-text-amber">{{voto}}</span>
+                </p>
+            </div>
+        </div>
+    {{/sommario}}
+</script>
+
+<!-- LEGGI RECENSIONI -->
+<script type="text/html" id="leggi_recensioni">
+    {{#recensioni}}
+        <div class="w3-row-padding w3-margin-top">
+            <div class="w3-col s2 m2 l1">
+                <span class="w3-xxxlarge w3-text-amber">{{valore}}</span>
+            </div>
+            <div class="w3-col s10 m10 l11">
+                <p>
+                    <span onclick="recensioni.elimina_recensione('{{id}}')" class="w3-closebtn w3-text-red">&times;</span>
+                    <b>{{autore}}</b>
+                    <br><i>{{testo}}</i>
+                </p>
+            </div>
+        </div>
+    {{/recensioni}}
+    {{^recensioni}}
+        <div class="w3-display-container vuoto">
+            <div class="w3-display-middle w3-center">
+                <p class="w3-text-grey">
+                    <i class="w3-jumbo material-icons">star</i>
+                    <br><br>Nessuna
+                    <br>recensione...
+                </p>
+            </div>
+        </div>
+    {{/recensioni}}
     {{#spazio}}
         <div class="w3-col s12 m12 l12" id="spazio">&nbsp;</div>
     {{/spazio}}
