@@ -1,6 +1,7 @@
 aggiungi = {
     
     init: function() {
+        aggiungi.init_scanner();
         aggiungi.sorgente_copertina = '';
         aggiungi.init_home();
         aggiungi.init_mostra_isbn();
@@ -9,6 +10,27 @@ aggiungi = {
         aggiungi.init_seleziona_copertina();
         aggiungi.init_leggi_copertina();
         aggiungi.init_conferma();
+    },
+    
+    leggi_parametro: function(parametro) {
+        var indirizzo_pagina = decodeURIComponent(window.location.search.substring(1));
+        var variabili = indirizzo_pagina.split('&');
+        var nome_parametro, i;
+        for (i = 0; i < variabili.length; i++) {
+            nome_parametro = variabili[i].split('=');
+            if (nome_parametro[0] === parametro) {
+                return nome_parametro[1] === undefined ? true : nome_parametro[1];
+            }
+        }
+    },
+    
+    init_scanner: function() {
+        var isbn = aggiungi.leggi_parametro('isbn');
+        if (isbn) {
+            $('#codice_isbn').val(isbn);
+            $('#isbn').css('display', 'block');
+            aggiungi.carica_isbn();
+        }
     },
     
     init_home: function() {
