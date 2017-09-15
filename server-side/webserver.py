@@ -56,6 +56,7 @@ def elimina_scheda():
     codice = richiesta['codice']
     if biblioteca.codice_presente(codice):
         biblioteca.elimina_scheda(codice)
+        biblioteca.elimina_recensioni(codice)
         return dumps({'successo': True})
     return dumps({'errore': True})
 
@@ -72,7 +73,10 @@ def modifica_scheda():
     if biblioteca.codice_presente(codice):
         copertina = biblioteca.leggi_copertina(codice)
         biblioteca.elimina_scheda(codice)
-        return dumps({'codice': biblioteca.nuovo_libro(titolo, autore, genere, descrizione, editore, anno, copertina)})
+        nuovo_codice = biblioteca.nuovo_libro(titolo, autore, genere, descrizione, editore, anno, copertina)
+        if (codice != nuovo_codice):
+            biblioteca.aggiorna_recensioni(codice, nuovo_codice)
+        return dumps({'codice': nuovo_codice})
     return dumps({'errore': True})
 
 @app.route('/nuovo_libro', methods = ['POST'])

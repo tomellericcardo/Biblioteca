@@ -55,7 +55,7 @@ recensioni = {
         $('#stella3').on('click', function() {
             recensioni.valore_recensione = 3;
             $('#stella1, #stella2, #stella3').html('star');
-            $('#stella4, #stella4').html('star_border');
+            $('#stella4, #stella5').html('star_border');
         });
         $('#stella4').on('click', function() {
             recensioni.valore_recensione = 4;
@@ -136,11 +136,12 @@ recensioni = {
     formatta_recensioni: function(risposta) {
         var sommario = risposta.sommario;
         if (sommario) {
+            var voto = Number((sommario[3]).toFixed(1));
             var nuovo_sommario = {
                 titolo: sommario[0],
                 autore: sommario[1],
                 copertina: sommario[2],
-                voto: sommario[3]
+                voto: voto
             };
             risposta.sommario = nuovo_sommario;
         } else {

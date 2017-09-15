@@ -36,7 +36,7 @@ class Biblioteca:
         ''', (codice,))
     
     def elimina_scheda(self, codice):
-        return self.manager.scrivi('''
+        self.manager.scrivi('''
             DELETE
             FROM libro
             WHERE codice = ?
@@ -52,6 +52,9 @@ class Biblioteca:
     
     def genera_codice(self, autore, titolo):
         codice = ''
+        lista_nomi = autore.split(' ')
+        if (len(lista_nomi) > 1):
+            autore = lista_nomi[len(lista_nomi) - 1]
         autore = self.formatta_stringa(autore)
         titolo = self.formatta_stringa(titolo)
         if len(autore) > 5:
@@ -118,3 +121,17 @@ class Biblioteca:
             FROM recensione
             WHERE id = ?
         ''', (id_recensione,))
+    
+    def elimina_recensioni(self, libro):
+        self.manager.scrivi('''
+            DELETE
+            FROM recensione
+            WHERE libro = ?
+        ''', (libro,))
+    
+    def aggiorna_recensioni(self, libro, nuovo_libro):
+        self.manager.scrivi('''
+            UPDATE libro
+            SET libro = ?
+            WHERE libro = ?
+        ''', (nuovo_libro, libro))

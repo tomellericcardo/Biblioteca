@@ -58,7 +58,7 @@ aggiungi = {
                     } else {
                         var libro = risposta.items[0].volumeInfo;
                         var titolo = libro.title;
-                        var autore = aggiungi.formatta_autore(libro.authors[0]);
+                        var autore = libro.authors[0];
                         var genere = libro.categories[0];
                         var descrizione = libro.description;
                         var editore = libro.publisher;
@@ -84,15 +84,6 @@ aggiungi = {
                 $('#attesa').css('display', 'none');
             });
         }
-    },
-    
-    formatta_autore: function(autore) {
-        var lista = autore.split(' ');
-        var nuovo_autore = lista[lista.length - 1];
-        for (var i = 0; i < lista.length - 1; i++) {
-            nuovo_autore += ' ' + lista[i];
-        }
-        return nuovo_autore;
     },
     
     init_seleziona_copertina: function() {
