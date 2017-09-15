@@ -125,4 +125,4 @@ def elimina_recensione():
 # AVVIO DEL SERVER
 
 if __name__ == '__main__':
-    app.run(host = '192.168.1.67', port = 80, threaded = True, debug = True)
+    app.run(host = '192.168.1.94', port = 80, threaded = True, debug = True)
