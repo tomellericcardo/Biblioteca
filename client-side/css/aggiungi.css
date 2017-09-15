@@ -13,3 +13,10 @@
 #apri_scanner {
     width: 100%;
 }
+
+
+/*** SCANNER ***/
+
+#scanner {
+    display: none;
+}

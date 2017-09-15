@@ -71,7 +71,7 @@
                 </div>
                 <div class="w3-container w3-padding-bottom w3-white">
                     <p class="w3-center">
-                        <a href="/scanner" class="w3-large">Scannerizza il codice ISBN</a>
+                        <button id="carica_foto" class="w3-btn w3-margin-top w3-green"><i class="material-icons">add_a_photo</i> <b>Scannerizza il codice ISBN</b></button>
                     </p>
                     <input type="number" id="codice_isbn" class="w3-input w3-margin-top" placeholder="Inserisci l'ISBN">
                     <div class="w3-margin w3-right">
@@ -81,6 +81,74 @@
                 </div>
             </div>
         </div>
+        
+        <section id="scanner" class="container">
+            <div class="controls">
+                <fieldset class="input-group">
+                    <input type="file" accept="image/*" capture="camera" id="file_input">
+                </fieldset>
+                <fieldset class="reader-config-group">
+                    <label>
+                        <span>Barcode-Type</span>
+                        <select name="decoder_readers">
+                            <option value="code_128">Code 128</option>
+                            <option value="code_39">Code 39</option>
+                            <option value="code_39_vin">Code 39 VIN</option>
+                            <option value="ean" selected="selected">EAN</option>
+                            <option value="ean_extended">EAN-extended</option>
+                            <option value="ean_8">EAN-8</option>
+                            <option value="upc">UPC</option>
+                            <option value="upc_e">UPC-E</option>
+                            <option value="codabar">Codabar</option>
+                            <option value="i2of5">Interleaved 2 of 5</option>
+                            <option value="2of5">Standard 2 of 5</option>
+                            <option value="code_93">Code 93</option>
+                        </select>
+                    </label>
+                    <label>
+                        <span>Resolution (long side)</span>
+                        <select name="input-stream_size">
+                            <option value="320">320px</option>
+                            <option value="640">640px</option>
+                            <option selected="selected" value="800">800px</option>
+                            <option value="1280">1280px</option>
+                            <option value="1600">1600px</option>
+                            <option value="1920">1920px</option>
+                        </select>
+                    </label>
+                    <label>
+                        <span>Patch-Size</span>
+                        <select name="locator_patch-size">
+                            <option value="x-small">x-small</option>
+                            <option value="small">small</option>
+                            <option value="medium">medium</option>
+                            <option selected="selected" value="large">large</option>
+                            <option value="x-large">x-large</option>
+                        </select>
+                    </label>
+                    <label>
+                        <span>Half-Sample</span>
+                        <input type="checkbox" name="locator_half-sample" />
+                    </label>
+                    <label>
+                        <span>Single Channel</span>
+                        <input type="checkbox" name="input-stream_single-channel" />
+                    </label>
+                    <label>
+                        <span>Workers</span>
+                        <select name="numOfWorkers">
+                            <option value="0">0</option>
+                            <option selected="selected" value="1">1</option>
+                        </select>
+                    </label>
+                </fieldset>
+            </div>
+            <div id="result_strip">
+                <ul class="thumbnails"></ul>
+            </div>
+            <div id="interactive" class="viewport"></div>
+            <div id="debug" class="detection"></div>
+        </section>
         
         <!-- CARICAMENTO -->
         <div id="caricamento" class="w3-light-grey">
@@ -109,8 +177,10 @@
         
         <!-- SCRIPTS -->
         <script type="text/javascript" src="/js/jquery.js"></script>
+        <script type="text/javascript" src="/js/quagga.min.js"></script>
         <script type="text/javascript" src="/js/errore.js"></script>
         <script type="text/javascript" src="/js/aggiungi.js"></script>
+        <script type="text/javascript" src="/js/scanner.js"></script>
         
     </body>
 </html>

@@ -9,6 +9,11 @@ $(function() {
             $(".controls input[type=file]").on("change", function(e) {
                 if (e.target.files && e.target.files.length) {
                     App.decode(URL.createObjectURL(e.target.files[0]));
+                    $('#attesa').css('display', 'inline');
+                    aggiungi.timeout = setTimeout(function() {
+                        $('#attesa').css('display', 'inline');
+                        errore.messaggio('Impossibile scannerizzare l\'immagine!\nProva a scattare un\'altra foto.');
+                    }, 8000);
                 }
             });
 
@@ -174,16 +179,11 @@ $(function() {
     });
 
     Quagga.onDetected(function(result) {
-        var code = result.codeResult.code;
-        window.location.href = '/aggiungi?isbn=' + code;
-    });
-    
-    $('#aggiungi').on('click', function() {
-        window.location.href = '/aggiungi';
-    });
-    
-    $('#carica_file').on('click', function() {
-        $('#file_input').click();
+        clearTimeout(aggiungi.timeout);
+        var codice = result.codeResult.code;
+        $('#codice_isbn').val(codice);
+        $('#isbn').css('display', 'block');
+        aggiungi.carica_isbn();
     });
     
 });
