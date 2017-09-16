@@ -2,7 +2,7 @@ recensioni = {
     
     init: function() {
         recensioni.codice = recensioni.leggi_parametro('libro');
-        recensioni.init_home();
+        recensioni.init_indietro();
         recensioni.init_mostra_recensione();
         recensioni.init_chiudi_recensione();
         recensioni.init_stelle();
@@ -22,9 +22,9 @@ recensioni = {
         }
     },
     
-    init_home: function() {
-        $('#home').on('click', function() {
-            window.location.href = '/home';
+    init_indietro: function() {
+        $('#indietro').on('click', function() {
+            window.location.href = '/libro?codice=' + recensioni.codice;
         });
     },
     

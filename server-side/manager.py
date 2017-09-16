@@ -31,6 +31,14 @@ class Manager:
         ''')
         database.commit()
         cursore.execute('''
+            CREATE TABLE IF NOT EXISTS posizione (
+                libro TEXT PRIMARY KEY,
+                stato TEXT NOT NULL,
+                testo TEXT NOT NULL
+            )
+        ''')
+        database.commit()
+        cursore.execute('''
             CREATE TABLE IF NOT EXISTS recensione (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 libro TEXT NOT NULL,

@@ -82,6 +82,13 @@ class Biblioteca:
             stringa = stringa.replace(carattere, '')
         return stringa
     
+    def modifica_copertina(self, codice, copertina):
+        self.manager.scrivi('''
+            UPDATE libro
+            SET copertina = ?
+            WHERE codice = ?
+        ''', (copertina, codice))
+    
     def esegui_ricerca(self, filtro, richiesta):
         richiesta = richiesta.lower()
         return self.manager.leggi_righe('''
@@ -131,7 +138,43 @@ class Biblioteca:
     
     def aggiorna_recensioni(self, libro, nuovo_libro):
         self.manager.scrivi('''
-            UPDATE libro
+            UPDATE recensione
+            SET libro = ?
+            WHERE libro = ?
+        ''', (nuovo_libro, libro))
+    
+    def nuova_posizione(self, codice):
+        self.manager.scrivi('''
+            INSERT INTO posizione (libro, stato, testo)
+            VALUES (?, '', '')
+        ''', (codice,))
+    
+    def leggi_posizione(self, libro):
+        return self.manager.leggi_riga('''
+            SELECT l.codice, l.titolo, l.autore, p.stato, p.testo
+            FROM libro l
+            INNER JOIN posizione p
+            ON l.codice = p.libro
+            WHERE l.codice = ?
+        ''', (libro,))
+    
+    def modifica_posizione(self, libro, stato, testo):
+        self.manager.scrivi('''
+            UPDATE posizione
+            SET stato = ?, testo = ?
+            WHERE libro = ?
+        ''', (stato, testo, libro))
+    
+    def elimina_posizione(self, libro):
+        self.manager.scrivi('''
+            DELETE
+            FROM posizione
+            WHERE libro = ?
+        ''', (libro,))
+    
+    def aggiorna_posizione(self, libro, nuovo_libro):
+        self.manager.scrivi('''
+            UPDATE posizione
             SET libro = ?
             WHERE libro = ?
         ''', (nuovo_libro, libro))

@@ -6,6 +6,7 @@ libro = {
         libro.init_home();
         libro.init_chiudi_elimina();
         libro.init_conferma_elimina();
+        libro.init_leggi_copertina();
         libro.init_chiudi_copertina();
         libro.init_modifica_scheda();
         libro.init_conferma_modifiche();
@@ -70,13 +71,73 @@ libro = {
     init_copertina: function() {
         $('#immagine_copertina').on('click', function() {
             if (libro.modificando_scheda) {
-                alert('Modifica');
+                $('#seleziona').click();
             } else {
                 var copertina = $('#immagine_copertina').attr('src');
                 if (copertina != '/img/copertina.png') {
                     $('#sorgente_copertina').html('<img src="' + copertina + '" id="copertina_aperta">');
                     $('#mostra_copertina').css('display', 'block');
                 }
+            }
+        });
+    },
+    
+    init_leggi_copertina: function() {
+        $('#seleziona').change(function(evento) {
+            $('#caricamento').css('display', 'block');
+            $('#modifica_scheda, #conferma_modifiche').css('bottom', '65px');
+            var lettore = new FileReader();
+            lettore.onload = function(e) {
+                libro.ridimensiona_mostra(e.target.result, 200, 350);
+            };
+            lettore.readAsDataURL(evento.target.files[0]);
+        });
+    },
+    
+    ridimensiona_mostra: function(sorgente, larghezza_massima, altezza_massima) {
+        var immagine = document.createElement('img');
+        var canvas = document.createElement('canvas');
+        immagine.onload = function() {
+            var larghezza = immagine.width;
+            var altezza = immagine.height;
+            if (larghezza > altezza) {
+                if (larghezza > larghezza_massima) {
+                    altezza *= larghezza_massima / larghezza;
+                    larghezza = larghezza_massima;
+                }
+            } else {
+                if (altezza > altezza_massima) {
+                    larghezza *= altezza_massima / altezza;
+                    altezza = altezza_massima;
+                }
+            }
+            canvas.width = larghezza;
+            canvas.height = altezza;
+            var contesto = canvas.getContext('2d');
+            contesto.drawImage(immagine, 0, 0, larghezza, altezza);
+            libro.modifica_copertina(canvas.toDataURL('image/png'));
+        };
+        immagine.src = sorgente;
+    },
+    
+    modifica_copertina: function(sorgente) {
+        var richiesta = {
+            codice: libro.codice,
+            copertina: sorgente
+        };
+        $.ajax({
+            url: 'modifica_copertina',
+            method: 'POST',
+            contentType: 'application/json',
+            dataType: 'json',
+            data: JSON.stringify(richiesta),
+            success: function(risposta) {
+                $('#immagine_copertina').attr('src', sorgente);
+                $('#caricamento').css('display', 'none');
+                $('#modifica_scheda, #conferma_modifiche').css('bottom', '20px');
+            },
+            error: function() {
+                errore.messaggio('Errore del server!');
             }
         });
     },
@@ -93,10 +154,16 @@ libro = {
         });
     },
     
+    init_posizione: function() {
+        $('#posizione').on('click', function() {
+            window.location.href = '/posizione?libro=' + libro.codice;
+        });
+    },
+    
     init_modifica_scheda: function() {
         $('#modifica_scheda').on('click', function() {
             libro.modificando_scheda = true;
-            $('#modifica_scheda, #recensioni, #mostra_elimina').css('display', 'none');
+            $('#modifica_scheda, #mostra_elimina, #recensioni, #posizione').css('display', 'none');
             $('#conferma_modifiche').css('display', 'block');
             $('#titolo, #autore, #descrizione, #genere, #editore, #anno').prop('disabled', false);
         });
@@ -117,7 +184,7 @@ libro = {
                 libro.modificando_scheda = false;
                 $('#titolo, #autore, #descrizione, #genere, #editore, #anno').prop('disabled', true);
                 $('#conferma_modifiche').css('display', 'none');
-                $('#modifica_scheda, #recensioni, #mostra_elimina').css('display', 'block');
+                $('#modifica_scheda, #mostra_elimina, #recensioni, #posizione').css('display', 'block');
                 var descrizione = $('#descrizione').val();
                 var genere = $('#genere').val();
                 var editore = $('#editore').val();
@@ -167,9 +234,10 @@ libro = {
                     var template = $(contenuto).filter('#leggi_scheda').html();
                     $('#scheda').html(Mustache.render(template, risposta));
                 }).then(function() {
+                    libro.init_mostra_elimina();
                     libro.init_copertina();
                     libro.init_recensioni();
-                    libro.init_mostra_elimina();
+                    libro.init_posizione();
                 });
             },
             error: function() {

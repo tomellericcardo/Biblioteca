@@ -2,19 +2,12 @@ cerca = {
     
     init: function() {
         cerca.init_home();
-        cerca.init_liste();
         cerca.init_cerca();
     },
     
     init_home: function() {
         $('#home').on('click', function() {
             window.location.href = '/home';
-        });
-    },
-    
-    init_liste: function() {
-        $('#liste').on('click', function() {
-            window.location.href = '/liste';
         });
     },
     

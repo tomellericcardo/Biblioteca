@@ -57,6 +57,7 @@ def elimina_scheda():
     if biblioteca.codice_presente(codice):
         biblioteca.elimina_scheda(codice)
         biblioteca.elimina_recensioni(codice)
+        biblioteca.elimina_posizione(codice)
         return dumps({'successo': True})
     return dumps({'errore': True})
 
@@ -76,8 +77,17 @@ def modifica_scheda():
         nuovo_codice = biblioteca.nuovo_libro(titolo, autore, genere, descrizione, editore, anno, copertina)
         if (codice != nuovo_codice):
             biblioteca.aggiorna_recensioni(codice, nuovo_codice)
+            biblioteca.aggiorna_posizione(codice, nuovo_codice)
         return dumps({'codice': nuovo_codice})
     return dumps({'errore': True})
+
+@app.route('/modifica_copertina', methods = ['POST'])
+def modifica_copertina():
+    richiesta = request.get_json(force = True)
+    codice = richiesta['codice']
+    copertina = richiesta['copertina']
+    biblioteca.modifica_copertina(codice, copertina)
+    return dumps({'successo': True})
 
 @app.route('/nuovo_libro', methods = ['POST'])
 def nuovo_libro():
@@ -89,7 +99,9 @@ def nuovo_libro():
     editore = richiesta['editore']
     anno = richiesta['anno']
     copertina = richiesta['copertina']
-    return dumps({'codice': biblioteca.nuovo_libro(titolo, autore, genere, descrizione, editore, anno, copertina)})
+    codice = biblioteca.nuovo_libro(titolo, autore, genere, descrizione, editore, anno, copertina)
+    biblioteca.nuova_posizione(codice)
+    return dumps({'codice': codice})
 
 @app.route('/esegui_ricerca', methods = ['POST'])
 def esegui_ricerca():
@@ -119,6 +131,21 @@ def elimina_recensione():
     richiesta = request.get_json(force = True)
     id_recensione = richiesta['id']
     biblioteca.elimina_recensione(id_recensione)
+    return dumps({'successo': True})
+
+@app.route('/leggi_posizione', methods = ['POST'])
+def leggi_posizione():
+    richiesta = request.get_json(force = True)
+    libro = richiesta['libro']
+    return dumps({'posizione': biblioteca.leggi_posizione(libro)})
+
+@app.route('/modifica_posizione', methods = ['POST'])
+def modifica_posizione():
+    richiesta = request.get_json(force = True)
+    libro = richiesta['libro']
+    stato = richiesta['stato']
+    testo = richiesta['testo']
+    biblioteca.modifica_posizione(libro, stato, testo)
     return dumps({'successo': True})
 
 

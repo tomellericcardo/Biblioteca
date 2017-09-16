@@ -1,9 +1,16 @@
 home = {
     
     init: function() {
+        home.init_liste();
         home.init_cerca();
         home.init_aggiungi();
         home.leggi_galleria();
+    },
+    
+    init_liste: function() {
+        $('#liste').on('click', function() {
+            window.location.href = '/liste';
+        });
     },
     
     init_cerca: function() {

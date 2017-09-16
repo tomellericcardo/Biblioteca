@@ -92,12 +92,12 @@
             </div>
         </div>
         <div class="w3-container w3-white">
+            <input type="text" id="genere" value="{{genere}}" placeholder="Genere" class="w3-input" disabled>
             <textarea id="descrizione" rows="10" placeholder="Nessuna descrizione..." class="w3-input" disabled>{{descrizione}}</textarea><br>
-            <input type="text" id="genere" value="{{genere}}" placeholder="Genere" class="w3-input" disabled><br>
             <input type="text" id="editore" value="{{editore}}" placeholder="Editore" class="w3-input" disabled>
             <input type="number" id="anno" value="{{anno}}" placeholder="Anno di pubblicazione" class="w3-input" disabled><br>
             <button id="recensioni" class="w3-btn w3-margin-top w3-amber w3-text-white"><i class="material-icons">star</i> <b>Recensioni</b></button>
-            <button id="mostra_elimina" class="w3-btn w3-margin-top w3-red"><i class="material-icons">delete</i> <b>Elimina Scheda</b></button>
+            <button id="posizione" class="w3-btn w3-margin-top w3-green"><i class="material-icons">location_on</i> <b>Posizione</b></button>
         </div>
     {{/scheda}}
     {{^scheda}}
@@ -137,6 +137,49 @@
             </div>
         </div>
     {{/sommario}}
+</script>
+
+<!-- LEGGI POSIZIONE -->
+<script type="text/html" id="leggi_posizione">
+    {{#posizione}}
+        <div class="w3-row-padding w3-margin-top">
+            <div id="copertina" class="w3-col s4">
+                {{#copertina}}
+                    <img src="{{copertina}}" id="immagine_copertina">
+                {{/copertina}}
+                {{^copertina}}
+                    <img src="/img/copertina.png" id="immagine_copertina">
+                {{/copertina}}
+            </div>
+            <div class="w3-col s8">
+                <p>{{codice}}</p>
+                <p class="w3-large">
+                    <b>{{titolo}}</b>
+                    <br><i>{{autore}}</i>
+                </p>
+            </div>
+        </div>
+        <div class="w3-container w3-margin-top w3-white">
+            <label for="stato" class="w3-label">Stato</label>
+            <select id="stato" name="stato" class="w3-select" disabled>
+                <option value="">Nessuno</option>
+                <option value="casa">In casa</option>
+                <option value="prestito">In prestito</option>
+            </select>
+            <input type="text" id="testo" class="w3-input" placeholder="" value="{{testo}}" disabled>
+        </div>
+    {{/posizione}}
+    {{^posizione}}
+        <div class="w3-display-container vuoto">
+            <div class="w3-display-middle w3-center">
+                <p class="w3-text-grey">
+                    <i class="w3-jumbo material-icons">location_on</i>
+                    <br><br>Posizione non
+                    <br>trovata...
+                </p>
+            </div>
+        </div>
+    {{/posizione}}
 </script>
 
 <!-- LEGGI RECENSIONI -->
