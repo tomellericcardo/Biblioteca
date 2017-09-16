@@ -90,7 +90,7 @@ input::placeholder, textarea::placeholder {
 /*** MODALS ***/
 
 .w3-modal {
-    padding-top: 30vh;
+    padding-top: 25vh;
 }
 
 .w3-modal-content {
