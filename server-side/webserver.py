@@ -42,7 +42,7 @@ def invia_file(nome_cartella, nome_file):
 
 @app.route('/leggi_galleria', methods = ['POST'])
 def leggi_galleria():
-    return dumps({'lista_libri': biblioteca.leggi_galleria()})
+    return dumps({'lista_libri': biblioteca.leggi_galleria(), 'classifica': biblioteca.leggi_classifica()})
 
 @app.route('/leggi_scheda', methods = ['POST'])
 def leggi_scheda():

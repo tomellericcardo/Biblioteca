@@ -11,7 +11,7 @@ $(function() {
                     App.decode(URL.createObjectURL(e.target.files[0]));
                     $('#attesa').css('display', 'inline');
                     aggiungi.timeout = setTimeout(function() {
-                        $('#attesa').css('display', 'inline');
+                        $('#attesa').css('display', 'none');
                         errore.messaggio('Impossibile scannerizzare l\'immagine!\nProva a scattare un\'altra foto.');
                     }, 8000);
                 }

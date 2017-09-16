@@ -10,9 +10,25 @@ class Biblioteca:
     
     def leggi_galleria(self):
         return self.manager.leggi_righe('''
-            SELECT *
-            FROM galleria
+            SELECT codice, titolo, autore, copertina
+            FROM libro
+            ORDER BY data_ora DESC
+            LIMIT 12
         ''')
+    
+    def leggi_classifica(self):
+        classifica = self.manager.leggi_righe('''
+            SELECT l.codice, l.titolo, l.autore, l.copertina, AVG(r.valore) AS voto
+            FROM libro l
+            LEFT JOIN recensione r
+            ON l.codice = r.libro
+            GROUP BY l.codice
+            ORDER BY voto DESC
+            LIMIT 12
+        ''')
+        if classifica == [(None, None, None, None, None)]:
+            return []
+        return classifica
     
     def leggi_scheda(self, codice):
         return self.manager.leggi_riga('''

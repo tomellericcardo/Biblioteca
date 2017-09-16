@@ -49,14 +49,6 @@ class Manager:
             )
         ''')
         database.commit()
-        cursore.execute('''
-            CREATE VIEW IF NOT EXISTS galleria AS
-            SELECT codice, titolo, autore, copertina
-            FROM libro
-            ORDER BY data_ora DESC
-            LIMIT 20
-        ''')
-        database.commit()
         cursore.close()
         database.close()
     

@@ -78,10 +78,7 @@ recensioni = {
             } else if (autore.length == 0) {
                 $('#autore').css('border-color', 'red');
                 errore.messaggio('Devi inserire il tuo nome per fare la recensione!');
-            } else if (testo.length == 0) {
-                $('#testo').css('border-color', 'red');
-                errore.messaggio('Devi inserire il testo della recensione!');
-            } else {
+            }else {
                 $('#attesa').css('display', 'inline');
                 $.ajax({
                     url: 'invia_recensione',
