@@ -12,7 +12,7 @@ $(function() {
                     $('#attesa').css('display', 'inline');
                     aggiungi.timeout = setTimeout(function() {
                         $('#attesa').css('display', 'none');
-                        errore.messaggio('Impossibile scannerizzare l\'immagine!\nProva a scattare un\'altra foto.');
+                        errore.messaggio('Impossibile scannerizzare l\'immagine!\nProva a scattare un\'altra foto o ad inserire manualmente il codice.');
                     }, 8000);
                 }
             });
@@ -182,8 +182,7 @@ $(function() {
         clearTimeout(aggiungi.timeout);
         var codice = result.codeResult.code;
         $('#codice_isbn').val(codice);
-        $('#isbn').css('display', 'block');
-        aggiungi.carica_isbn();
+        aggiungi.carica_informazioni();
     });
     
 });
