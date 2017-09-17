@@ -40,7 +40,7 @@
     {{#classifica}}
         <div class="w3-col s6 m3 l2 w3-margin-top">
             <div class="w3-center libro" onclick="home.apri_libro('{{codice}}')">
-                <span class="w3-xlarge w3-text-amber">{{voto}}</span><br>
+                <span class="w3-large w3-text-{{colore}}">{{voto}}<i class="w3-medium material-icons">star</i></span><br>
                 {{#copertina}}
                     <img src="{{copertina}}" class="immagine_copertina">
                 {{/copertina}}
@@ -97,7 +97,31 @@
     {{/spazio}}
 </script>
 
-<!-- LEGGI SCHEDA -->
+<!-- LISTA -->
+<script type="text/html" id="leggi_lista">
+    {{#lista_libri}}
+        <p>
+            <a href="/libro?codice={{codice}}" class="w3-large">{{titolo}}</a>
+            <br>{{autore}}
+        </p>
+    {{/lista_libri}}
+    {{^lista_libri}}
+        <div class="w3-display-container vuoto">
+            <div class="w3-display-middle w3-center">
+                <p class="w3-text-grey">
+                    <i class="w3-jumbo material-icons">book</i>
+                    <br><br>Nessun libro
+                    <br>trovato...
+                </p>
+            </div>
+        </div>
+    {{/lista_libri}}
+    {{#spazio}}
+        <div class="w3-col s12 m12 l12" id="spazio">&nbsp;</div>
+    {{/spazio}}
+</script>
+
+<!-- SCHEDA -->
 <script type="text/html" id="leggi_scheda">
     {{#scheda}}
         <div class="w3-row-padding w3-padding-32">
@@ -140,7 +164,7 @@
     {{/spazio}}
 </script>
 
-<!-- LEGGI SOMMARIO -->
+<!-- SOMMARIO -->
 <script type="text/html" id="leggi_sommario">
     {{#sommario}}
         <div class="w3-row-padding w3-margin-top">
@@ -156,14 +180,14 @@
                 <p class="w3-large">
                     <b>{{titolo}}</b>
                     <br><i>{{autore}}</i>
-                    <br><span class="w3-xxlarge w3-text-amber">{{voto}}</span>
+                    <br><span class="w3-xxlarge w3-text-{{colore}}">{{voto}}<i class="material-icons">star</i></span>
                 </p>
             </div>
         </div>
     {{/sommario}}
 </script>
 
-<!-- LEGGI POSIZIONE -->
+<!-- POSIZIONE -->
 <script type="text/html" id="leggi_posizione">
     {{#posizione}}
         <div class="w3-row-padding w3-margin-top">
@@ -206,12 +230,12 @@
     {{/posizione}}
 </script>
 
-<!-- LEGGI RECENSIONI -->
+<!-- RECENSIONI -->
 <script type="text/html" id="leggi_recensioni">
     {{#recensioni}}
         <div class="w3-row-padding w3-margin-top">
             <div class="w3-col s2">
-                <span class="w3-xxxlarge w3-text-amber">{{valore}}</span>
+                <span class="w3-xxxlarge w3-text-{{colore}}">{{valore}}</span>
             </div>
             <div class="w3-col s10">
                 <p>

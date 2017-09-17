@@ -110,6 +110,12 @@ def esegui_ricerca():
     richiesta = richiesta['richiesta']
     return dumps({'lista_libri': biblioteca.esegui_ricerca(filtro, richiesta)})
 
+@app.route('/leggi_lista', methods = ['POST'])
+def leggi_lista():
+    richiesta = request.get_json(force = True)
+    ordine = richiesta['ordine']
+    return dumps({'lista_libri': biblioteca.leggi_lista(ordine)})
+
 @app.route('/invia_recensione', methods = ['POST'])
 def invia_recensione():
     richiesta = request.get_json(force = True)

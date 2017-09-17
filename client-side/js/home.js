@@ -70,25 +70,34 @@ home = {
             var classifica = risposta.classifica;
             var nuova_classifica = [];
             if (classifica) {
-                var voto;
+                var voto, n, colore;
                 for (i = 0; i < classifica.length; i++) {
                     libro = classifica[i];
                     titolo = libro[1];
                     lista_nomi = libro[2].split(' ');
                     autore = lista_nomi[lista_nomi.length - 1];
-                    voto = Number((libro[4]).toFixed(1));
                     if (titolo.length > 12) {
                         titolo = titolo.substring(0, 10) + '...';
                     }
                     if (autore.length > 13) {
                         autore = autore.substring(0, 11) + '...';
                     }
+                    voto = Number((libro[4]).toFixed(1));
+                    n = Math.round(voto);
+                    if (n < 3) {
+                        colore = 'red';
+                    } else if (n < 5) {
+                        colore = 'orange';
+                    } else {
+                        colore = 'amber';
+                    }
                     nuova_classifica[i] = {
                         codice: libro[0],
                         titolo: titolo,
                         autore: autore,
                         copertina: libro[3],
-                        voto: voto
+                        voto: voto,
+                        colore: colore
                     };
                 }
             }

@@ -117,8 +117,9 @@ posizione = {
                 codice: posizione[0],
                 titolo: posizione[1],
                 autore: posizione[2],
-                stato: posizione[3],
-                testo: posizione[4]
+                copertina: posizione[3],
+                stato: posizione[4],
+                testo: posizione[5]
             };
             risposta.posizione = nuova_posizione;
             return risposta;

@@ -27,7 +27,7 @@
         <header class="w3-container w3-center w3-blue ombra">
             <i id="home" class="w3-margin w3-display-topleft material-icons bottone_header">arrow_back</i>
             <h1 class="w3-xlarge">Aggiungi</h1>
-            <i id="mostra_isbn" class="w3-margin w3-display-topright material-icons bottone_header">file_download</i>
+            <i id="mostra_carica" class="w3-margin w3-display-topright material-icons bottone_header">file_download</i>
         </header>
         
         <!-- CONFERMA -->
@@ -61,22 +61,25 @@
             <div class="w3-col s12 m12 l12" id="spazio">&nbsp;</div>
         </div>
         
-        <!-- ISBN -->
-        <div id="isbn" class="w3-modal">
-            <div id="sfondo_isbn" class="sfondo_modal"></div>
+        <!-- CARICA -->
+        <div id="carica" class="w3-modal">
+            <div id="sfondo_carica" class="sfondo_modal"></div>
             <div class="w3-modal-content w3-card-8">
                 <div class="w3-container w3-blue">
-                    <span id="chiudi_isbn" class="w3-closebtn">&times;</span>
+                    <span id="chiudi_carica" class="w3-closebtn">&times;</span>
                     <h1 class="w3-xlarge">Carica informazioni</h1>
                 </div>
                 <div class="w3-container w3-padding-bottom w3-white">
+                    <input type="text" id="titolo_carica" class="w3-input w3-margin-top" placeholder="Titolo del libro">
+                    <input type="text" id="autore_carica" class="w3-input w3-margin-top" placeholder="Autore del libro">
                     <p class="w3-center">
+                        oppure<br>
                         <button id="carica_foto" class="w3-btn w3-margin-top w3-green"><i class="material-icons">add_a_photo</i> <b>Scannerizza il codice ISBN</b></button>
                     </p>
-                    <input type="number" id="codice_isbn" class="w3-input w3-margin-top" placeholder="Inserisci l'ISBN">
+                    <input type="number" id="codice_isbn" class="w3-input w3-margin-top" placeholder="Codice ISBN">
                     <div class="w3-margin w3-right">
                         <span id="attesa"><i class="material-icons w3-margin-right w3-spin w3-text-grey">refresh</i></span>
-                        <button id="carica_isbn" class="w3-btn w3-right w3-indigo">Carica</button>
+                        <button id="carica_informazioni" class="w3-btn w3-right w3-indigo">Carica</button>
                     </div>
                 </div>
             </div>

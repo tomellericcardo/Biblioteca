@@ -13,18 +13,18 @@ class Biblioteca:
             SELECT codice, titolo, autore, copertina
             FROM libro
             ORDER BY data_ora DESC
-            LIMIT 12
+            LIMIT 6
         ''')
     
     def leggi_classifica(self):
         classifica = self.manager.leggi_righe('''
             SELECT l.codice, l.titolo, l.autore, l.copertina, AVG(r.valore) AS voto
             FROM libro l
-            LEFT JOIN recensione r
+            INNER JOIN recensione r
             ON l.codice = r.libro
             GROUP BY l.codice
             ORDER BY voto DESC
-            LIMIT 12
+            LIMIT 6
         ''')
         if classifica == [(None, None, None, None, None)]:
             return []
@@ -114,6 +114,14 @@ class Biblioteca:
             REGEXP ?
         ''', (richiesta,))
     
+    def leggi_lista(self, ordine):
+        return self.manager.leggi_righe('''
+            SELECT codice, titolo, autore
+            FROM libro
+            WHERE ''' + ordine + ''' != ''
+            ORDER BY LOWER(''' + ordine + ''')
+        ''')
+    
     def invia_recensione(self, libro, valore, autore, testo):
         self.manager.scrivi('''
             INSERT INTO recensione (libro, valore, autore, testo)
@@ -167,7 +175,7 @@ class Biblioteca:
     
     def leggi_posizione(self, libro):
         return self.manager.leggi_riga('''
-            SELECT l.codice, l.titolo, l.autore, p.stato, p.testo
+            SELECT l.codice, l.titolo, l.autore, l.copertina, p.stato, p.testo
             FROM libro l
             INNER JOIN posizione p
             ON l.codice = p.libro

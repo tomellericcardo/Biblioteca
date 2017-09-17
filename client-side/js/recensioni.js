@@ -134,11 +134,21 @@ recensioni = {
         var sommario = risposta.sommario;
         if (sommario) {
             var voto = Number((sommario[3]).toFixed(1));
+            var n = Math.round(voto);
+            var colore;
+            if (n < 3) {
+                colore = 'red';
+            } else if (n < 5) {
+                colore = 'orange';
+            } else {
+                colore = 'amber';
+            }
             var nuovo_sommario = {
                 titolo: sommario[0],
                 autore: sommario[1],
                 copertina: sommario[2],
-                voto: voto
+                voto: voto,
+                colore: colore
             };
             risposta.sommario = nuovo_sommario;
         } else {
@@ -147,12 +157,21 @@ recensioni = {
         var lista_recensioni = risposta.recensioni;
         if (lista_recensioni) {
             var nuova_lista = [];
-            var i, recensione, codice, autore, testo;
+            var i, recensione;
             for (i = 0; i < lista_recensioni.length; i++) {
                 recensione = lista_recensioni[i];
+                var valore = recensione[1];
+                if (valore < 3) {
+                    colore = 'red';
+                } else if (valore < 5) {
+                    colore = 'orange';
+                } else {
+                    colore = 'amber';
+                }
                 nuova_lista[i] = {
                     id: recensione[0],
-                    valore: recensione[1],
+                    valore: valore,
+                    colore: colore,
                     autore: recensione[2],
                     testo: recensione[3]
                 };
