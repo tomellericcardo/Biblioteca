@@ -7,6 +7,9 @@ from re import compile
 
 class Manager:
     
+    
+    # Inizializzazione del database
+    
     def __init__(self, g, database_filename):
         self.g = g
         posizione = dirname(realpath(__file__))
@@ -52,6 +55,9 @@ class Manager:
         cursore.close()
         database.close()
     
+    
+    # Gestione delle connessioni
+    
     def apri_connessione(self):
         self.g.db = connect(self.percorso)
         self.g.db.text_factory = str
@@ -62,9 +68,15 @@ class Manager:
         if db is not None:
             db.close()
     
+    
+    # Aggiunta delle espressioni regolari
+    
     def regexp(self, espressione, oggetto):
         reg = compile(espressione)
         return reg.search(oggetto) is not None
+    
+    
+    # Metodi di lettura
     
     def leggi_righe(self, query, parametri = ()):
         cursore = self.g.db.cursor()
@@ -85,6 +97,9 @@ class Manager:
     
     def leggi_presenza(self, query, parametri = ()):
         return len(self.leggi_righe(query, parametri)) > 0
+    
+    
+    # Metodi di scrittura
     
     def scrivi(self, query, parametri = ()):
         cursore = self.g.db.cursor()

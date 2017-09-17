@@ -12,6 +12,7 @@
         <link rel="stylesheet" href="/css/aggiungi.css">
         
         <!-- FONTS -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
         
         <!-- ANDROID -->
@@ -42,6 +43,8 @@
         <div class="w3-container w3-white">
             <div class="w3-third w3-hide-small">&nbsp;</div>
             <div class="w3-third">
+                
+                <!-- COPERTINA -->
                 <div class="w3-row w3-margin-top w3-margin-bottom w3-center">
                     <div class="w3-col s3 m3 l4">&nbsp;</div>
                     <div id="copertina" class="w3-col s6 m6 l4">
@@ -51,12 +54,15 @@
                     </div>
                     <div class="w3-col s3 m3 l4">&nbsp;</div>
                 </div>
+                
+                <!-- INFORMAZIONI -->
                 <input type="text" id="titolo" class="w3-input" placeholder="Titolo">
                 <input type="text" id="autore" class="w3-input" placeholder="Autore (Nome Cognome)">
                 <input type="text" id="genere" class="w3-input" placeholder="Genere">
                 <textarea id="descrizione" rows="6" placeholder="Trama/Descrizione" class="w3-input"></textarea>
                 <input type="text" id="editore" class="w3-input" placeholder="Editore">
                 <input type="number" id="anno" class="w3-input" placeholder="Anno di pubblicazione">
+                
             </div>
             <div class="w3-col s12 m12 l12" id="spazio">&nbsp;</div>
         </div>
@@ -65,26 +71,40 @@
         <div id="carica" class="w3-modal">
             <div id="sfondo_carica" class="sfondo_modal"></div>
             <div class="w3-modal-content w3-card-8">
+                
+                <!-- HEADER -->
                 <div class="w3-container w3-blue">
                     <span id="chiudi_carica" class="w3-closebtn">&times;</span>
                     <h1 class="w3-xlarge">Carica informazioni</h1>
                 </div>
+                
+                <!-- CAMPI -->
                 <div class="w3-container w3-padding-bottom w3-white">
+                    
+                    <!-- TITOLO e AUTORE -->
                     <input type="text" id="titolo_carica" class="w3-input w3-margin-top" placeholder="Titolo del libro">
                     <input type="text" id="autore_carica" class="w3-input" placeholder="Autore del libro">
-                    <p class="w3-center">
-                        oppure<br>
-                        <button id="carica_foto" class="w3-btn w3-margin-top w3-green"><i class="material-icons">add_a_photo</i> <b>Scannerizza il codice ISBN</b></button>
-                    </p>
+                    <p class="w3-center">oppure</p>
+                    
+                    <!-- ISBN -->
+                    <button id="carica_foto" class="w3-btn w3-margin-top w3-green">
+                        <i class="material-icons">add_a_photo</i> <b>Scannerizza il codice ISBN</b>
+                    </button>
                     <input type="number" id="codice_isbn" class="w3-input" placeholder="Codice ISBN">
+                    
+                    <!-- CARICA -->
                     <div class="w3-margin w3-right">
                         <span id="attesa"><i class="material-icons w3-margin-right w3-spin w3-text-grey">refresh</i></span>
                         <button id="carica_informazioni" class="w3-btn w3-right w3-indigo">Carica</button>
                     </div>
+                    
                 </div>
+                
             </div>
         </div>
         
+        
+        <!-- SCANNER -->
         <section id="scanner" class="container">
             <div class="controls">
                 <fieldset class="input-group">
@@ -168,13 +188,18 @@
         <div id="errore" class="w3-modal">
             <div id="sfondo_errore" class="sfondo_modal"></div>
             <div class="w3-modal-content w3-card-8">
+                
+                <!-- HEADER -->
                 <div class="w3-container w3-red">
                     <span id="chiudi_errore" class="w3-closebtn">&times;</span>
                     <h1 class="w3-xlarge">Errore!</h1>
                 </div>
+                
+                <!-- MESSAGGIO -->
                 <div class="w3-container w3-padding-bottom w3-white">
                     <p id="messaggio"></p>
                 </div>
+                
             </div>
         </div>
         

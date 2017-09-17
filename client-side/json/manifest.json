@@ -1,7 +1,7 @@
 {
     "name": "Biblioteca",
     "short_name": "Biblioteca",
-    "description": "Biblioteca digitale per Casa Laura",
+    "description": "Sistema bibliotecario domestico",
     "start_url": "/",
     "display": "standalone",
     "orientation": "portrait",

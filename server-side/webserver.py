@@ -40,15 +40,56 @@ def invia_file(nome_cartella, nome_file):
 
 # CONTESTI
 
+# Leggi galleria
+
 @app.route('/leggi_galleria', methods = ['POST'])
 def leggi_galleria():
-    return dumps({'lista_libri': biblioteca.leggi_galleria(), 'classifica': biblioteca.leggi_classifica()})
+    lista_libri = biblioteca.leggi_galleria()
+    classifica = biblioteca.leggi_classifica()
+    return dumps({'lista_libri': lista_libri, 'classifica': classifica})
+
+# Leggi lista
+
+@app.route('/leggi_lista', methods = ['POST'])
+def leggi_lista():
+    richiesta = request.get_json(force = True)
+    ordine = richiesta['ordine']
+    return dumps({'lista_libri': biblioteca.leggi_lista(ordine)})
+
+# Esegui ricerca
+
+@app.route('/esegui_ricerca', methods = ['POST'])
+def esegui_ricerca():
+    richiesta = request.get_json(force = True)
+    filtro = richiesta['filtro']
+    richiesta = richiesta['richiesta']
+    return dumps({'lista_libri': biblioteca.esegui_ricerca(filtro, richiesta)})
+
+# Nuovo libro
+
+@app.route('/nuovo_libro', methods = ['POST'])
+def nuovo_libro():
+    richiesta = request.get_json(force = True)
+    titolo = richiesta['titolo']
+    autore = richiesta['autore']
+    genere = richiesta['genere']
+    descrizione = richiesta['descrizione']
+    editore = richiesta['editore']
+    anno = richiesta['anno']
+    copertina = richiesta['copertina']
+    codice = biblioteca.nuovo_libro(titolo, autore, genere, descrizione, editore, anno, copertina)
+    biblioteca.nuova_posizione(codice)
+    return dumps({'codice': codice})
+
+# Leggi scheda
 
 @app.route('/leggi_scheda', methods = ['POST'])
 def leggi_scheda():
     richiesta = request.get_json(force = True)
     codice = richiesta['codice']
     return dumps({'scheda': biblioteca.leggi_scheda(codice)})
+
+# Elimina scheda
 
 @app.route('/elimina_scheda', methods = ['POST'])
 def elimina_scheda():
@@ -60,6 +101,8 @@ def elimina_scheda():
         biblioteca.elimina_posizione(codice)
         return dumps({'successo': True})
     return dumps({'errore': True})
+
+# Modifica scheda
 
 @app.route('/modifica_scheda', methods = ['POST'])
 def modifica_scheda():
@@ -81,6 +124,8 @@ def modifica_scheda():
         return dumps({'codice': nuovo_codice})
     return dumps({'errore': True})
 
+# Modifica copertina
+
 @app.route('/modifica_copertina', methods = ['POST'])
 def modifica_copertina():
     richiesta = request.get_json(force = True)
@@ -89,32 +134,17 @@ def modifica_copertina():
     biblioteca.modifica_copertina(codice, copertina)
     return dumps({'successo': True})
 
-@app.route('/nuovo_libro', methods = ['POST'])
-def nuovo_libro():
-    richiesta = request.get_json(force = True)
-    titolo = richiesta['titolo']
-    autore = richiesta['autore']
-    genere = richiesta['genere']
-    descrizione = richiesta['descrizione']
-    editore = richiesta['editore']
-    anno = richiesta['anno']
-    copertina = richiesta['copertina']
-    codice = biblioteca.nuovo_libro(titolo, autore, genere, descrizione, editore, anno, copertina)
-    biblioteca.nuova_posizione(codice)
-    return dumps({'codice': codice})
+# Leggi recensioni
 
-@app.route('/esegui_ricerca', methods = ['POST'])
-def esegui_ricerca():
+@app.route('/leggi_recensioni', methods = ['POST'])
+def leggi_recensioni():
     richiesta = request.get_json(force = True)
-    filtro = richiesta['filtro']
-    richiesta = richiesta['richiesta']
-    return dumps({'lista_libri': biblioteca.esegui_ricerca(filtro, richiesta)})
+    libro = richiesta['libro']
+    sommario = biblioteca.leggi_sommario(libro)
+    recensioni = biblioteca.leggi_recensioni(libro)
+    return dumps({'sommario': sommario, 'recensioni': recensioni})
 
-@app.route('/leggi_lista', methods = ['POST'])
-def leggi_lista():
-    richiesta = request.get_json(force = True)
-    ordine = richiesta['ordine']
-    return dumps({'lista_libri': biblioteca.leggi_lista(ordine)})
+# Invia recensione
 
 @app.route('/invia_recensione', methods = ['POST'])
 def invia_recensione():
@@ -126,11 +156,7 @@ def invia_recensione():
     biblioteca.invia_recensione(libro, valore, autore, testo)
     return dumps({'successo': True})
 
-@app.route('/leggi_recensioni', methods = ['POST'])
-def leggi_recensioni():
-    richiesta = request.get_json(force = True)
-    libro = richiesta['libro']
-    return dumps({'sommario': biblioteca.leggi_sommario(libro), 'recensioni': biblioteca.leggi_recensioni(libro)})
+# Elimina recensione
 
 @app.route('/elimina_recensione', methods = ['POST'])
 def elimina_recensione():
@@ -139,11 +165,15 @@ def elimina_recensione():
     biblioteca.elimina_recensione(id_recensione)
     return dumps({'successo': True})
 
+# Leggi posizione
+
 @app.route('/leggi_posizione', methods = ['POST'])
 def leggi_posizione():
     richiesta = request.get_json(force = True)
     libro = richiesta['libro']
     return dumps({'posizione': biblioteca.leggi_posizione(libro)})
+
+# Modifica posizione
 
 @app.route('/modifica_posizione', methods = ['POST'])
 def modifica_posizione():

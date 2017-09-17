@@ -2,27 +2,34 @@
     
 <!-- GALLERIA -->
 <script type="text/html" id="leggi_galleria">
-    {{#spazio}}
-        <p class="w3-large w3-padding-left">Libri aggiunti di recente:</p>
-    {{/spazio}}
+    
+    <!-- RECENTI -->
+    <p class="w3-large w3-padding-left">Libri aggiunti di recente:</p>
     {{#lista_libri}}
         <div class="w3-col s6 m3 l2 w3-margin-top">
             <div class="w3-center libro" onclick="home.apri_libro('{{codice}}')">
+                
+                <!-- COPERTINA -->
                 {{#copertina}}
                     <img src="{{copertina}}" class="immagine_copertina">
                 {{/copertina}}
                 {{^copertina}}
                     <img src="/img/copertina.png" class="immagine_copertina">
                 {{/copertina}}
+                
+                <!-- TITOLO e AUTORE -->
                 <div class="w3-container w3-center">
                     <p>
                         <b>{{titolo}}</b>
                         <br><i>{{autore}}</i>
                     </p>
                 </div>
+                
             </div>
         </div>
     {{/lista_libri}}
+    
+    <!-- NESSUNO -->
     {{^lista_libri}}
         <div class="w3-display-container vuoto">
             <div class="w3-display-middle w3-center">
@@ -34,77 +41,56 @@
             </div>
         </div>
     {{/lista_libri}}
-    {{#spazio}}
-        <p class="w3-col s12 w3-large w3-padding-left">I migliori in classifica:</p>
-    {{/spazio}}
+    
+    <!-- CLASSIFICA -->
+    <p class="w3-col s12 w3-large w3-padding-left">I migliori in classifica:</p>
     {{#classifica}}
         <div class="w3-col s6 m3 l2 w3-margin-top">
             <div class="w3-center libro" onclick="home.apri_libro('{{codice}}')">
-                <span class="w3-large w3-text-{{colore}}">{{voto}}<i class="w3-medium material-icons">star</i></span><br>
+                
+                <!-- VOTO -->
+                <span class="w3-large w3-text-{{colore}}">
+                    {{voto}}<i class="w3-medium material-icons">star</i>
+                </span><br>
+                
+                <!-- COPERTINA -->
                 {{#copertina}}
                     <img src="{{copertina}}" class="immagine_copertina">
                 {{/copertina}}
                 {{^copertina}}
                     <img src="/img/copertina.png" class="immagine_copertina">
                 {{/copertina}}
+                
+                <!-- TITOLO e AUTORE -->
                 <div class="w3-container w3-center">
                     <p>
                         <b>{{titolo}}</b>
                         <br><i>{{autore}}</i>
                     </p>
                 </div>
+                
             </div>
         </div>
     {{/classifica}}
-    {{#spazio}}
-        <div class="w3-col s12 m12 l12" id="spazio">&nbsp;</div>
-    {{/spazio}}
+    
+    <!-- SPAZIO -->
+    <div class="w3-col s12 m12 l12" id="spazio">&nbsp;</div>
+    
 </script>
 
-<!-- RISULTATI -->
-<script type="text/html" id="leggi_risultati">
-    {{#lista_libri}}
-        <div class="w3-col s6 w3-margin-top">
-            <div class="w3-center libro" onclick="cerca.apri_libro('{{codice}}')">
-                {{#copertina}}
-                    <img src="{{copertina}}" class="immagine_copertina">
-                {{/copertina}}
-                {{^copertina}}
-                    <img src="/img/copertina.png" class="immagine_copertina">
-                {{/copertina}}
-                <div class="w3-container w3-center">
-                    <p>
-                        <b>{{titolo}}</b>
-                        <br><i>{{autore}}</i>
-                    </p>
-                </div>
-            </div>
-        </div>
-    {{/lista_libri}}
-    {{^lista_libri}}
-        <div class="w3-display-container vuoto">
-            <div class="w3-display-middle w3-center">
-                <p class="w3-text-grey">
-                    <i class="w3-jumbo material-icons">book</i>
-                    <br><br>Nessun libro
-                    <br>trovato...
-                </p>
-            </div>
-        </div>
-    {{/lista_libri}}
-    {{#spazio}}
-        <div class="w3-col s12 m12 l12" id="spazio">&nbsp;</div>
-    {{/spazio}}
-</script>
 
 <!-- LISTA -->
 <script type="text/html" id="leggi_lista">
+    
+    <!-- LIBRI -->
     {{#lista_libri}}
         <p>
             <a href="/libro?codice={{codice}}" class="w3-large">{{titolo}}</a>
             <br>{{autore}}
         </p>
     {{/lista_libri}}
+    
+    <!-- NESSUNO -->
     {{^lista_libri}}
         <div class="w3-display-container vuoto">
             <div class="w3-display-middle w3-center">
@@ -116,15 +102,72 @@
             </div>
         </div>
     {{/lista_libri}}
+    
+    <!-- SPAZIO -->
     {{#spazio}}
         <div class="w3-col s12 m12 l12" id="spazio">&nbsp;</div>
     {{/spazio}}
+
 </script>
+
+
+<!-- RISULTATI -->
+<script type="text/html" id="leggi_risultati">
+    
+    <!-- LIBRI -->
+    {{#lista_libri}}
+        <div class="w3-col s6 w3-margin-top">
+            <div class="w3-center libro" onclick="cerca.apri_libro('{{codice}}')">
+                
+                <!-- COPERTINA -->
+                {{#copertina}}
+                    <img src="{{copertina}}" class="immagine_copertina">
+                {{/copertina}}
+                {{^copertina}}
+                    <img src="/img/copertina.png" class="immagine_copertina">
+                {{/copertina}}
+                
+                <!-- TITOLO e AUTORE -->
+                <div class="w3-container w3-center">
+                    <p>
+                        <b>{{titolo}}</b>
+                        <br><i>{{autore}}</i>
+                    </p>
+                </div>
+                
+            </div>
+        </div>
+    {{/lista_libri}}
+    
+    <!-- NESSUNO -->
+    {{^lista_libri}}
+        <div class="w3-display-container vuoto">
+            <div class="w3-display-middle w3-center">
+                <p class="w3-text-grey">
+                    <i class="w3-jumbo material-icons">book</i>
+                    <br><br>Nessun libro
+                    <br>trovato...
+                </p>
+            </div>
+        </div>
+    {{/lista_libri}}
+    
+    <!-- SPAZIO -->
+    {{#spazio}}
+        <div class="w3-col s12 m12 l12" id="spazio">&nbsp;</div>
+    {{/spazio}}
+    
+</script>
+
 
 <!-- SCHEDA -->
 <script type="text/html" id="leggi_scheda">
+    
+    <!-- SCHEDA -->
     {{#scheda}}
         <div class="w3-row-padding w3-padding-32">
+            
+            <!-- COPERTINA -->
             <div id="copertina" class="w3-col s4">
                 {{#copertina}}
                     <img src="{{copertina}}" id="immagine_copertina">
@@ -133,12 +176,17 @@
                     <img src="/img/copertina.png" id="immagine_copertina">
                 {{/copertina}}
             </div>
+            
+            <!-- CAMPI PRINCIPALI -->
             <div class="w3-col s8">
                 <input type="text" id="codice" value="{{codice}}" placeholder="Codice" class="w3-input" disabled><br>
                 <input type="text" id="titolo" value="{{titolo}}" placeholder="Titolo" class="w3-input" disabled>
                 <input type="text" id="autore" value="{{autore}}" placeholder="Autore" class="w3-input" disabled>
             </div>
+            
         </div>
+    
+        <!-- ALTRI CAMPI -->
         <div class="w3-container w3-white">
             <input type="text" id="genere" value="{{genere}}" placeholder="Genere" class="w3-input" disabled>
             <textarea id="descrizione" rows="10" placeholder="Nessuna descrizione..." class="w3-input" disabled>{{descrizione}}</textarea><br>
@@ -147,7 +195,10 @@
             <button id="recensioni" class="w3-btn w3-margin-top w3-amber w3-text-white"><i class="material-icons">star</i> <b>Recensioni</b></button>
             <button id="posizione" class="w3-btn w3-margin-top w3-green"><i class="material-icons">location_on</i> <b>Posizione</b></button>
         </div>
+        
     {{/scheda}}
+    
+    <!-- NESSUNO -->
     {{^scheda}}
         <div class="w3-display-container vuoto">
             <div class="w3-display-middle w3-center">
@@ -159,15 +210,22 @@
             </div>
         </div>
     {{/scheda}}
+    
+    <!-- SPAZIO -->
     {{#spazio}}
         <div class="w3-col s12 m12 l12" id="spazio">&nbsp;</div>
     {{/spazio}}
+    
 </script>
 
 <!-- SOMMARIO -->
 <script type="text/html" id="leggi_sommario">
+    
+    <!-- SOMMARIO -->
     {{#sommario}}
         <div class="w3-row-padding w3-margin-top">
+            
+            <!-- COPERTINA -->
             <div id="copertina" class="w3-col s4">
                 {{#copertina}}
                     <img src="{{copertina}}" id="immagine_copertina">
@@ -176,67 +234,41 @@
                     <img src="/img/copertina.png" id="immagine_copertina">
                 {{/copertina}}
             </div>
+            
             <div class="w3-col s8">
                 <p class="w3-large">
+                    
+                    <!-- GENERALI -->
                     <b>{{titolo}}</b>
-                    <br><i>{{autore}}</i>
-                    <br><span class="w3-xxlarge w3-text-{{colore}}">{{voto}}<i class="material-icons">star</i></span>
+                    <br><i>{{autore}}</i><br>
+                    
+                    <!-- VOTO -->
+                    <span class="w3-xxlarge w3-text-{{colore}}">
+                        {{voto}}<i class="material-icons">star</i>
+                    </span>
+                    
                 </p>
             </div>
+            
         </div>
     {{/sommario}}
+    
 </script>
 
-<!-- POSIZIONE -->
-<script type="text/html" id="leggi_posizione">
-    {{#posizione}}
-        <div class="w3-row-padding w3-margin-top">
-            <div id="copertina" class="w3-col s4">
-                {{#copertina}}
-                    <img src="{{copertina}}" id="immagine_copertina">
-                {{/copertina}}
-                {{^copertina}}
-                    <img src="/img/copertina.png" id="immagine_copertina">
-                {{/copertina}}
-            </div>
-            <div class="w3-col s8">
-                <p>{{codice}}</p>
-                <p class="w3-large">
-                    <b>{{titolo}}</b>
-                    <br><i>{{autore}}</i>
-                </p>
-            </div>
-        </div>
-        <div class="w3-container w3-margin-top w3-white">
-            <label for="stato" class="w3-label">Stato</label>
-            <select id="stato" name="stato" class="w3-select" disabled>
-                <option value="">Nessuno</option>
-                <option value="casa">In casa</option>
-                <option value="prestito">In prestito</option>
-            </select>
-            <input type="text" id="testo" class="w3-input" placeholder="" value="{{testo}}" disabled>
-        </div>
-    {{/posizione}}
-    {{^posizione}}
-        <div class="w3-display-container vuoto">
-            <div class="w3-display-middle w3-center">
-                <p class="w3-text-grey">
-                    <i class="w3-jumbo material-icons">location_on</i>
-                    <br><br>Posizione non
-                    <br>trovata...
-                </p>
-            </div>
-        </div>
-    {{/posizione}}
-</script>
 
 <!-- RECENSIONI -->
 <script type="text/html" id="leggi_recensioni">
+    
+    <!-- LISTA -->
     {{#recensioni}}
         <div class="w3-row-padding w3-margin-top">
+            
+            <!-- VOTO -->
             <div class="w3-col s2">
                 <span class="w3-xxxlarge w3-text-{{colore}}">{{valore}}</span>
             </div>
+            
+            <!-- TESTO ed ELIMINA -->
             <div class="w3-col s10">
                 <p>
                     <span onclick="recensioni.elimina_recensione('{{id}}')" class="w3-closebtn w3-text-red">&times;</span>
@@ -244,8 +276,11 @@
                     <br><i>{{testo}}</i>
                 </p>
             </div>
+            
         </div>
     {{/recensioni}}
+    
+    <!-- NESSUNA -->
     {{^recensioni}}
         <div class="w3-display-container vuoto">
             <div class="w3-display-middle w3-center">
@@ -257,7 +292,69 @@
             </div>
         </div>
     {{/recensioni}}
+    
+    <!-- SPAZIO -->
     {{#spazio}}
         <div class="w3-col s12 m12 l12" id="spazio">&nbsp;</div>
     {{/spazio}}
+    
+</script>
+
+
+<!-- POSIZIONE -->
+<script type="text/html" id="leggi_posizione">
+    
+    <!-- VALORE -->
+    {{#posizione}}
+        <div class="w3-row-padding w3-margin-top">
+            
+            <!-- COPERTINA -->
+            <div id="copertina" class="w3-col s4">
+                {{#copertina}}
+                    <img src="{{copertina}}" id="immagine_copertina">
+                {{/copertina}}
+                {{^copertina}}
+                    <img src="/img/copertina.png" id="immagine_copertina">
+                {{/copertina}}
+            </div>
+            
+            <!-- GENERALI -->
+            <div class="w3-col s8">
+                <p>{{codice}}</p>
+                <p class="w3-large">
+                    <b>{{titolo}}</b>
+                    <br><i>{{autore}}</i>
+                </p>
+            </div>
+            
+        </div>
+        <div class="w3-container w3-margin-top w3-white">
+            
+            <!-- STATO -->
+            <label for="stato" class="w3-label">Stato</label>
+            <select id="stato" name="stato" class="w3-select" disabled>
+                <option value="">Nessuno</option>
+                <option value="casa">In casa</option>
+                <option value="prestito">In prestito</option>
+            </select>
+            
+            <!-- TESTO -->
+            <input type="text" id="testo" class="w3-input" placeholder="" value="{{testo}}" disabled>
+            
+        </div>
+    {{/posizione}}
+    
+    <!-- NESSUNA -->
+    {{^posizione}}
+        <div class="w3-display-container vuoto">
+            <div class="w3-display-middle w3-center">
+                <p class="w3-text-grey">
+                    <i class="w3-jumbo material-icons">location_on</i>
+                    <br><br>Posizione non
+                    <br>trovata...
+                </p>
+            </div>
+        </div>
+    {{/posizione}}
+    
 </script>

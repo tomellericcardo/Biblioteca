@@ -5,7 +5,8 @@ $(function() {
         },
         attachListeners: function() {
             var self = this;
-
+            
+            // IMMAGINE CARICATA
             $(".controls input[type=file]").on("change", function(e) {
                 if (e.target.files && e.target.files.length) {
                     App.decode(URL.createObjectURL(e.target.files[0]));
@@ -177,7 +178,8 @@ $(function() {
             }
     }
     });
-
+    
+    // CODICE IDENTIFICATO
     Quagga.onDetected(function(result) {
         clearTimeout(aggiungi.timeout);
         var codice = result.codeResult.code;

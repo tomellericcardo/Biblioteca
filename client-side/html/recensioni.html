@@ -12,6 +12,7 @@
         <link rel="stylesheet" href="/css/recensioni.css">
         
         <!-- FONTS -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
         
         <!-- ANDROID -->
@@ -40,6 +41,8 @@
                 
                 <!-- SOMMARIO -->
                 <div id="sommario" class="w3-row-padding w3-white">
+            
+                    <!-- CARICAMENTO -->
                     <div class="w3-display-container vuoto">
                         <div class="w3-display-middle w3-center">
                             <p class="w3-text-grey">
@@ -49,6 +52,7 @@
                             </p>
                         </div>
                     </div>
+                    
                 </div>
                 
                 <!-- RECENSIONI -->
@@ -62,11 +66,17 @@
         <div id="nuova_recensione" class="w3-modal">
             <div id="sfondo_recensione" class="sfondo_modal"></div>
             <div class="w3-modal-content w3-card-8">
+                
+                <!-- HEADER -->
                 <div class="w3-container w3-amber w3-text-white">
                     <span id="chiudi_recensione" class="w3-closebtn">&times;</span>
                     <h1 class="w3-xlarge">Nuova Recensione</h1>
                 </div>
+                
+                <!-- CAMPI -->
                 <div class="w3-container w3-padding-top w3-padding-bottom w3-white">
+                    
+                    <!-- STELLE -->
                     <div class="w3-container w3-white">
                         <p class="w3-center">
                             <i id="stella1" class="material-icons w3-xxlarge w3-text-amber stella">star_border</i>
@@ -76,31 +86,19 @@
                             <i id="stella5" class="material-icons w3-xxlarge w3-text-amber stella">star_border</i>
                         </p>
                     </div>
+                    
+                    <!-- AUTORE e TESTO -->
                     <input type="text" id="autore" class="w3-input" placeholder="Autore">
                     <textarea id="testo" rows="4" placeholder="Testo della recensione..." class="w3-input"></textarea>
+                    
+                    <!-- INVIA -->
                     <div class="w3-margin w3-right">
                         <span id="attesa"><i class="material-icons w3-margin-right w3-spin w3-text-grey">refresh</i></span>
                         <button id="invia_recensione" class="w3-btn w3-right w3-blue">Invia</button>
                     </div>
+                    
                 </div>
-            </div>
-        </div>
-        
-        <!-- ELIMINA -->
-        <div id="elimina" class="w3-modal">
-            <div id="sfondo_elimina" class="sfondo_modal"></div>
-            <div class="w3-modal-content w3-card-8">
-                <div class="w3-container w3-red">
-                    <span id="chiudi_elimina" class="w3-closebtn">&times;</span>
-                    <h1 class="w3-xlarge">Sicuro?</h1>
-                </div>
-                <div class="w3-container w3-padding-bottom w3-white">
-                    <p>Sicuro di voler eliminare questo libro?</p>
-                    <div class="w3-margin w3-right">
-                        <span id="attesa"><i class="material-icons w3-margin-right w3-spin w3-text-grey">refresh</i></span>
-                        <button id="conferma_elimina" class="w3-btn w3-right w3-orange">Conferma</button>
-                    </div>
-                </div>
+                
             </div>
         </div>
         
@@ -108,13 +106,18 @@
         <div id="errore" class="w3-modal">
             <div id="sfondo_errore" class="sfondo_modal"></div>
             <div class="w3-modal-content w3-card-8">
+                
+                <!-- HEADER -->
                 <div class="w3-container w3-red">
                     <span id="chiudi_errore" class="w3-closebtn">&times;</span>
                     <h1 class="w3-xlarge">Errore!</h1>
                 </div>
+                
+                <!-- MESSAGGIO -->
                 <div class="w3-container w3-padding-bottom w3-white">
                     <p id="messaggio"></p>
                 </div>
+                
             </div>
         </div>
         
