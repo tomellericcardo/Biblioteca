@@ -3,6 +3,7 @@ liste = {
     init: function() {
         liste.init_home();
         liste.init_mostra();
+        liste.leggi_lista();
     },
     
     init_home: function() {
@@ -13,27 +14,31 @@ liste = {
     
     init_mostra: function() {
         $('#mostra').on('click', function() {
-            $('#attesa').css('display', 'inline');
-            var ordine = $('#ordine').val();
-            $.ajax({
-                url: 'leggi_lista',
-                method: 'POST',
-                contentType: 'application/json',
-                dataType: 'json',
-                data: JSON.stringify({ordine: ordine}),
-                success: function(risposta) {
-                    risposta = liste.formatta_risultati(risposta);
-                    $.get('/html/templates.html', function(contenuto) {
-                        var template = $(contenuto).filter('#leggi_lista').html();
-                        $('#risultati').html(Mustache.render(template, risposta));
-                    }).then(function() {
-                        $('#attesa').css('display', 'none');
-                    });
-                },
-                error: function() {
-                    errore.messaggio('Errore del server!');
-                }
-            });
+            liste.leggi_lista();
+        });
+    },
+    
+    leggi_lista: function() {
+        $('#attesa').css('display', 'inline');
+        var ordine = $('#ordine').val();
+        $.ajax({
+            url: 'leggi_lista',
+            method: 'POST',
+            contentType: 'application/json',
+            dataType: 'json',
+            data: JSON.stringify({ordine: ordine}),
+            success: function(risposta) {
+                risposta = liste.formatta_risultati(risposta);
+                $.get('/html/templates.html', function(contenuto) {
+                    var template = $(contenuto).filter('#leggi_lista').html();
+                    $('#risultati').html(Mustache.render(template, risposta));
+                }).then(function() {
+                    $('#attesa').css('display', 'none');
+                });
+            },
+            error: function() {
+                errore.messaggio('Errore del server!');
+            }
         });
     },
     
