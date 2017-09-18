@@ -7,6 +7,7 @@ class Biblioteca:
     
     def __init__(self, g, database_filename):
         self.manager = Manager(g, database_filename)
+        self.alfabeto = 'abcdefghijklmnopqrstuvwxyz'
     
     def leggi_galleria(self):
         return self.manager.leggi_righe('''
@@ -114,13 +115,36 @@ class Biblioteca:
             REGEXP ?
         ''', (richiesta,))
     
-    def leggi_lista(self, ordine):
-        return self.manager.leggi_righe('''
-            SELECT codice, titolo, autore
+    def leggi_lista_titolo(self):
+        dizionario = {}
+        for lettera in self.alfabeto:
+            espressione = '^' + lettera
+            lista = self.manager.leggi_righe('''
+                SELECT codice, titolo, autore
+                FROM libro
+                WHERE LOWER(titolo)
+                REGEXP ?
+            ''', (espressione,))
+            if len(lista) > 0:
+                dizionario[lettera] = lista
+        return dizionario
+    
+    def leggi_lista_autore(self):
+        dizionario = {}
+        lista_autori = self.manager.leggi_righe('''
+            SELECT DISTINCT(autore)
             FROM libro
-            WHERE ''' + ordine + ''' != ''
-            ORDER BY LOWER(''' + ordine + ''')
         ''')
+        for autore in lista_autori:
+            autore = autore[0]
+            lista = self.manager.leggi_righe('''
+                SELECT codice, titolo
+                FROM libro
+                WHERE autore = ?
+            ''', (autore,))
+            if len(lista) > 0:
+                dizionario[autore] = lista
+        return dizionario
     
     def invia_recensione(self, libro, valore, autore, testo):
         self.manager.scrivi('''

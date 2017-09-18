@@ -79,15 +79,52 @@
 </script>
 
 
-<!-- LISTA -->
-<script type="text/html" id="leggi_lista">
+<!-- LISTA TITOLO -->
+<script type="text/html" id="leggi_lista_titolo">
     
     <!-- LIBRI -->
     {{#lista_libri}}
-        <p>
-            <a href="/libro?codice={{codice}}" class="w3-large">{{titolo}}</a>
-            <br>{{autore}}
-        </p>
+        <p class="w3-xlarge w3-text-indigo"><b>{{chiave}}</b></p>
+        {{#libri}}
+            <p class="w3-margin-left w3-padding-left">
+                <a href="/libro?codice={{codice}}" class="w3-large">{{titolo}}</a>
+                <br>{{autore}}
+            </p>
+        {{/libri}}
+    {{/lista_libri}}
+    
+    <!-- NESSUNO -->
+    {{^lista_libri}}
+        <div class="w3-display-container vuoto">
+            <div class="w3-display-middle w3-center">
+                <p class="w3-text-grey">
+                    <i class="w3-jumbo material-icons">book</i>
+                    <br><br>Nessun libro
+                    <br>trovato...
+                </p>
+            </div>
+        </div>
+    {{/lista_libri}}
+    
+    <!-- SPAZIO -->
+    {{#spazio}}
+        <div class="w3-col s12 m12 l12" id="spazio">&nbsp;</div>
+    {{/spazio}}
+
+</script>
+
+
+<!-- LISTA AUTORE -->
+<script type="text/html" id="leggi_lista_autore">
+    
+    <!-- LIBRI -->
+    {{#lista_libri}}
+        <p class="w3-xlarge w3-text-indigo"><b>{{chiave}}</b></p>
+        {{#libri}}
+            <p class="w3-margin-left w3-padding-left">
+                <a href="/libro?codice={{codice}}" class="w3-large">{{titolo}}</a>
+            </p>
+        {{/libri}}
     {{/lista_libri}}
     
     <!-- NESSUNO -->

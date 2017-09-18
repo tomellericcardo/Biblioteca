@@ -54,7 +54,11 @@ def leggi_galleria():
 def leggi_lista():
     richiesta = request.get_json(force = True)
     ordine = richiesta['ordine']
-    return dumps({'lista_libri': biblioteca.leggi_lista(ordine)})
+    if ordine == 'titolo':
+        lista_libri = biblioteca.leggi_lista_titolo()
+    elif ordine == 'autore':
+        lista_libri = biblioteca.leggi_lista_autore()
+    return dumps({'lista_libri': lista_libri})
 
 # Esegui ricerca
 
@@ -188,4 +192,4 @@ def modifica_posizione():
 # AVVIO DEL SERVER
 
 if __name__ == '__main__':
-    app.run(host = '192.168.1.94', port = 80, threaded = True, debug = True)
+    app.run(host = '192.168.1.67', port = 80, threaded = True, debug = True)
