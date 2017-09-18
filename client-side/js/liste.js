@@ -55,6 +55,7 @@ liste = {
     formatta_risultati_titolo: function(risposta) {
         var lista_libri = risposta.lista_libri;
         if (lista_libri) {
+            var n = 0;
             var nuova_lista = [];
             var lista_chiavi = [];
             for (var chiave in lista_libri) {
@@ -74,11 +75,13 @@ liste = {
                         titolo: libro[1],
                         autore: libro[2]
                     };
+                    n += 1;
                 }
                 nuova_lista[i] = gruppo;
             }
             risposta.lista_libri = nuova_lista;
             risposta.spazio = true;
+            $('#n').html(n + ' risultati');
             return risposta;
         }
         return [];
@@ -87,21 +90,24 @@ liste = {
     formatta_risultati_autore: function(risposta) {
         var lista_libri = risposta.lista_libri;
         if (lista_libri) {
+            var n = 0;
             var nuova_lista = [];
-            var lista_chiavi = [];
-            var lista_nomi
-            for (var chiave in lista_libri) {
-                lista_chiavi.push(chiave);
+            var lista_autori = [];
+            var autore, lista_nomi, nuovo_autore;
+            for (autore in lista_libri) {
+                lista_nomi = autore.split(' ');
+                nuovo_autore = lista_nomi[lista_nomi.length - 1].toUpperCase();
+                lista_autori.push(nuovo_autore);
+                lista_libri[nuovo_autore] = lista_libri[autore];
             }
-            lista_chiavi.sort(function (a, b) {
+            lista_autori.sort(function (a, b) {
                 return a.toLowerCase().localeCompare(b.toLowerCase());
             });
-            var i, j, gruppo, lista_nomi, chiave, libro;
-            for (i = 0; i < lista_chiavi.length; i++) {
-                chiave = lista_chiavi[i];
+            var i, j, gruppo, chiave, libro;
+            for (i = 0; i < lista_autori.length; i++) {
+                chiave = lista_autori[i];
                 gruppo = {};
-                lista_nomi = chiave.split(' ');
-                gruppo.chiave = lista_nomi[lista_nomi.length - 1].toUpperCase();
+                gruppo.chiave = chiave;
                 gruppo.libri = [];
                 for (j = 0; j < lista_libri[chiave].length; j++) {
                     libro = lista_libri[chiave][j];
@@ -109,11 +115,13 @@ liste = {
                         codice: libro[0],
                         titolo: libro[1]
                     };
+                    n += 1;
                 }
                 nuova_lista[i] = gruppo;
             }
             risposta.lista_libri = nuova_lista;
             risposta.spazio = true;
+            $('#n').html(n + ' risultati');
             return risposta;
         }
         return [];
