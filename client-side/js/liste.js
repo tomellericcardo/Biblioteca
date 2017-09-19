@@ -28,18 +28,18 @@ liste = {
             dataType: 'json',
             data: JSON.stringify({ordine: ordine}),
             success: function(risposta) {
-                if (ordine == 'titolo') {
-                    risposta = liste.formatta_risultati_titolo(risposta);
+                if (ordine == 'autore') {
+                    risposta = liste.formatta_risultati_autore(risposta);
                     $.get('/html/templates.html', function(contenuto) {
-                        var template = $(contenuto).filter('#leggi_lista_titolo').html();
+                        var template = $(contenuto).filter('#leggi_lista_autore').html();
                         $('#risultati').html(Mustache.render(template, risposta));
                     }).then(function() {
                         $('#attesa').css('display', 'none');
                     });
-                } else if (ordine == 'autore') {
-                    risposta = liste.formatta_risultati_autore(risposta);
+                } else {
+                    risposta = liste.formatta_risultati(risposta);
                     $.get('/html/templates.html', function(contenuto) {
-                        var template = $(contenuto).filter('#leggi_lista_autore').html();
+                        var template = $(contenuto).filter('#leggi_lista').html();
                         $('#risultati').html(Mustache.render(template, risposta));
                     }).then(function() {
                         $('#attesa').css('display', 'none');
@@ -50,41 +50,6 @@ liste = {
                 errore.messaggio('Errore del server!');
             }
         });
-    },
-    
-    formatta_risultati_titolo: function(risposta) {
-        var lista_libri = risposta.lista_libri;
-        if (lista_libri) {
-            var n = 0;
-            var nuova_lista = [];
-            var lista_chiavi = [];
-            for (var chiave in lista_libri) {
-                lista_chiavi.push(chiave);
-            }
-            lista_chiavi.sort();
-            var i, j, gruppo, chiave, libro;
-            for (i = 0; i < lista_chiavi.length; i++) {
-                chiave = lista_chiavi[i];
-                gruppo = {};
-                gruppo.chiave = chiave.toUpperCase();
-                gruppo.libri = [];
-                for (j = 0; j < lista_libri[chiave].length; j++) {
-                    libro = lista_libri[chiave][j];
-                    gruppo.libri[j] = {
-                        codice: libro[0],
-                        titolo: libro[1],
-                        autore: libro[2]
-                    };
-                    n += 1;
-                }
-                nuova_lista[i] = gruppo;
-            }
-            risposta.lista_libri = nuova_lista;
-            risposta.spazio = true;
-            $('#n').html(n + ' risultati');
-            return risposta;
-        }
-        return [];
     },
     
     formatta_risultati_autore: function(risposta) {
@@ -100,9 +65,7 @@ liste = {
                 lista_autori.push(nuovo_autore);
                 lista_libri[nuovo_autore] = lista_libri[autore];
             }
-            lista_autori.sort(function (a, b) {
-                return a.toLowerCase().localeCompare(b.toLowerCase());
-            });
+            lista_autori.sort();
             var i, j, gruppo, chiave, libro;
             for (i = 0; i < lista_autori.length; i++) {
                 chiave = lista_autori[i];
@@ -114,6 +77,50 @@ liste = {
                     gruppo.libri[j] = {
                         codice: libro[0],
                         titolo: libro[1]
+                    };
+                    n += 1;
+                }
+                nuova_lista[i] = gruppo;
+            }
+            risposta.lista_libri = nuova_lista;
+            risposta.spazio = true;
+            $('#n').html(n + ' risultati');
+            return risposta;
+        }
+        return [];
+    },
+    
+    formatta_risultati: function(risposta) {
+        var lista_libri = risposta.lista_libri;
+        if (lista_libri) {
+            var n = 0;
+            var nuova_lista = [];
+            var lista_chiavi = [];
+            var chiave, nuova_chiave;
+            for (chiave in lista_libri) {
+                if (chiave.length > 0) {
+                    nuova_chiave = chiave.toUpperCase();
+                    lista_chiavi.push(nuova_chiave);
+                    lista_libri[nuova_chiave] = lista_libri[chiave];
+                }
+            }
+            lista_chiavi.sort();
+            if (lista_libri['']) {
+                lista_chiavi.push('NON SPECIFICATO');
+                lista_libri['NON SPECIFICATO'] = lista_libri[''];
+            }
+            var i, j, gruppo, chiave, libro;
+            for (i = 0; i < lista_chiavi.length; i++) {
+                chiave = lista_chiavi[i];
+                gruppo = {};
+                gruppo.chiave = chiave;
+                gruppo.libri = [];
+                for (j = 0; j < lista_libri[chiave].length; j++) {
+                    libro = lista_libri[chiave][j];
+                    gruppo.libri[j] = {
+                        codice: libro[0],
+                        titolo: libro[1],
+                        autore: libro[2]
                     };
                     n += 1;
                 }

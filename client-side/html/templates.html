@@ -79,8 +79,8 @@
 </script>
 
 
-<!-- LISTA TITOLO -->
-<script type="text/html" id="leggi_lista_titolo">
+<!-- LISTA AUTORE -->
+<script type="text/html" id="leggi_lista_autore">
     
     <!-- LIBRI -->
     {{#lista_libri}}
@@ -88,7 +88,6 @@
         {{#libri}}
             <p class="w3-margin-left w3-padding-left">
                 <a href="/libro?codice={{codice}}" class="w3-large">{{titolo}}</a>
-                <br>{{autore}}
             </p>
         {{/libri}}
     {{/lista_libri}}
@@ -114,8 +113,8 @@
 </script>
 
 
-<!-- LISTA AUTORE -->
-<script type="text/html" id="leggi_lista_autore">
+<!-- LISTA -->
+<script type="text/html" id="leggi_lista">
     
     <!-- LIBRI -->
     {{#lista_libri}}
@@ -123,6 +122,7 @@
         {{#libri}}
             <p class="w3-margin-left w3-padding-left">
                 <a href="/libro?codice={{codice}}" class="w3-large">{{titolo}}</a>
+                <br>{{autore}}
             </p>
         {{/libri}}
     {{/lista_libri}}

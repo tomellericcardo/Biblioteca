@@ -137,13 +137,26 @@ class Biblioteca:
         ''')
         for autore in lista_autori:
             autore = autore[0]
-            lista = self.manager.leggi_righe('''
+            dizionario[autore] = self.manager.leggi_righe('''
                 SELECT codice, titolo
                 FROM libro
                 WHERE autore = ?
             ''', (autore,))
-            if len(lista) > 0:
-                dizionario[autore] = lista
+        return dizionario
+    
+    def leggi_lista(self, ordine):
+        dizionario = {}
+        lista_chiavi = self.manager.leggi_righe('''
+            SELECT DISTINCT(''' + ordine + ''')
+            FROM libro
+        ''')
+        for chiave in lista_chiavi:
+            chiave = chiave[0]
+            dizionario[chiave] = self.manager.leggi_righe('''
+                SELECT codice, titolo, autore
+                FROM libro
+                WHERE ''' + ordine + ''' = ?
+            ''', (chiave,))
         return dizionario
     
     def invia_recensione(self, libro, valore, autore, testo):

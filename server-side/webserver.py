@@ -58,6 +58,8 @@ def leggi_lista():
         lista_libri = biblioteca.leggi_lista_titolo()
     elif ordine == 'autore':
         lista_libri = biblioteca.leggi_lista_autore()
+    else:
+        lista_libri = biblioteca.leggi_lista(ordine)
     return dumps({'lista_libri': lista_libri})
 
 # Esegui ricerca
