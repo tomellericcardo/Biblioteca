@@ -7,7 +7,7 @@ class Biblioteca:
     
     def __init__(self, g, database_filename):
         self.manager = Manager(g, database_filename)
-        self.alfabeto = 'abcdefghijklmnopqrstuvwxyz'
+        self.alfabeto = u'0123456789abcdefghijklmnopqrstuvwxyz'
     
     def leggi_galleria(self):
         return self.manager.leggi_righe('''
