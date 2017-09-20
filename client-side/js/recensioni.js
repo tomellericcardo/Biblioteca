@@ -10,6 +10,9 @@ recensioni = {
         recensioni.leggi_recensioni();
     },
     
+    
+    // Leggi parametro
+    
     leggi_parametro: function(parametro) {
         var indirizzo_pagina = decodeURIComponent(window.location.search.substring(1));
         var variabili = indirizzo_pagina.split('&');
@@ -22,11 +25,17 @@ recensioni = {
         }
     },
     
+    
+    // Bottone indietro
+    
     init_indietro: function() {
         $('#indietro').on('click', function() {
             window.location.href = '/libro?codice=' + recensioni.codice;
         });
     },
+    
+    
+    // Bottone mostra nuova recensione
     
     init_mostra_recensione: function() {
         $('#mostra_recensione').on('click', function() {
@@ -34,11 +43,17 @@ recensioni = {
         });
     },
     
+    
+    // Bottone chiudi nuova recensione
+    
     init_chiudi_recensione: function() {
         $('#chiudi_recensione, #sfondo_recensione').on('click', function() {
             $('#nuova_recensione').css('display', 'none');
         });
     },
+    
+    
+    // Icone stelle
     
     init_stelle: function() {
         recensioni.valore_recensione = 0;
@@ -68,6 +83,9 @@ recensioni = {
         });
     },
     
+    
+    // Bottone invia recensione
+    
     init_invia_recensione: function() {
         $('#invia_recensione').on('click', function() {
             $('#autore, #testo').css('border-color', '#757575');
@@ -78,111 +96,14 @@ recensioni = {
             } else if (autore.length == 0) {
                 $('#autore').css('border-color', 'red');
                 errore.messaggio('Devi inserire il tuo nome per fare la recensione!');
-            }else {
-                $('#attesa').css('display', 'inline');
-                $.ajax({
-                    url: 'invia_recensione',
-                    method: 'POST',
-                    contentType: 'application/json',
-                    dataType: 'json',
-                    data: JSON.stringify({
-                        libro: recensioni.codice,
-                        valore: recensioni.valore_recensione,
-                        autore: autore,
-                        testo: testo
-                    }),
-                    success: function(risposta) {
-                        $('#attesa, #nuova_recensione').css('display', 'none');
-                        recensioni.valore_recensione = 0;
-                        $('.stella').html('star_border');
-                        $('#autore, #testo').val('');
-                        recensioni.leggi_recensioni();
-                    },
-                    error: function() {
-                        errore.messaggio('Errore del server!');
-                    }
-                });
-            }
-        });
-    },
-    
-    leggi_recensioni: function() {
-        $.ajax({
-            url: 'leggi_recensioni',
-            method: 'POST',
-            contentType: 'application/json',
-            dataType: 'json',
-            data: JSON.stringify({libro: recensioni.codice}),
-            success: function(risposta) {
-                risposta = recensioni.formatta_recensioni(risposta);
-                $.get('/html/templates.html', function(contenuto) {
-                    var template1 = $(contenuto).filter('#leggi_sommario').html();
-                    $('#sommario').html(Mustache.render(template1, risposta));
-                });
-                $.get('/html/templates.html', function(contenuto) {
-                    var template2 = $(contenuto).filter('#leggi_recensioni').html();
-                    $('#recensioni').html(Mustache.render(template2, risposta));
-                });
-            },
-            error: function() {
-                errore.messaggio('Errore del server!');
-            }
-        });
-    },
-    
-    formatta_recensioni: function(risposta) {
-        var sommario = risposta.sommario;
-        if (sommario) {
-            var voto = Number((sommario[3]).toFixed(1));
-            var n = Math.round(voto);
-            var colore;
-            if (n < 3) {
-                colore = 'red';
-            } else if (n < 5) {
-                colore = 'orange';
             } else {
-                colore = 'amber';
+                recensioni.invia_recensione(autore, testo);
             }
-            var nuovo_sommario = {
-                titolo: sommario[0],
-                autore: sommario[1],
-                copertina: sommario[2],
-                voto: voto,
-                colore: colore
-            };
-            risposta.sommario = nuovo_sommario;
-        } else {
-            risposta.sommario = [];
-        }
-        var lista_recensioni = risposta.recensioni;
-        if (lista_recensioni) {
-            var nuova_lista = [];
-            var i, recensione;
-            for (i = 0; i < lista_recensioni.length; i++) {
-                recensione = lista_recensioni[i];
-                var valore = recensione[1];
-                if (valore < 3) {
-                    colore = 'red';
-                } else if (valore < 5) {
-                    colore = 'orange';
-                } else {
-                    colore = 'amber';
-                }
-                nuova_lista[i] = {
-                    id: recensione[0],
-                    valore: valore,
-                    colore: colore,
-                    autore: recensione[2],
-                    testo: recensione[3]
-                };
-            }
-            risposta.recensioni = nuova_lista;
-            risposta.spazio = true;
-        } else {
-            risposta.recensioni = [];
-        }
-        return risposta;
+        });
     },
+    
+    
+    // Elimina recensione
     
     elimina_recensione: function(id) {
         $.ajax({
@@ -198,6 +119,135 @@ recensioni = {
                 errore.messaggio('Errore del server!');
             }
         });
+    },
+    
+    
+    // Invia recensione
+    
+    invia_recensione: function(autore, testo) {
+        $('#attesa').css('display', 'inline');
+        $.ajax({
+            url: 'invia_recensione',
+            method: 'POST',
+            contentType: 'application/json',
+            dataType: 'json',
+            data: JSON.stringify({
+                libro: recensioni.codice,
+                valore: recensioni.valore_recensione,
+                autore: autore,
+                testo: testo
+            }),
+            success: function(risposta) {
+                $('#attesa, #nuova_recensione').css('display', 'none');
+                recensioni.valore_recensione = 0;
+                $('.stella').html('star_border');
+                $('#autore, #testo').val('');
+                recensioni.leggi_recensioni();
+            },
+            error: function() {
+                errore.messaggio('Errore del server!');
+            }
+        });
+    },
+    
+    
+    // Leggi recensioni
+    
+    leggi_recensioni: function() {
+        $.ajax({
+            url: 'leggi_recensioni',
+            method: 'POST',
+            contentType: 'application/json',
+            dataType: 'json',
+            data: JSON.stringify({libro: recensioni.codice}),
+            success: function(risposta) {
+                risposta = recensioni.formatta_risposta(risposta);
+                $.get('/html/templates.html', function(contenuto) {
+                    var template1 = $(contenuto).filter('#leggi_sommario').html();
+                    $('#sommario').html(Mustache.render(template1, risposta));
+                });
+                $.get('/html/templates.html', function(contenuto) {
+                    var template2 = $(contenuto).filter('#leggi_recensioni').html();
+                    $('#recensioni').html(Mustache.render(template2, risposta));
+                });
+            },
+            error: function() {
+                errore.messaggio('Errore del server!');
+            }
+        });
+    },
+    
+    
+    // Formatta risposta
+    
+    formatta_risposta: function(risposta) {
+        var sommario = risposta.sommario;
+        if (sommario) {
+            var nuovo_sommario = recensioni.formatta_sommario(sommario);
+            risposta.sommario = nuovo_sommario;
+        } else {
+            risposta.sommario = [];
+        }
+        var lista_recensioni = risposta.recensioni;
+        if (lista_recensioni) {
+            var nuova_lista = recensioni.formatta_recensioni(lista_recensioni);
+            risposta.recensioni = nuova_lista;
+            risposta.spazio = true;
+        } else {
+            risposta.recensioni = [];
+        }
+        return risposta;
+    },
+    
+    
+    // Formatta sommario
+    
+    formatta_sommario: function(sommario) {
+        var voto = Number((sommario[3]).toFixed(1));
+        var n = Math.round(voto);
+        var colore;
+        if (n < 3) {
+            colore = 'red';
+        } else if (n < 5) {
+            colore = 'orange';
+        } else {
+            colore = 'amber';
+        }
+        var nuovo_sommario = {
+            titolo: sommario[0],
+            autore: sommario[1],
+            copertina: sommario[2],
+            voto: voto,
+            colore: colore
+        };
+        return nuovo_sommario;
+    },
+    
+    
+    // Formatta recensioni
+    
+    formatta_recensioni: function(lista_recensioni) {
+        var nuova_lista = [];
+        var i, recensione, colore;
+        for (i = 0; i < lista_recensioni.length; i++) {
+            recensione = lista_recensioni[i];
+            var valore = recensione[1];
+            if (valore < 3) {
+                colore = 'red';
+            } else if (valore < 5) {
+                colore = 'orange';
+            } else {
+                colore = 'amber';
+            }
+            nuova_lista[i] = {
+                id: recensione[0],
+                valore: valore,
+                colore: colore,
+                autore: recensione[2],
+                testo: recensione[3]
+            };
+        }
+        return nuova_lista;
     }
     
 };

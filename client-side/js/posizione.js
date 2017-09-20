@@ -8,6 +8,9 @@ posizione = {
         posizione.leggi_posizione();
     },
     
+    
+    // Leggi parametro
+    
     leggi_parametro: function(parametro) {
         var indirizzo_pagina = decodeURIComponent(window.location.search.substring(1));
         var variabili = indirizzo_pagina.split('&');
@@ -20,11 +23,17 @@ posizione = {
         }
     },
     
+    
+    // Bottone indietro
+    
     init_indietro: function() {
         $('#indietro').on('click', function() {
             window.location.href = '/libro?codice=' + posizione.codice;
         });
     },
+    
+    
+    // Selezione stato
     
     init_stato: function() {
         $('#stato').on('change', function() {
@@ -39,6 +48,9 @@ posizione = {
         });
     },
     
+    
+    // Bottone modifica posizione
+    
     init_modifica_posizione: function() {
         $('#modifica_posizione').on('click', function() {
             $('#modifica_posizione').css('display', 'none');
@@ -46,6 +58,9 @@ posizione = {
             $('#stato, #testo').prop('disabled', false);
         });
     },
+    
+    
+    // Bottone conferma modifiche
     
     init_conferma_modifiche: function() {
         $('#conferma_modifiche').on('click', function() {
@@ -62,30 +77,40 @@ posizione = {
                     errore.messaggio('Devi specificare a chi è stato dato in prestito il libro!');
                 }
             } else {
-                $('#stato, #testo').prop('disabled', true);
-                $('#conferma_modifiche').css('display', 'none');
-                $('#modifica_posizione').css('display', 'block');
-                var richiesta = {
-                    libro: posizione.codice,
-                    stato: stato,
-                    testo: testo
-                };
-                $.ajax({
-                    url: 'modifica_posizione',
-                    method: 'POST',
-                    contentType: 'application/json',
-                    dataType: 'json',
-                    data: JSON.stringify(richiesta),
-                    success: function(risposta) {
-                        posizione.leggi_posizione();
-                    },
-                    error: function() {
-                        errore.messaggio('Errore del server!');
-                    }
-                });
+                posizione.modifica_posizione(stato, testo);
             }
         });
     },
+    
+    
+    // Modifica posizione
+    
+    modifica_posizione: function(stato, testo) {
+        $('#stato, #testo').prop('disabled', true);
+        $('#conferma_modifiche').css('display', 'none');
+        $('#modifica_posizione').css('display', 'block');
+        var richiesta = {
+            libro: posizione.codice,
+            stato: stato,
+            testo: testo
+        };
+        $.ajax({
+            url: 'modifica_posizione',
+            method: 'POST',
+            contentType: 'application/json',
+            dataType: 'json',
+            data: JSON.stringify(richiesta),
+            success: function(risposta) {
+                posizione.leggi_posizione();
+            },
+            error: function() {
+                errore.messaggio('Errore del server!');
+            }
+        });
+    },
+    
+    
+    // Leggi posizione
     
     leggi_posizione: function() {
         $.ajax({
@@ -109,6 +134,9 @@ posizione = {
             }
         });
     },
+    
+    
+    // Formatta posizione
     
     formatta_posizione: function(risposta) {
         var posizione = risposta.posizione;

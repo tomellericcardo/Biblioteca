@@ -101,12 +101,10 @@ def leggi_scheda():
 def elimina_scheda():
     richiesta = request.get_json(force = True)
     codice = richiesta['codice']
-    if biblioteca.codice_presente(codice):
-        biblioteca.elimina_scheda(codice)
-        biblioteca.elimina_recensioni(codice)
-        biblioteca.elimina_posizione(codice)
-        return dumps({'successo': True})
-    return dumps({'errore': True})
+    biblioteca.elimina_scheda(codice)
+    biblioteca.elimina_recensioni(codice)
+    biblioteca.elimina_posizione(codice)
+    return dumps({'successo': True})
 
 # Modifica scheda
 
@@ -120,15 +118,13 @@ def modifica_scheda():
     descrizione = richiesta['descrizione']
     editore = richiesta['editore']
     anno = richiesta['anno']
-    if biblioteca.codice_presente(codice):
-        copertina = biblioteca.leggi_copertina(codice)
-        biblioteca.elimina_scheda(codice)
-        nuovo_codice = biblioteca.nuovo_libro(titolo, autore, genere, descrizione, editore, anno, copertina)
-        if (codice != nuovo_codice):
-            biblioteca.aggiorna_recensioni(codice, nuovo_codice)
-            biblioteca.aggiorna_posizione(codice, nuovo_codice)
-        return dumps({'codice': nuovo_codice})
-    return dumps({'errore': True})
+    copertina = biblioteca.leggi_copertina(codice)
+    biblioteca.elimina_scheda(codice)
+    nuovo_codice = biblioteca.nuovo_libro(titolo, autore, genere, descrizione, editore, anno, copertina)
+    if (codice != nuovo_codice):
+        biblioteca.aggiorna_recensioni(codice, nuovo_codice)
+        biblioteca.aggiorna_posizione(codice, nuovo_codice)
+    return dumps({'codice': nuovo_codice})
 
 # Modifica copertina
 

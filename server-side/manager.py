@@ -8,7 +8,7 @@ from re import compile
 class Manager:
     
     
-    # Inizializzazione del database
+    # Inizializzazione database
     
     def __init__(self, g, database_filename):
         self.g = g
@@ -56,7 +56,7 @@ class Manager:
         database.close()
     
     
-    # Gestione delle connessioni
+    # Gestione connessioni
     
     def apri_connessione(self):
         self.g.db = connect(self.percorso)
@@ -76,7 +76,7 @@ class Manager:
         return reg.search(oggetto) is not None
     
     
-    # Metodi di lettura
+    # Metodi lettura
     
     def leggi_righe(self, query, parametri = ()):
         cursore = self.g.db.cursor()
@@ -99,7 +99,7 @@ class Manager:
         return len(self.leggi_righe(query, parametri)) > 0
     
     
-    # Metodi di scrittura
+    # Metodo scrittura
     
     def scrivi(self, query, parametri = ()):
         cursore = self.g.db.cursor()

@@ -5,11 +5,17 @@ cerca = {
         cerca.init_cerca();
     },
     
+    
+    // Bottone home
+    
     init_home: function() {
         $('#home').on('click', function() {
             window.location.href = '/home';
         });
     },
+    
+    
+    // Bottone cerca
     
     init_cerca: function() {
         $('#cerca').on('click', function() {
@@ -21,6 +27,16 @@ cerca = {
             }
         });
     },
+    
+    
+    // Apri scheda
+    
+    apri_libro: function(codice) {
+        window.location.href = '/libro?codice=' + codice;
+    },
+    
+    
+    // Esegui ricerca
     
     esegui_ricerca: function() {
         $('#attesa').css('display', 'inline');
@@ -55,24 +71,20 @@ cerca = {
         }
     },
     
+    
+    // Formatta risultati ricerca
+    
     formatta_risultati: function(risposta) {
         var lista_libri = risposta.lista_libri;
         if (lista_libri) {
             var nuova_lista = [];
-            var i, libro, codice, titolo, autore;
+            var i, libro, titolo, autore;
             for (i = 0; i < lista_libri.length; i++) {
                 libro = lista_libri[i];
-                codice = libro[0];
-                titolo = libro[1];
-                autore = libro[2];
-                if (titolo.length > 12) {
-                    titolo = titolo.substring(0, 10) + '...';
-                }
-                if (autore.length > 13) {
-                    autore = autore.substring(0, 11) + '...';
-                }
+                titolo = cerca.formatta_stringa(libro[1]);
+                autore = cerca.formatta_stringa(libro[2]);
                 nuova_lista[i] = {
-                    codice: codice,
+                    codice: libro[0],
                     titolo: titolo,
                     autore: autore,
                     copertina: libro[3]
@@ -85,8 +97,15 @@ cerca = {
         return [];
     },
     
-    apri_libro: function(codice) {
-        window.location.href = '/libro?codice=' + codice;
+    
+    // Formatta informazioni
+    
+    formatta_stringa: function(stringa) {
+        if (stringa.length > 12) {
+            stringa = stringa.substring(0, 10) + '...';
+            stringa.replace(' ...', '...');
+        }
+        return stringa;
     }
     
 };

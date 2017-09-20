@@ -9,6 +9,9 @@ class Biblioteca:
         self.manager = Manager(g, database_filename)
         self.alfabeto = u'0123456789abcdefghijklmnopqrstuvwxyz'
     
+    
+    # Leggi galleria
+    
     def leggi_galleria(self):
         return self.manager.leggi_righe('''
             SELECT codice, titolo, autore, copertina
@@ -31,33 +34,70 @@ class Biblioteca:
             return []
         return classifica
     
-    def leggi_scheda(self, codice):
-        return self.manager.leggi_riga('''
-            SELECT codice, titolo, autore, genere, descrizione, editore, anno, copertina
-            FROM libro
-            WHERE codice = ?
-        ''', (codice,))
     
-    def codice_presente(self, codice):
-        return self.manager.leggi_presenza('''
-            SELECT codice
-            FROM libro
-            WHERE codice = ?
-        ''', (codice,))
+    # Leggi lista
     
-    def leggi_copertina(self, codice):
-        return self.manager.leggi_dato('''
-            SELECT copertina
-            FROM libro
-            WHERE codice = ?
-        ''', (codice,))
+    def leggi_lista_titolo(self):
+        dizionario = {}
+        for lettera in self.alfabeto:
+            espressione = '^' + lettera
+            lista = self.manager.leggi_righe('''
+                SELECT codice, titolo, autore
+                FROM libro
+                WHERE LOWER(titolo)
+                REGEXP ?
+                ORDER BY titolo
+            ''', (espressione,))
+            if len(lista) > 0:
+                dizionario[lettera] = lista
+        return dizionario
     
-    def elimina_scheda(self, codice):
-        self.manager.scrivi('''
-            DELETE
+    def leggi_lista_autore(self):
+        dizionario = {}
+        lista_autori = self.manager.leggi_righe('''
+            SELECT DISTINCT(autore)
             FROM libro
-            WHERE codice = ?
-        ''', (codice,))
+        ''')
+        for autore in lista_autori:
+            autore = autore[0]
+            dizionario[autore] = self.manager.leggi_righe('''
+                SELECT codice, titolo
+                FROM libro
+                WHERE autore = ?
+                ORDER BY titolo
+            ''', (autore,))
+        return dizionario
+    
+    def leggi_lista(self, ordine):
+        dizionario = {}
+        lista_chiavi = self.manager.leggi_righe('''
+            SELECT DISTINCT(''' + ordine + ''')
+            FROM libro
+        ''')
+        for chiave in lista_chiavi:
+            chiave = chiave[0]
+            dizionario[chiave] = self.manager.leggi_righe('''
+                SELECT codice, titolo, autore
+                FROM libro
+                WHERE ''' + ordine + ''' = ?
+                ORDER BY titolo
+            ''', (chiave,))
+        return dizionario
+    
+    
+    # Esegui ricerca
+    
+    def esegui_ricerca(self, filtro, richiesta):
+        richiesta = richiesta.lower()
+        return self.manager.leggi_righe('''
+            SELECT codice, titolo, autore, copertina
+            FROM libro
+            WHERE LOWER(''' + filtro + ''')
+            REGEXP ?
+        ''', (richiesta,))
+        
+    
+    # Nuovo libro
     
     def nuovo_libro(self, titolo, autore, genere, descrizione, editore, anno, copertina):
         codice = self.genera_codice(autore, titolo)
@@ -99,6 +139,73 @@ class Biblioteca:
             stringa = stringa.replace(carattere, '')
         return stringa
     
+    def nuova_posizione(self, codice):
+        self.manager.scrivi('''
+            INSERT INTO posizione (libro, stato, testo)
+            VALUES (?, '', '')
+        ''', (codice,))
+    
+    
+    # Leggi schdea
+    
+    def leggi_scheda(self, codice):
+        return self.manager.leggi_riga('''
+            SELECT codice, titolo, autore, genere, descrizione, editore, anno, copertina
+            FROM libro
+            WHERE codice = ?
+        ''', (codice,))
+    
+    
+    # Elimina scheda
+    
+    def elimina_scheda(self, codice):
+        self.manager.scrivi('''
+            DELETE
+            FROM libro
+            WHERE codice = ?
+        ''', (codice,))
+    
+    def elimina_recensioni(self, libro):
+        self.manager.scrivi('''
+            DELETE
+            FROM recensione
+            WHERE libro = ?
+        ''', (libro,))
+    
+    def elimina_posizione(self, libro):
+        self.manager.scrivi('''
+            DELETE
+            FROM posizione
+            WHERE libro = ?
+        ''', (libro,))
+    
+    
+    # Modifica scheda
+    
+    def leggi_copertina(self, codice):
+        return self.manager.leggi_dato('''
+            SELECT copertina
+            FROM libro
+            WHERE codice = ?
+        ''', (codice,))
+    
+    def aggiorna_recensioni(self, libro, nuovo_libro):
+        self.manager.scrivi('''
+            UPDATE recensione
+            SET libro = ?
+            WHERE libro = ?
+        ''', (nuovo_libro, libro))
+    
+    def aggiorna_posizione(self, libro, nuovo_libro):
+        self.manager.scrivi('''
+            UPDATE posizione
+            SET libro = ?
+            WHERE libro = ?
+        ''', (nuovo_libro, libro))
+    
+    
+    # Modifica copertina
+    
     def modifica_copertina(self, codice, copertina):
         self.manager.scrivi('''
             UPDATE libro
@@ -106,64 +213,8 @@ class Biblioteca:
             WHERE codice = ?
         ''', (copertina, codice))
     
-    def esegui_ricerca(self, filtro, richiesta):
-        richiesta = richiesta.lower()
-        return self.manager.leggi_righe('''
-            SELECT codice, titolo, autore, copertina
-            FROM libro
-            WHERE LOWER(''' + filtro + ''')
-            REGEXP ?
-        ''', (richiesta,))
     
-    def leggi_lista_titolo(self):
-        dizionario = {}
-        for lettera in self.alfabeto:
-            espressione = '^' + lettera
-            lista = self.manager.leggi_righe('''
-                SELECT codice, titolo, autore
-                FROM libro
-                WHERE LOWER(titolo)
-                REGEXP ?
-            ''', (espressione,))
-            if len(lista) > 0:
-                dizionario[lettera] = lista
-        return dizionario
-    
-    def leggi_lista_autore(self):
-        dizionario = {}
-        lista_autori = self.manager.leggi_righe('''
-            SELECT DISTINCT(autore)
-            FROM libro
-        ''')
-        for autore in lista_autori:
-            autore = autore[0]
-            dizionario[autore] = self.manager.leggi_righe('''
-                SELECT codice, titolo
-                FROM libro
-                WHERE autore = ?
-            ''', (autore,))
-        return dizionario
-    
-    def leggi_lista(self, ordine):
-        dizionario = {}
-        lista_chiavi = self.manager.leggi_righe('''
-            SELECT DISTINCT(''' + ordine + ''')
-            FROM libro
-        ''')
-        for chiave in lista_chiavi:
-            chiave = chiave[0]
-            dizionario[chiave] = self.manager.leggi_righe('''
-                SELECT codice, titolo, autore
-                FROM libro
-                WHERE ''' + ordine + ''' = ?
-            ''', (chiave,))
-        return dizionario
-    
-    def invia_recensione(self, libro, valore, autore, testo):
-        self.manager.scrivi('''
-            INSERT INTO recensione (libro, valore, autore, testo)
-            VALUES (?, ?, ?, ?)
-        ''', (libro, valore, autore, testo))
+    # Leggi recensioni
     
     def leggi_sommario(self, libro):
         return self.manager.leggi_riga('''
@@ -183,6 +234,18 @@ class Biblioteca:
             ORDER BY valore DESC
         ''', (libro,))
     
+    
+    # Invia recensione
+    
+    def invia_recensione(self, libro, valore, autore, testo):
+        self.manager.scrivi('''
+            INSERT INTO recensione (libro, valore, autore, testo)
+            VALUES (?, ?, ?, ?)
+        ''', (libro, valore, autore, testo))
+    
+    
+    # Elimina recensione
+    
     def elimina_recensione(self, id_recensione):
         self.manager.scrivi('''
             DELETE
@@ -190,25 +253,8 @@ class Biblioteca:
             WHERE id = ?
         ''', (id_recensione,))
     
-    def elimina_recensioni(self, libro):
-        self.manager.scrivi('''
-            DELETE
-            FROM recensione
-            WHERE libro = ?
-        ''', (libro,))
     
-    def aggiorna_recensioni(self, libro, nuovo_libro):
-        self.manager.scrivi('''
-            UPDATE recensione
-            SET libro = ?
-            WHERE libro = ?
-        ''', (nuovo_libro, libro))
-    
-    def nuova_posizione(self, codice):
-        self.manager.scrivi('''
-            INSERT INTO posizione (libro, stato, testo)
-            VALUES (?, '', '')
-        ''', (codice,))
+    # Leggi posizione
     
     def leggi_posizione(self, libro):
         return self.manager.leggi_riga('''
@@ -219,23 +265,12 @@ class Biblioteca:
             WHERE l.codice = ?
         ''', (libro,))
     
+    
+    # Modifica posizione
+    
     def modifica_posizione(self, libro, stato, testo):
         self.manager.scrivi('''
             UPDATE posizione
             SET stato = ?, testo = ?
             WHERE libro = ?
         ''', (stato, testo, libro))
-    
-    def elimina_posizione(self, libro):
-        self.manager.scrivi('''
-            DELETE
-            FROM posizione
-            WHERE libro = ?
-        ''', (libro,))
-    
-    def aggiorna_posizione(self, libro, nuovo_libro):
-        self.manager.scrivi('''
-            UPDATE posizione
-            SET libro = ?
-            WHERE libro = ?
-        ''', (nuovo_libro, libro))

@@ -13,6 +13,9 @@ libro = {
         libro.leggi_scheda();
     },
     
+    
+    // Leggi parametro
+    
     leggi_parametro: function(parametro) {
         var indirizzo_pagina = decodeURIComponent(window.location.search.substring(1));
         var variabili = indirizzo_pagina.split('&');
@@ -25,11 +28,17 @@ libro = {
         }
     },
     
+    
+    // Bottone home
+    
     init_home: function() {
         $('#home').on('click', function() {
             window.location.href = '/home';
         });
     },
+    
+    
+    // Bottone mostra elimina
     
     init_mostra_elimina: function() {
         $('#mostra_elimina').on('click', function() {
@@ -37,11 +46,17 @@ libro = {
         });
     },
     
+    
+    // Bottone chiudi elimina
+    
     init_chiudi_elimina: function() {
         $('#chiudi_elimina, #sfondo_elimina').on('click', function() {
             $('#elimina').css('display', 'none');
         });
     },
+    
+    
+    // Bottone conferma elimina
     
     init_conferma_elimina: function() {
         $('#conferma_elimina').on('click', function() {
@@ -53,13 +68,7 @@ libro = {
                 dataType: 'json',
                 data: JSON.stringify({codice: libro.codice}),
                 success: function(risposta) {
-                    $('#elimina').css('display', 'none');
-                    $('#attesa').css('display', 'none');
-                    if (risposta.successo) {
-                        window.location.href = '/home';
-                    } else {
-                        errore.messaggio('Impossibile eliminare questo libro!');
-                    }
+                    window.location.href = '/home';
                 },
                 error: function() {
                     errore.messaggio('Errore del server!');
@@ -67,6 +76,9 @@ libro = {
             });
         });
     },
+    
+    
+    // Immagine copertina
     
     init_copertina: function() {
         $('#immagine_copertina').on('click', function() {
@@ -82,6 +94,9 @@ libro = {
         });
     },
     
+    
+    // Input copertina
+    
     init_leggi_copertina: function() {
         $('#seleziona').change(function(evento) {
             $('#caricamento').css('display', 'block');
@@ -93,6 +108,68 @@ libro = {
             lettore.readAsDataURL(evento.target.files[0]);
         });
     },
+    
+    
+    // Bottone chiudi copertina
+    
+    init_chiudi_copertina: function() {
+        $('#chiudi_mostra, #sfondo_mostra').on('click', function() {
+            $('#mostra_copertina').css('display', 'none');
+        });
+    },
+    
+    
+    // Bottone recensioni
+    
+    init_recensioni: function() {
+        $('#recensioni').on('click', function() {
+            window.location.href = '/recensioni?libro=' + libro.codice;
+        });
+    },
+    
+    
+    // Bottone posizione
+    
+    init_posizione: function() {
+        $('#posizione').on('click', function() {
+            window.location.href = '/posizione?libro=' + libro.codice;
+        });
+    },
+    
+    
+    // Bottone modifica scheda
+    
+    init_modifica_scheda: function() {
+        $('#modifica_scheda').on('click', function() {
+            libro.modificando_scheda = true;
+            $('#modifica_scheda, #mostra_elimina, #recensioni, #posizione').css('display', 'none');
+            $('#conferma_modifiche').css('display', 'block');
+            $('#titolo, #autore, #descrizione, #genere, #editore, #anno').prop('disabled', false);
+        });
+    },
+    
+    
+    // Bottone conferma modifiche
+    
+    init_conferma_modifiche: function() {
+        $('#conferma_modifiche').on('click', function() {
+            $('#titolo, #autore').css('border-color', '#757575');
+            var titolo = $('#titolo').val();
+            var autore = $('#autore').val();
+            if (titolo.length == 0) {
+                $('#titolo').css('border-color', 'red');
+                errore.messaggio('Devi inserire il titolo del libro per poterlo catalogare!');
+            } else if (autore.length == 0) {
+                $('#autore').css('border-color', 'red');
+                errore.messaggio('Devi inserire l\'autore del libro per poterlo catalogare!');
+            } else {
+                libro.modifica_scheda(titolo, autore);
+            }
+        });
+    },
+    
+    
+    // Ridimensiona copertina
     
     ridimensiona_mostra: function(sorgente, larghezza_massima, altezza_massima) {
         var immagine = document.createElement('img');
@@ -120,6 +197,9 @@ libro = {
         immagine.src = sorgente;
     },
     
+    
+    // Modifica copertina
+    
     modifica_copertina: function(sorgente) {
         var richiesta = {
             codice: libro.codice,
@@ -142,84 +222,50 @@ libro = {
         });
     },
     
-    init_chiudi_copertina: function() {
-        $('#chiudi_mostra, #sfondo_mostra').on('click', function() {
-            $('#mostra_copertina').css('display', 'none');
-        });
-    },
     
-    init_recensioni: function() {
-        $('#recensioni').on('click', function() {
-            window.location.href = '/recensioni?libro=' + libro.codice;
-        });
-    },
+    // Modifica scheda
     
-    init_posizione: function() {
-        $('#posizione').on('click', function() {
-            window.location.href = '/posizione?libro=' + libro.codice;
-        });
-    },
-    
-    init_modifica_scheda: function() {
-        $('#modifica_scheda').on('click', function() {
-            libro.modificando_scheda = true;
-            $('#modifica_scheda, #mostra_elimina, #recensioni, #posizione').css('display', 'none');
-            $('#conferma_modifiche').css('display', 'block');
-            $('#titolo, #autore, #descrizione, #genere, #editore, #anno').prop('disabled', false);
-        });
-    },
-    
-    init_conferma_modifiche: function() {
-        $('#conferma_modifiche').on('click', function() {
-            $('#titolo, #autore').css('border-color', '#757575');
-            var titolo = $('#titolo').val();
-            var autore = $('#autore').val();
-            if (titolo.length == 0) {
-                $('#titolo').css('border-color', 'red');
-                errore.messaggio('Devi inserire il titolo del libro per poterlo catalogare!');
-            } else if (autore.length == 0) {
-                $('#autore').css('border-color', 'red');
-                errore.messaggio('Devi inserire l\'autore del libro per poterlo catalogare!');
-            } else {
-                libro.modificando_scheda = false;
-                $('#titolo, #autore, #descrizione, #genere, #editore, #anno').prop('disabled', true);
-                $('#conferma_modifiche').css('display', 'none');
-                $('#modifica_scheda, #mostra_elimina, #recensioni, #posizione').css('display', 'block');
-                var descrizione = $('#descrizione').val();
-                var genere = $('#genere').val();
-                var editore = $('#editore').val();
-                var anno = $('#anno').val();
-                var richiesta = {
-                    codice: libro.codice,
-                    titolo: titolo,
-                    autore: autore,
-                    descrizione: descrizione,
-                    genere: genere,
-                    editore: editore,
-                    anno: anno
-                };
-                $.ajax({
-                    url: 'modifica_scheda',
-                    method: 'POST',
-                    contentType: 'application/json',
-                    dataType: 'json',
-                    data: JSON.stringify(richiesta),
-                    success: function(risposta) {
-                        if (risposta.codice) {
-                            if (risposta.codice != libro.codice) {
-                                window.location.href = '/libro?codice=' + risposta.codice;
-                            }
-                        } else {
-                            errore.messaggio('Impossibile modificare la scheda di questo libro!');
-                        }
-                    },
-                    error: function() {
-                        errore.messaggio('Errore del server!');
+    modifica_scheda: function(titolo, autore) {
+        libro.modificando_scheda = false;
+        $('#titolo, #autore, #descrizione, #genere, #editore, #anno').prop('disabled', true);
+        $('#conferma_modifiche').css('display', 'none');
+        $('#modifica_scheda, #mostra_elimina, #recensioni, #posizione').css('display', 'block');
+        var descrizione = $('#descrizione').val();
+        var genere = $('#genere').val();
+        var editore = $('#editore').val();
+        var anno = $('#anno').val();
+        var richiesta = {
+            codice: libro.codice,
+            titolo: titolo,
+            autore: autore,
+            descrizione: descrizione,
+            genere: genere,
+            editore: editore,
+            anno: anno
+        };
+        $.ajax({
+            url: 'modifica_scheda',
+            method: 'POST',
+            contentType: 'application/json',
+            dataType: 'json',
+            data: JSON.stringify(richiesta),
+            success: function(risposta) {
+                if (risposta.codice) {
+                    if (risposta.codice != libro.codice) {
+                        window.location.href = '/libro?codice=' + risposta.codice;
                     }
-                });
+                } else {
+                    errore.messaggio('Impossibile modificare la scheda di questo libro!');
+                }
+            },
+            error: function() {
+                errore.messaggio('Errore del server!');
             }
         });
     },
+    
+    
+    // Leggi scheda
     
     leggi_scheda: function() {
         $.ajax({
@@ -245,6 +291,9 @@ libro = {
             }
         });
     },
+    
+    
+    // Formatta scheda
     
     formatta_scheda: function(risposta) {
         var scheda = risposta.scheda;

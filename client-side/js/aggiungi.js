@@ -12,11 +12,17 @@ aggiungi = {
         aggiungi.init_conferma();
     },
     
+    
+    // Bottone home
+    
     init_home: function() {
         $('#home').on('click', function() {
             window.location.href = '/home';
         });
     },
+    
+    
+    // Bottone mostra caricamento informazioni
     
     init_mostra_carica: function() {
         $('#mostra_carica').on('click', function() {
@@ -24,17 +30,26 @@ aggiungi = {
         });
     },
     
+    
+    // Bottone chiudi caricamento informazioni
+    
     init_chiudi_carica: function() {
         $('#chiudi_carica, #sfondo_carica').on('click', function() {
             $('#carica').css('display', 'none');
         });
     },
     
+    
+    // Bottone caricamento codice
+    
     init_carica_foto: function() {
         $('#carica_foto').on('click', function() {
             $('#file_input').click();
         });
     },
+    
+    
+    // Bottone caricamento informazioni
     
     init_carica_informazioni: function() {
         $('#carica_informazioni').on('click', function() {
@@ -47,6 +62,47 @@ aggiungi = {
         });
     },
     
+    
+    // Settore seleziona informazioni
+    
+    init_seleziona_copertina: function() {
+        $('#copertina').on('click', function() {
+            $('#seleziona').click();
+        });
+    },
+    
+    
+    // Input leggi copertina
+    
+    init_leggi_copertina: function() {
+        $('#seleziona').change(function(evento) {
+            $('#caricamento').css('display', 'block');
+            $('#conferma').css('bottom', '65px');
+            var lettore = new FileReader();
+            lettore.onload = function(e) {
+                aggiungi.ridimensiona_mostra(e.target.result, 200, 350);
+            };
+            lettore.readAsDataURL(evento.target.files[0]);
+        });
+    },
+    
+    
+    // Bottone conferma aggiunta
+    
+    init_conferma: function() {
+        $('#conferma').on('click', function() {
+            aggiungi.conferma();
+        });
+        $('#titolo, #autore, #genere, #editore, #anno').on('keyup', function(e) {
+            if (e.keyCode == 13) {
+                aggiungi.conferma();
+            }
+        });
+    },
+    
+    
+    // Carica informazioni
+    
     carica_informazioni: function() {
         var titolo = $('#titolo_carica').val();
         var autore = $('#autore_carica').val();
@@ -54,15 +110,20 @@ aggiungi = {
             var isbn = $('#codice_isbn').val();
             if (isbn.length == 0) {
                 $('#isbn').css('display', 'none');
-                errore.messaggio('Devi inserire il titolo e l\'autore oppure il codice ISBN del libro!');
+                var messaggio = 'Devi inserire il titolo e l\'autore oppure il codice ISBN del libro!';
+                errore.messaggio(messaggio);
             } else {
-                aggiungi.ottieni_informazioni('https://www.googleapis.com/books/v1/volumes?q=isbn:' + isbn);
+                var url = 'https://www.googleapis.com/books/v1/volumes?q=isbn:' + isbn;
+                aggiungi.ottieni_informazioni(url);
             }
         } else {
             var url = 'https://www.googleapis.com/books/v1/volumes?q=intitle:' + titolo + '+inauthor:' + autore;
             aggiungi.ottieni_informazioni(url);
         }
     },
+    
+    
+    // Ottieni informazioni
     
     ottieni_informazioni: function(url) {
         $('#attesa').css('display', 'inline');
@@ -105,23 +166,8 @@ aggiungi = {
         });
     },
     
-    init_seleziona_copertina: function() {
-        $('#copertina').on('click', function() {
-            $('#seleziona').click();
-        });
-    },
     
-    init_leggi_copertina: function() {
-        $('#seleziona').change(function(evento) {
-            $('#caricamento').css('display', 'block');
-            $('#conferma').css('bottom', '65px');
-            var lettore = new FileReader();
-            lettore.onload = function(e) {
-                aggiungi.ridimensiona_mostra(e.target.result, 200, 350);
-            };
-            lettore.readAsDataURL(evento.target.files[0]);
-        });
-    },
+    // Ridimensionamento copertina
     
     ridimensiona_mostra: function(sorgente, larghezza_massima, altezza_massima) {
         var immagine = document.createElement('img');
@@ -149,6 +195,9 @@ aggiungi = {
         immagine.src = sorgente;
     },
     
+    
+    // Visualizzazione immagine
+    
     mostra_immagine: function(sorgente) {
         $('#caricamento').css('display', 'none');
         $('#conferma').css('bottom', '20px');
@@ -156,16 +205,8 @@ aggiungi = {
         aggiungi.sorgente_copertina = sorgente;
     },
     
-    init_conferma: function() {
-        $('#conferma').on('click', function() {
-            aggiungi.conferma();
-        });
-        $('#titolo, #autore, #genere, #editore, #anno').on('keyup', function(e) {
-            if (e.keyCode == 13) {
-                aggiungi.conferma();
-            }
-        });
-    },
+    
+    // Aggiunta libro
     
     conferma: function() {
         $('#titolo, #autore').css('border-color', '#757575');
