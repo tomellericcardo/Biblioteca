@@ -14,7 +14,7 @@ class Biblioteca:
             SELECT codice, titolo, autore, copertina
             FROM libro
             ORDER BY data_ora DESC
-            LIMIT 6
+            LIMIT 12
         ''')
     
     def leggi_classifica(self):
@@ -25,7 +25,7 @@ class Biblioteca:
             ON l.codice = r.libro
             GROUP BY l.codice
             ORDER BY voto DESC
-            LIMIT 6
+            LIMIT 12
         ''')
         if classifica == [(None, None, None, None, None)]:
             return []

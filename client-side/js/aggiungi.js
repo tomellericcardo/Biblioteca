@@ -183,6 +183,7 @@ aggiungi = {
             $('#autore').css('border-color', 'red');
             errore.messaggio('Devi inserire l\'autore del libro per poterlo catalogare!');
         } else {
+            $('#conferma').html('<i class="material-icons w3-spin">refresh</i>');
             $.ajax({
                 url: 'nuovo_libro',
                 method: 'POST',
@@ -204,6 +205,7 @@ aggiungi = {
                 },
                 error: function() {
                     errore.messaggio('Errore del server!');
+                    $('#conferma').html('<i class="material-icons">done</i>');
                 }
             });
         }
