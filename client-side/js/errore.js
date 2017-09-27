@@ -1,4 +1,4 @@
-errore = {
+var errore = {
     
     
     // Bottone chiudi errore

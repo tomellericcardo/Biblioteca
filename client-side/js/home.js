@@ -1,4 +1,4 @@
-home = {
+var home = {
     
     init: function() {
         home.init_liste();
@@ -50,6 +50,7 @@ home = {
             method: 'POST',
             contentType: 'application/json',
             dataType: 'json',
+            data: JSON.stringify({chiave: chiave.chiave}),
             success: function(risposta) {
                 risposta = home.formatta_risposta(risposta);
                 $.get('/html/templates.html', function(contenuto) {

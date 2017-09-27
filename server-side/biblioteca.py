@@ -1,13 +1,31 @@
 # -*- coding: utf-8 -*-
 
 from manager import Manager
+from hashlib import sha256
 
 
 class Biblioteca:
     
-    def __init__(self, g, database_filename):
+    def __init__(self, g, database_filename, sale):
         self.manager = Manager(g, database_filename)
+        self.sale = sale
         self.alfabeto = u'0123456789abcdefghijklmnopqrstuvwxyz'
+    
+    
+    # Genera hash
+    
+    def genera_hash(self, chiave):
+        return sha256(chiave + self.sale).hexdigest()
+    
+    
+    # Utente autorizzato
+    
+    def utente_autorizzato(self, chiave):
+        return self.manager.leggi_presenza('''
+            SELECT id
+            FROM chiave
+            WHERE valore = ?
+        ''', (chiave,))
     
     
     # Leggi galleria

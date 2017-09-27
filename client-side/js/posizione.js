@@ -1,4 +1,4 @@
-posizione = {
+var posizione = {
     
     init: function() {
         posizione.codice = posizione.leggi_parametro('libro');
@@ -89,17 +89,17 @@ posizione = {
         $('#stato, #testo').prop('disabled', true);
         $('#conferma_modifiche').css('display', 'none');
         $('#modifica_posizione').css('display', 'block');
-        var richiesta = {
-            libro: posizione.codice,
-            stato: stato,
-            testo: testo
-        };
         $.ajax({
             url: 'modifica_posizione',
             method: 'POST',
             contentType: 'application/json',
             dataType: 'json',
-            data: JSON.stringify(richiesta),
+            data: JSON.stringify({
+                chiave: chiave.chiave,
+                libro: posizione.codice,
+                stato: stato,
+                testo: testo
+            }),
             success: function(risposta) {
                 posizione.leggi_posizione();
             },
@@ -118,7 +118,10 @@ posizione = {
             method: 'POST',
             contentType: 'application/json',
             dataType: 'json',
-            data: JSON.stringify({libro: posizione.codice}),
+            data: JSON.stringify({
+                chiave: chiave.chiave,
+                libro: posizione.codice
+            }),
             success: function(risposta) {
                 risposta = posizione.formatta_posizione(risposta);
                 $.get('/html/templates.html', function(contenuto) {

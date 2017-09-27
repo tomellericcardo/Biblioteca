@@ -1,4 +1,4 @@
-cerca = {
+var cerca = {
     
     init: function() {
         cerca.init_home();
@@ -52,6 +52,7 @@ cerca = {
                 contentType: 'application/json',
                 dataType: 'json',
                 data: JSON.stringify({
+                    chiave: chiave.chiave,
                     filtro: filtro,
                     richiesta: richiesta
                 }),

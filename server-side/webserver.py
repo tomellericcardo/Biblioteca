@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from flask import Flask, g, send_from_directory, request
+from flask_sslify import SSLify
 from biblioteca import Biblioteca
 from json import dumps
 
@@ -8,7 +9,8 @@ from json import dumps
 # VARIABILI GLOBALI
 
 app = Flask(__name__)
-biblioteca = Biblioteca(g, 'database.db')
+ssLify = SSLify(app)
+biblioteca = Biblioteca(g, 'database.db', 'clorurodisodio')
 
 
 # OPERAZIONI DI SESSIONE
@@ -40,10 +42,32 @@ def invia_file(nome_cartella, nome_file):
 
 # CONTESTI
 
+# Accedi
+
+@app.route('/accedi', methods = ['POST'])
+def accedi():
+    richiesta = request.get_json(force = True)
+    chiave = richiesta['chiave']
+    hash_chiave = biblioteca.genera_hash(chiave)
+    utente_valido = biblioteca.utente_autorizzato(hash_chiave)
+    return dumps({'utente_valido': utente_valido, 'hash_chiave': hash_chiave})
+
+# Utente autorizzato
+
+@app.route('/utente_autorizzato', methods = ['POST'])
+def utente_autorizzato():
+    richiesta = request.get_json(force = True)
+    chiave = richiesta['chiave']
+    return dumps({'utente_valido': biblioteca.utente_autorizzato(chiave)})
+
 # Leggi galleria
 
 @app.route('/leggi_galleria', methods = ['POST'])
 def leggi_galleria():
+    richiesta = request.get_json(force = True)
+    chiave = richiesta['chiave']
+    if not biblioteca.utente_autorizzato(chiave):
+        return dumps({'non_autorizzato': True})
     lista_libri = biblioteca.leggi_galleria()
     classifica = biblioteca.leggi_classifica()
     return dumps({'lista_libri': lista_libri, 'classifica': classifica})
@@ -53,6 +77,9 @@ def leggi_galleria():
 @app.route('/leggi_lista', methods = ['POST'])
 def leggi_lista():
     richiesta = request.get_json(force = True)
+    chiave = richiesta['chiave']
+    if not biblioteca.utente_autorizzato(chiave):
+        return dumps({'non_autorizzato': True})
     ordine = richiesta['ordine']
     if ordine == 'titolo':
         lista_libri = biblioteca.leggi_lista_titolo()
@@ -67,6 +94,9 @@ def leggi_lista():
 @app.route('/esegui_ricerca', methods = ['POST'])
 def esegui_ricerca():
     richiesta = request.get_json(force = True)
+    chiave = richiesta['chiave']
+    if not biblioteca.utente_autorizzato(chiave):
+        return dumps({'non_autorizzato': True})
     filtro = richiesta['filtro']
     richiesta = richiesta['richiesta']
     return dumps({'lista_libri': biblioteca.esegui_ricerca(filtro, richiesta)})
@@ -76,6 +106,9 @@ def esegui_ricerca():
 @app.route('/nuovo_libro', methods = ['POST'])
 def nuovo_libro():
     richiesta = request.get_json(force = True)
+    chiave = richiesta['chiave']
+    if not biblioteca.utente_autorizzato(chiave):
+        return dumps({'non_autorizzato': True})
     titolo = richiesta['titolo']
     autore = richiesta['autore']
     genere = richiesta['genere']
@@ -92,6 +125,9 @@ def nuovo_libro():
 @app.route('/leggi_scheda', methods = ['POST'])
 def leggi_scheda():
     richiesta = request.get_json(force = True)
+    chiave = richiesta['chiave']
+    if not biblioteca.utente_autorizzato(chiave):
+        return dumps({'non_autorizzato': True})
     codice = richiesta['codice']
     return dumps({'scheda': biblioteca.leggi_scheda(codice)})
 
@@ -100,6 +136,9 @@ def leggi_scheda():
 @app.route('/elimina_scheda', methods = ['POST'])
 def elimina_scheda():
     richiesta = request.get_json(force = True)
+    chiave = richiesta['chiave']
+    if not biblioteca.utente_autorizzato(chiave):
+        return dumps({'non_autorizzato': True})
     codice = richiesta['codice']
     biblioteca.elimina_scheda(codice)
     biblioteca.elimina_recensioni(codice)
@@ -111,6 +150,9 @@ def elimina_scheda():
 @app.route('/modifica_scheda', methods = ['POST'])
 def modifica_scheda():
     richiesta = request.get_json(force = True)
+    chiave = richiesta['chiave']
+    if not biblioteca.utente_autorizzato(chiave):
+        return dumps({'non_autorizzato': True})
     codice = richiesta['codice']
     titolo = richiesta['titolo']
     autore = richiesta['autore']
@@ -131,6 +173,9 @@ def modifica_scheda():
 @app.route('/modifica_copertina', methods = ['POST'])
 def modifica_copertina():
     richiesta = request.get_json(force = True)
+    chiave = richiesta['chiave']
+    if not biblioteca.utente_autorizzato(chiave):
+        return dumps({'non_autorizzato': True})
     codice = richiesta['codice']
     copertina = richiesta['copertina']
     biblioteca.modifica_copertina(codice, copertina)
@@ -141,6 +186,9 @@ def modifica_copertina():
 @app.route('/leggi_recensioni', methods = ['POST'])
 def leggi_recensioni():
     richiesta = request.get_json(force = True)
+    chiave = richiesta['chiave']
+    if not biblioteca.utente_autorizzato(chiave):
+        return dumps({'non_autorizzato': True})
     libro = richiesta['libro']
     sommario = biblioteca.leggi_sommario(libro)
     recensioni = biblioteca.leggi_recensioni(libro)
@@ -151,6 +199,9 @@ def leggi_recensioni():
 @app.route('/invia_recensione', methods = ['POST'])
 def invia_recensione():
     richiesta = request.get_json(force = True)
+    chiave = richiesta['chiave']
+    if not biblioteca.utente_autorizzato(chiave):
+        return dumps({'non_autorizzato': True})
     libro = richiesta['libro']
     valore = richiesta['valore']
     autore = richiesta['autore']
@@ -163,6 +214,9 @@ def invia_recensione():
 @app.route('/elimina_recensione', methods = ['POST'])
 def elimina_recensione():
     richiesta = request.get_json(force = True)
+    chiave = richiesta['chiave']
+    if not biblioteca.utente_autorizzato(chiave):
+        return dumps({'non_autorizzato': True})
     id_recensione = richiesta['id']
     biblioteca.elimina_recensione(id_recensione)
     return dumps({'successo': True})
@@ -172,6 +226,9 @@ def elimina_recensione():
 @app.route('/leggi_posizione', methods = ['POST'])
 def leggi_posizione():
     richiesta = request.get_json(force = True)
+    chiave = richiesta['chiave']
+    if not biblioteca.utente_autorizzato(chiave):
+        return dumps({'non_autorizzato': True})
     libro = richiesta['libro']
     return dumps({'posizione': biblioteca.leggi_posizione(libro)})
 
@@ -180,6 +237,9 @@ def leggi_posizione():
 @app.route('/modifica_posizione', methods = ['POST'])
 def modifica_posizione():
     richiesta = request.get_json(force = True)
+    chiave = richiesta['chiave']
+    if not biblioteca.utente_autorizzato(chiave):
+        return dumps({'non_autorizzato': True})
     libro = richiesta['libro']
     stato = richiesta['stato']
     testo = richiesta['testo']
@@ -190,4 +250,4 @@ def modifica_posizione():
 # AVVIO DEL SERVER
 
 if __name__ == '__main__':
-    app.run(host = '192.168.1.94', port = 80, threaded = True, debug = True)
+    app.run(threaded = True)

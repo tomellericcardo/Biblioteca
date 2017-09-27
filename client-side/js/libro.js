@@ -1,4 +1,4 @@
-libro = {
+var libro = {
     
     init: function() {
         libro.codice = libro.leggi_parametro('codice');
@@ -66,7 +66,10 @@ libro = {
                 method: 'POST',
                 contentType: 'application/json',
                 dataType: 'json',
-                data: JSON.stringify({codice: libro.codice}),
+                data: JSON.stringify({
+                    chiave: chiave.chiave,
+                    codice: libro.codice
+                }),
                 success: function(risposta) {
                     window.location.href = '/home';
                 },
@@ -201,16 +204,16 @@ libro = {
     // Modifica copertina
     
     modifica_copertina: function(sorgente) {
-        var richiesta = {
-            codice: libro.codice,
-            copertina: sorgente
-        };
         $.ajax({
             url: 'modifica_copertina',
             method: 'POST',
             contentType: 'application/json',
             dataType: 'json',
-            data: JSON.stringify(richiesta),
+            data: JSON.stringify({
+                chiave: chiave.chiave,
+                codice: libro.codice,
+                copertina: sorgente
+            }),
             success: function(risposta) {
                 $('#immagine_copertina').attr('src', sorgente);
                 $('#caricamento').css('display', 'none');
@@ -234,21 +237,21 @@ libro = {
         var genere = $('#genere').val();
         var editore = $('#editore').val();
         var anno = $('#anno').val();
-        var richiesta = {
-            codice: libro.codice,
-            titolo: titolo,
-            autore: autore,
-            descrizione: descrizione,
-            genere: genere,
-            editore: editore,
-            anno: anno
-        };
         $.ajax({
             url: 'modifica_scheda',
             method: 'POST',
             contentType: 'application/json',
             dataType: 'json',
-            data: JSON.stringify(richiesta),
+            data: JSON.stringify({
+                chiave: chiave.chiave,
+                codice: libro.codice,
+                titolo: titolo,
+                autore: autore,
+                descrizione: descrizione,
+                genere: genere,
+                editore: editore,
+                anno: anno
+            }),
             success: function(risposta) {
                 if (risposta.codice) {
                     if (risposta.codice != libro.codice) {
@@ -273,7 +276,10 @@ libro = {
             method: 'POST',
             contentType: 'application/json',
             dataType: 'json',
-            data: JSON.stringify({codice: libro.codice}),
+            data: JSON.stringify({
+                chiave: chiave.chiave,
+                codice: libro.codice
+            }),
             success: function(risposta) {
                 risposta = libro.formatta_scheda(risposta);
                 $.get('/html/templates.html', function(contenuto) {

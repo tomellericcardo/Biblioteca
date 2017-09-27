@@ -1,4 +1,4 @@
-aggiungi = {
+var aggiungi = {
     
     init: function() {
         aggiungi.sorgente_copertina = '';
@@ -231,6 +231,7 @@ aggiungi = {
                 contentType: 'application/json',
                 dataType: 'json',
                 data: JSON.stringify({
+                    chiave: chiave.chiave,
                     titolo: titolo,
                     autore: autore,
                     genere: genere,

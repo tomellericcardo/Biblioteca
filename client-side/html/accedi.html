@@ -2,14 +2,14 @@
 <html>
     <head>
         
-        <title>Cerca</title>
+        <title>Accedi</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
         <meta charset="UTF-8">
         
         <!-- STYLES -->
         <link rel="stylesheet" href="/css/w3.css">
         <link rel="stylesheet" href="/css/style.css">
-        <link rel="stylesheet" href="/css/galleria.css">
+        <link rel="stylesheet" href="/css/accedi.css">
         
         <!-- FONTS -->
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
@@ -26,36 +26,19 @@
         
         <!-- HEADER -->
         <header class="w3-container w3-center w3-blue ombra">
-            <i id="home" class="w3-margin w3-display-topleft material-icons bottone_header">arrow_back</i>
-            <h1 class="w3-xlarge">Cerca</h1>
+            <h1 class="w3-xxxlarge">Biblioteca</h1>
         </header>
         
-        <!-- TERZO -->
-        <div class="w3-container w3-white">
+        <!-- ACCESSO -->
+        <div class="w3-container w3-center w3-white">
             <div class="w3-third w3-hide-small">&nbsp;</div>
             <div class="w3-third">
-                
-                <!-- RICERCA -->
-                <div class="w3-padding-top w3-white">
-                    <label for="filtro" class="w3-label">Cerca per:</label>
-                    <select id="filtro" name="filtro" class="w3-select">
-                        <option value="titolo">Titolo</option>
-                        <option value="autore">Autore</option>
-                        <option value="genere">Genere</option>
-                        <option value="editore">Editore</option>
-                        <option value="anno">Anno di pubblicazione</option>
-                    </select>
-                    <input type="text" id="richiesta" class="w3-input" placeholder="Inserisci una parola chiave">
-                    <div class="w3-margin w3-right">
-                        <span id="attesa"><i class="material-icons w3-margin-right w3-spin w3-text-grey">refresh</i></span>
-                        <button id="cerca" class="w3-btn w3-right w3-indigo">Cerca</button>
-                    </div>
+                <p class="w3-large">Inserisci la chiave d'accesso</p>
+                <input type="password" id="chiave" class="w3-input" placeholder="Chiave privata">
+                <div class="w3-margin w3-right">
+                    <span id="attesa"><i class="material-icons w3-margin-right w3-spin w3-text-grey">refresh</i></span>
+                    <button id="accedi" class="w3-btn w3-right w3-indigo">Accedi</button>
                 </div>
-                
-                <!-- RISULTATI -->
-                <div id="risultati" class="w3-row-padding w3-white">
-                </div>
-                
             </div>
         </div>
         
@@ -80,10 +63,8 @@
         
         <!-- SCRIPTS -->
         <script type="text/javascript" src="/js/jquery.min.js"></script>
-        <script type="text/javascript" src="/js/mustache.min.js"></script>
         <script type="text/javascript" src="/js/errore.js"></script>
-        <script type="text/javascript" src="/js/chiave.js"></script>
-        <script type="text/javascript" src="/js/cerca.js"></script>
+        <script type="text/javascript" src="/js/accedi.js"></script>
         
     </body>
 </html>

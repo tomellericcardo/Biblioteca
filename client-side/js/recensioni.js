@@ -1,4 +1,4 @@
-recensioni = {
+var recensioni = {
     
     init: function() {
         recensioni.codice = recensioni.leggi_parametro('libro');
@@ -111,7 +111,10 @@ recensioni = {
             method: 'POST',
             contentType: 'application/json',
             dataType: 'json',
-            data: JSON.stringify({id: id}),
+            data: JSON.stringify({
+                chiave: chiave.chiave,
+                id: id
+            }),
             success: function(risposta) {
                 recensioni.leggi_recensioni();
             },
@@ -132,6 +135,7 @@ recensioni = {
             contentType: 'application/json',
             dataType: 'json',
             data: JSON.stringify({
+                chiave: chiave.chiave,
                 libro: recensioni.codice,
                 valore: recensioni.valore_recensione,
                 autore: autore,
@@ -159,7 +163,10 @@ recensioni = {
             method: 'POST',
             contentType: 'application/json',
             dataType: 'json',
-            data: JSON.stringify({libro: recensioni.codice}),
+            data: JSON.stringify({
+                chiave: chiave.chiave,
+                libro: recensioni.codice
+            }),
             success: function(risposta) {
                 risposta = recensioni.formatta_risposta(risposta);
                 $.get('/html/templates.html', function(contenuto) {

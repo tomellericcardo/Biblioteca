@@ -52,6 +52,13 @@ class Manager:
             )
         ''')
         database.commit()
+        cursore.execute('''
+            CREATE TABLE IF NOT EXISTS chiave (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                valore TEXT NOT NULL
+            )
+        ''')
+        database.commit()
         cursore.close()
         database.close()
     
