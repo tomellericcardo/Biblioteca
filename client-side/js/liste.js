@@ -35,10 +35,7 @@ var liste = {
             method: 'POST',
             contentType: 'application/json',
             dataType: 'json',
-            data: JSON.stringify({
-                chiave: chiave.chiave,
-                ordine: ordine
-            }),
+            data: JSON.stringify({ordine: ordine}),
             success: function(risposta) {
                 if (ordine == 'autore') {
                     risposta = liste.formatta_risultati_autore(risposta);

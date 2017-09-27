@@ -71,7 +71,11 @@ var libro = {
                     codice: libro.codice
                 }),
                 success: function(risposta) {
-                    window.location.href = '/home';
+                    if (risposta.non_autorizzato) {
+                        window.location.href = '/accedi';
+                    } else {
+                        window.location.href = '/home';
+                    }
                 },
                 error: function() {
                     errore.messaggio('Errore del server!');
@@ -215,9 +219,13 @@ var libro = {
                 copertina: sorgente
             }),
             success: function(risposta) {
-                $('#immagine_copertina').attr('src', sorgente);
-                $('#caricamento').css('display', 'none');
-                $('#modifica_scheda, #conferma_modifiche').css('bottom', '20px');
+                if (risposta.non_autorizzato) {
+                    window.location.href = '/accedi';
+                } else {
+                    $('#immagine_copertina').attr('src', sorgente);
+                    $('#caricamento').css('display', 'none');
+                    $('#modifica_scheda, #conferma_modifiche').css('bottom', '20px');
+                }
             },
             error: function() {
                 errore.messaggio('Errore del server!');
@@ -257,6 +265,8 @@ var libro = {
                     if (risposta.codice != libro.codice) {
                         window.location.href = '/libro?codice=' + risposta.codice;
                     }
+                } else if (risposta.non_autorizzato) {
+                    window.location.href = '/accedi';
                 } else {
                     errore.messaggio('Impossibile modificare la scheda di questo libro!');
                 }
@@ -276,10 +286,7 @@ var libro = {
             method: 'POST',
             contentType: 'application/json',
             dataType: 'json',
-            data: JSON.stringify({
-                chiave: chiave.chiave,
-                codice: libro.codice
-            }),
+            data: JSON.stringify({codice: libro.codice}),
             success: function(risposta) {
                 risposta = libro.formatta_scheda(risposta);
                 $.get('/html/templates.html', function(contenuto) {

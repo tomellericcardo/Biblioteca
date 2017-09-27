@@ -101,7 +101,11 @@ var posizione = {
                 testo: testo
             }),
             success: function(risposta) {
-                posizione.leggi_posizione();
+                if (risposta.non_autorizzato) {
+                    window.location.href = '/accedi';
+                } else {
+                    posizione.leggi_posizione();
+                }
             },
             error: function() {
                 errore.messaggio('Errore del server!');
@@ -118,10 +122,7 @@ var posizione = {
             method: 'POST',
             contentType: 'application/json',
             dataType: 'json',
-            data: JSON.stringify({
-                chiave: chiave.chiave,
-                libro: posizione.codice
-            }),
+            data: JSON.stringify({libro: posizione.codice}),
             success: function(risposta) {
                 risposta = posizione.formatta_posizione(risposta);
                 $.get('/html/templates.html', function(contenuto) {

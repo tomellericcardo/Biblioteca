@@ -64,10 +64,6 @@ def utente_autorizzato():
 
 @app.route('/leggi_galleria', methods = ['POST'])
 def leggi_galleria():
-    richiesta = request.get_json(force = True)
-    chiave = richiesta['chiave']
-    if not biblioteca.utente_autorizzato(chiave):
-        return dumps({'non_autorizzato': True})
     lista_libri = biblioteca.leggi_galleria()
     classifica = biblioteca.leggi_classifica()
     return dumps({'lista_libri': lista_libri, 'classifica': classifica})
@@ -77,9 +73,6 @@ def leggi_galleria():
 @app.route('/leggi_lista', methods = ['POST'])
 def leggi_lista():
     richiesta = request.get_json(force = True)
-    chiave = richiesta['chiave']
-    if not biblioteca.utente_autorizzato(chiave):
-        return dumps({'non_autorizzato': True})
     ordine = richiesta['ordine']
     if ordine == 'titolo':
         lista_libri = biblioteca.leggi_lista_titolo()
@@ -94,9 +87,6 @@ def leggi_lista():
 @app.route('/esegui_ricerca', methods = ['POST'])
 def esegui_ricerca():
     richiesta = request.get_json(force = True)
-    chiave = richiesta['chiave']
-    if not biblioteca.utente_autorizzato(chiave):
-        return dumps({'non_autorizzato': True})
     filtro = richiesta['filtro']
     richiesta = richiesta['richiesta']
     return dumps({'lista_libri': biblioteca.esegui_ricerca(filtro, richiesta)})
@@ -125,9 +115,6 @@ def nuovo_libro():
 @app.route('/leggi_scheda', methods = ['POST'])
 def leggi_scheda():
     richiesta = request.get_json(force = True)
-    chiave = richiesta['chiave']
-    if not biblioteca.utente_autorizzato(chiave):
-        return dumps({'non_autorizzato': True})
     codice = richiesta['codice']
     return dumps({'scheda': biblioteca.leggi_scheda(codice)})
 
@@ -186,9 +173,6 @@ def modifica_copertina():
 @app.route('/leggi_recensioni', methods = ['POST'])
 def leggi_recensioni():
     richiesta = request.get_json(force = True)
-    chiave = richiesta['chiave']
-    if not biblioteca.utente_autorizzato(chiave):
-        return dumps({'non_autorizzato': True})
     libro = richiesta['libro']
     sommario = biblioteca.leggi_sommario(libro)
     recensioni = biblioteca.leggi_recensioni(libro)
@@ -199,9 +183,6 @@ def leggi_recensioni():
 @app.route('/invia_recensione', methods = ['POST'])
 def invia_recensione():
     richiesta = request.get_json(force = True)
-    chiave = richiesta['chiave']
-    if not biblioteca.utente_autorizzato(chiave):
-        return dumps({'non_autorizzato': True})
     libro = richiesta['libro']
     valore = richiesta['valore']
     autore = richiesta['autore']
@@ -226,9 +207,6 @@ def elimina_recensione():
 @app.route('/leggi_posizione', methods = ['POST'])
 def leggi_posizione():
     richiesta = request.get_json(force = True)
-    chiave = richiesta['chiave']
-    if not biblioteca.utente_autorizzato(chiave):
-        return dumps({'non_autorizzato': True})
     libro = richiesta['libro']
     return dumps({'posizione': biblioteca.leggi_posizione(libro)})
 

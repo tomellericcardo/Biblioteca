@@ -243,6 +243,8 @@ var aggiungi = {
                 success: function(risposta) {
                     if (risposta.codice) {
                         window.location.href = '/libro?codice=' + risposta.codice;
+                    } else if (risposta.non_autorizzato) {
+                        window.location.href = '/accedi';
                     }
                 },
                 error: function() {

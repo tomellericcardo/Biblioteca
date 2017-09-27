@@ -52,7 +52,6 @@ var cerca = {
                 contentType: 'application/json',
                 dataType: 'json',
                 data: JSON.stringify({
-                    chiave: chiave.chiave,
                     filtro: filtro,
                     richiesta: richiesta
                 }),

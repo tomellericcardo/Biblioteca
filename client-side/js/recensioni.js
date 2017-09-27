@@ -116,7 +116,11 @@ var recensioni = {
                 id: id
             }),
             success: function(risposta) {
-                recensioni.leggi_recensioni();
+                if (risposta.non_autorizzato) {
+                    window.location.href = '/accedi';
+                } else {
+                    recensioni.leggi_recensioni();
+                }
             },
             error: function() {
                 errore.messaggio('Errore del server!');
@@ -135,7 +139,6 @@ var recensioni = {
             contentType: 'application/json',
             dataType: 'json',
             data: JSON.stringify({
-                chiave: chiave.chiave,
                 libro: recensioni.codice,
                 valore: recensioni.valore_recensione,
                 autore: autore,
@@ -163,10 +166,7 @@ var recensioni = {
             method: 'POST',
             contentType: 'application/json',
             dataType: 'json',
-            data: JSON.stringify({
-                chiave: chiave.chiave,
-                libro: recensioni.codice
-            }),
+            data: JSON.stringify({libro: recensioni.codice}),
             success: function(risposta) {
                 risposta = recensioni.formatta_risposta(risposta);
                 $.get('/html/templates.html', function(contenuto) {
