@@ -149,7 +149,7 @@ var aggiungi = {
                     $('#descrizione').val(descrizione);
                     $('#editore').val(editore);
                     $('#anno').val(anno);
-                    $('#copertina').html('<img src="' + copertina + '" id="immagine_copertina">');
+                    $('#copertina').html('<img src="' + copertina.replace('http', 'https') + '" id="immagine_copertina">');
                     aggiungi.sorgente_copertina = copertina;
                     $('#carica').css('display', 'none');
                 }

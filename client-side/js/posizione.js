@@ -149,7 +149,7 @@ var posizione = {
                 codice: posizione[0],
                 titolo: posizione[1],
                 autore: posizione[2],
-                copertina: posizione[3],
+                copertina: posizione[3].replace('http', 'https'),
                 stato: posizione[4],
                 testo: posizione[5]
             };

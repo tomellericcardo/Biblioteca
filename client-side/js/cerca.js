@@ -88,7 +88,7 @@ var cerca = {
                     codice: libro[0],
                     titolo: titolo,
                     autore: autore,
-                    copertina: libro[3]
+                    copertina: libro[3].replace('http', 'https')
                 };
             }
             if (n == 1) {

@@ -223,7 +223,7 @@ var recensioni = {
         var nuovo_sommario = {
             titolo: sommario[0],
             autore: sommario[1],
-            copertina: sommario[2],
+            copertina: sommario[2].replace('http', 'https'),
             voto: voto,
             colore: colore
         };

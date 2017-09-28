@@ -319,7 +319,7 @@ var libro = {
                 descrizione: scheda[4],
                 editore: scheda[5],
                 anno: scheda[6],
-                copertina: scheda[7]
+                copertina: scheda[7].replace('http', 'https')
             };
             risposta.scheda = nuova_scheda;
             risposta.spazio = true;

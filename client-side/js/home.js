@@ -98,7 +98,7 @@ var home = {
                 codice: libro[0],
                 titolo: titolo,
                 autore: autore,
-                copertina: libro[3]
+                copertina: libro[3].replace('http', 'https')
             };
         }
         return nuova_lista;
@@ -129,7 +129,7 @@ var home = {
                 codice: libro[0],
                 titolo: titolo,
                 autore: autore,
-                copertina: libro[3],
+                copertina: libro[3].replace('http', 'https'),
                 voto: voto,
                 colore: colore
             };
