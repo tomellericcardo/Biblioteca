@@ -149,6 +149,9 @@ var liste = {
                     codice: libro[0],
                     titolo: libro[1]
                 };
+                if (libro[2]) {
+                    gruppo.libri[j].autore = libro[2];
+                }
                 n += 1;
             }
             nuova_lista[i] = gruppo;

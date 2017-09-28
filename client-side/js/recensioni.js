@@ -117,7 +117,7 @@ var recensioni = {
             }),
             success: function(risposta) {
                 if (risposta.non_autorizzato) {
-                    window.location.href = '/accedi';
+                    window.location.href = '/accedi?errore=1&destinazione=/recensioni&codice=' + recensioni.codice;
                 } else {
                     recensioni.leggi_recensioni();
                 }

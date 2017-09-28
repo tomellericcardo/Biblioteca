@@ -244,7 +244,7 @@ var aggiungi = {
                     if (risposta.codice) {
                         window.location.href = '/libro?codice=' + risposta.codice;
                     } else if (risposta.non_autorizzato) {
-                        window.location.href = '/accedi';
+                        window.location.href = '/accedi?errore=1&destinazione=/aggiungi';
                     }
                 },
                 error: function() {

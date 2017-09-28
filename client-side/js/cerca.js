@@ -78,8 +78,9 @@ var cerca = {
         var lista_libri = risposta.lista_libri;
         if (lista_libri) {
             var nuova_lista = [];
+            var n = lista_libri.length;
             var i, libro, titolo, autore;
-            for (i = 0; i < lista_libri.length; i++) {
+            for (i = 0; i < n; i++) {
                 libro = lista_libri[i];
                 titolo = cerca.formatta_stringa(libro[1]);
                 autore = cerca.formatta_stringa(libro[2]);
@@ -89,6 +90,11 @@ var cerca = {
                     autore: autore,
                     copertina: libro[3]
                 };
+            }
+            if (n == 1) {
+                $('#n').html('Un risultato');
+            } else if (n > 1) {
+                $('#n').html(n + ' risultati');
             }
             risposta.lista_libri = nuova_lista;
             risposta.spazio = true;

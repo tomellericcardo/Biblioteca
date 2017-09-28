@@ -27,17 +27,9 @@ class Manager:
                 genere TEXT NOT NULL,
                 descrizione TEXT NOT NULL,
                 editore TEXT NOT NULL,
-                anno INT,
+                anno INT NOT NULL,
                 copertina TEXT NOT NULL,
                 data_ora DATETIME DEFAULT CURRENT_TIMESTAMP
-            )
-        ''')
-        database.commit()
-        cursore.execute('''
-            CREATE TABLE IF NOT EXISTS posizione (
-                libro TEXT PRIMARY KEY,
-                stato TEXT NOT NULL,
-                testo TEXT NOT NULL
             )
         ''')
         database.commit()
@@ -49,6 +41,14 @@ class Manager:
                 autore TEXT NOT NULL,
                 testo TEXT NOT NULL,
                 data_ora DATETIME DEFAULT CURRENT_TIMESTAMP
+            )
+        ''')
+        database.commit()
+        cursore.execute('''
+            CREATE TABLE IF NOT EXISTS posizione (
+                libro TEXT PRIMARY KEY,
+                stato TEXT NOT NULL,
+                testo TEXT NOT NULL
             )
         ''')
         database.commit()

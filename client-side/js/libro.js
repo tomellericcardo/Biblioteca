@@ -72,7 +72,7 @@ var libro = {
                 }),
                 success: function(risposta) {
                     if (risposta.non_autorizzato) {
-                        window.location.href = '/accedi';
+                        window.location.href = '/accedi?errore=1&destinazione=/libro&codice=' + libro.codice;
                     } else {
                         window.location.href = '/home';
                     }
@@ -220,7 +220,7 @@ var libro = {
             }),
             success: function(risposta) {
                 if (risposta.non_autorizzato) {
-                    window.location.href = '/accedi';
+                    window.location.href = '/accedi?errore=1&destinazione=/libro&codice=' + libro.codice;
                 } else {
                     $('#immagine_copertina').attr('src', sorgente);
                     $('#caricamento').css('display', 'none');
@@ -266,7 +266,7 @@ var libro = {
                         window.location.href = '/libro?codice=' + risposta.codice;
                     }
                 } else if (risposta.non_autorizzato) {
-                    window.location.href = '/accedi';
+                    window.location.href = '/accedi?errore=1&destinazione=/libro&codice=' + libro.codice;
                 } else {
                     errore.messaggio('Impossibile modificare la scheda di questo libro!');
                 }

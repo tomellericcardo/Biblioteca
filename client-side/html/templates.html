@@ -6,7 +6,7 @@
     <!-- RECENTI -->
     <p class="w3-large w3-padding-left">Libri aggiunti di recente:</p>
     {{#lista_libri}}
-        <div class="w3-col s6 m3 l2 w3-margin-top">
+        <div class="w3-col s6 m3 l2 w3-margin-top w3-hover-grayscale">
             <div class="w3-center libro" onclick="home.apri_libro('{{codice}}')">
                 
                 <!-- COPERTINA -->
@@ -45,7 +45,7 @@
     <!-- CLASSIFICA -->
     <p class="w3-col s12 w3-large w3-padding-left">I migliori in classifica:</p>
     {{#classifica}}
-        <div class="w3-col s6 m3 l2 w3-margin-top">
+        <div class="w3-col s6 m3 l2 w3-margin-top w3-hover-grayscale">
             <div class="w3-center libro" onclick="home.apri_libro('{{codice}}')">
                 
                 <!-- VOTO -->
@@ -122,7 +122,7 @@
         {{#libri}}
             <p class="w3-margin-left w3-padding-left">
                 <a href="/libro?codice={{codice}}" class="w3-large">{{titolo}}</a>
-                <br>{{autore}}
+                <br><i>{{autore}}</i>
             </p>
         {{/libri}}
     {{/lista_libri}}
@@ -153,7 +153,7 @@
     
     <!-- LIBRI -->
     {{#lista_libri}}
-        <div class="w3-col s6 w3-margin-top">
+        <div class="w3-col s6 w3-margin-top w3-hover-grayscale">
             <div class="w3-center libro" onclick="cerca.apri_libro('{{codice}}')">
                 
                 <!-- COPERTINA -->

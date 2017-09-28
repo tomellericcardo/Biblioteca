@@ -102,7 +102,7 @@ var posizione = {
             }),
             success: function(risposta) {
                 if (risposta.non_autorizzato) {
-                    window.location.href = '/accedi';
+                    window.location.href = '/accedi?errore=1&destinazione=/posizione&codice=' + posizione.codice;
                 } else {
                     posizione.leggi_posizione();
                 }
