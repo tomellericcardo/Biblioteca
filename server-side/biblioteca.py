@@ -155,7 +155,7 @@ class Biblioteca:
         stringa = stringa.upper();
         for carattere in ' \'.,':
             stringa = stringa.replace(carattere, '')
-        return stringa.join(i for i in s if ord(i) < 128)
+        return ''.join(i for i in stringa if ord(i) < 128)
     
     def nuova_posizione(self, codice):
         self.manager.scrivi('''
