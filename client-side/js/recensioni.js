@@ -220,10 +220,11 @@ var recensioni = {
         } else {
             colore = 'amber';
         }
+        var copertina = sommario[2].replace('http', 'https') + '?nc=' + Date.now();
         var nuovo_sommario = {
             titolo: sommario[0],
             autore: sommario[1],
-            copertina: sommario[2].replace('http', 'https'),
+            copertina: copertina,
             voto: voto,
             colore: colore
         };

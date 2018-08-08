@@ -79,16 +79,17 @@ var cerca = {
         if (lista_libri) {
             var nuova_lista = [];
             var n = lista_libri.length;
-            var i, libro, titolo, autore;
+            var i, libro, titolo, autore, copertina;
             for (i = 0; i < n; i++) {
                 libro = lista_libri[i];
                 titolo = cerca.formatta_stringa(libro[1]);
                 autore = cerca.formatta_stringa(libro[2]);
+                copertina = libro[3].replace('http', 'https') + '?nc=' + Date.now();
                 nuova_lista[i] = {
                     codice: libro[0],
                     titolo: titolo,
                     autore: autore,
-                    copertina: libro[3].replace('http', 'https')
+                    copertina: copertina
                 };
             }
             if (n == 1) {

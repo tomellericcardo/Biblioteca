@@ -2,24 +2,25 @@
 
 from manager import Manager
 from hashlib import sha256
+from base64 import b64decode
+from os import rename, remove
+from os.path import realpath, dirname, join
 
 
 class Biblioteca:
     
+    # Inizializzazione
     def __init__(self, g, database_filename, sale):
         self.manager = Manager(g, database_filename)
+        self.percorso = dirname(realpath(__file__))
         self.sale = sale
         self.alfabeto = u'0123456789abcdefghijklmnopqrstuvwxyz'
     
-    
     # Genera hash
-    
     def genera_hash(self, chiave):
         return sha256(chiave + self.sale).hexdigest()
     
-    
     # Utente autorizzato
-    
     def utente_autorizzato(self, chiave):
         return self.manager.leggi_presenza('''
             SELECT id
@@ -27,9 +28,7 @@ class Biblioteca:
             WHERE valore = ?
         ''', (chiave,))
     
-    
     # Leggi galleria
-    
     def leggi_galleria(self):
         return self.manager.leggi_righe('''
             SELECT codice, titolo, autore, copertina
@@ -38,6 +37,7 @@ class Biblioteca:
             LIMIT 12
         ''')
     
+    # Leggi classifica
     def leggi_classifica(self):
         classifica = self.manager.leggi_righe('''
             SELECT l.codice, l.titolo, l.autore, l.copertina, AVG(r.valore) AS voto
@@ -52,9 +52,7 @@ class Biblioteca:
             return []
         return classifica
     
-    
     # Leggi lista
-    
     def leggi_lista_titolo(self):
         dizionario = {}
         for lettera in self.alfabeto:
@@ -102,9 +100,7 @@ class Biblioteca:
             ''', (chiave,))
         return dizionario
     
-    
     # Esegui ricerca
-    
     def esegui_ricerca(self, filtro, richiesta):
         richiesta = richiesta.lower()
         return self.manager.leggi_righe('''
@@ -114,15 +110,19 @@ class Biblioteca:
             REGEXP ?
         ''', (richiesta,))
         
-    
     # Nuovo libro
-    
     def nuovo_libro(self, titolo, autore, genere, descrizione, editore, anno, copertina):
         codice = self.genera_codice(autore, titolo)
+        if copertina.split(':')[0] == 'data':
+            percorso = self.carica_copertina(copertina, codice)
+        elif len(copertina) > 0:
+            percorso = copertina
+        else:
+            percorso = '/img/copertina.png'
         self.manager.scrivi('''
             INSERT INTO libro (codice, titolo, autore, genere, descrizione, editore, anno, copertina)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-        ''', (codice, titolo, autore, genere, descrizione, editore, anno, copertina))
+        ''', (codice, titolo, autore, genere, descrizione, editore, anno, percorso))
         return codice
     
     def genera_codice(self, autore, titolo):
@@ -163,9 +163,30 @@ class Biblioteca:
             VALUES (?, '', '')
         ''', (codice,))
     
+    # Caricamento della copertina
+    def carica_copertina(self, copertina, codice):
+        nome_file = 'copertina_' + str(codice) + '.png'
+        percorso = '/img/copertine/' + nome_file
+        self.write_and_move(copertina, nome_file, percorso)
+        self.manager.scrivi('''
+            UPDATE libro
+            SET copertina = ?
+            WHERE codice = ?
+        ''', (percorso, codice))
+        return percorso
+    
+    # Salva l'immagine e la sposta
+    def write_and_move(self, image, image_name, image_location):
+        image_data = b64decode(image.split(',')[1])
+        image_path = join(self.percorso, image_name)
+        f = open(image_path, 'wb')
+        f.write(image_data)
+        f.close()
+        upload_path = join(self.percorso, '../client-side' + image_location)
+        rename(image_path, upload_path)
+    
     
     # Leggi schdea
-    
     def leggi_scheda(self, codice):
         return self.manager.leggi_riga('''
             SELECT codice, titolo, autore, genere, descrizione, editore, anno, copertina
@@ -175,6 +196,14 @@ class Biblioteca:
     
     
     # Elimina scheda
+    def elimina_copertina(self, codice):
+        percorso = self.manager.leggi_dato('''
+            SELECT copertina
+            FROM libro
+            WHERE codice = ?
+        ''', (codice,))
+        if percorso.split('/')[2] == 'copertine':
+            remove(join(self.percorso, '../client-side' + percorso))
     
     def elimina_scheda(self, codice):
         self.manager.scrivi('''
@@ -182,23 +211,26 @@ class Biblioteca:
             FROM libro
             WHERE codice = ?
         ''', (codice,))
-    
-    def elimina_recensioni(self, libro):
         self.manager.scrivi('''
             DELETE
             FROM recensione
             WHERE libro = ?
-        ''', (libro,))
-    
-    def elimina_posizione(self, libro):
+        ''', (codice,))
         self.manager.scrivi('''
             DELETE
             FROM posizione
             WHERE libro = ?
-        ''', (libro,))
+        ''', (codice,))
     
     
     # Modifica scheda
+    def aggiorna_libro(self, titolo, autore, genere, descrizione, editore, anno, copertina):
+        codice = self.genera_codice(autore, titolo)
+        self.manager.scrivi('''
+            INSERT INTO libro (codice, titolo, autore, genere, descrizione, editore, anno, copertina)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        ''', (codice, titolo, autore, genere, descrizione, editore, anno, copertina))
+        return codice
     
     def leggi_copertina(self, codice):
         return self.manager.leggi_dato('''
@@ -206,6 +238,18 @@ class Biblioteca:
             FROM libro
             WHERE codice = ?
         ''', (codice,))
+    
+    def aggiorna_copertina(self, codice, copertina):
+        if copertina.split('/')[2] == 'copertine':
+            nuovo_nome = 'copertina_' + str(codice) + '.png'
+            percorso = join(self.percorso, '../client-side' + copertina)
+            nuovo_percorso = join(self.percorso, '../client-side/img/copertine/' + nuovo_nome)
+            rename(percorso, nuovo_percorso)
+            self.manager.scrivi('''
+                UPDATE libro
+                SET copertina = ?
+                WHERE codice = ?
+            ''', ('/img/copertine/' + nuovo_nome, codice))
     
     def aggiorna_recensioni(self, libro, nuovo_libro):
         self.manager.scrivi('''
@@ -221,19 +265,12 @@ class Biblioteca:
             WHERE libro = ?
         ''', (nuovo_libro, libro))
     
-    
     # Modifica copertina
-    
     def modifica_copertina(self, codice, copertina):
-        self.manager.scrivi('''
-            UPDATE libro
-            SET copertina = ?
-            WHERE codice = ?
-        ''', (copertina, codice))
-    
+        self.elimina_copertina(codice)
+        self.carica_copertina(copertina, codice)
     
     # Leggi recensioni
-    
     def leggi_sommario(self, libro):
         return self.manager.leggi_riga('''
             SELECT l.titolo, l.autore, l.copertina, AVG(r.valore)
@@ -252,18 +289,14 @@ class Biblioteca:
             ORDER BY valore DESC
         ''', (libro,))
     
-    
     # Invia recensione
-    
     def invia_recensione(self, libro, valore, autore, testo):
         self.manager.scrivi('''
             INSERT INTO recensione (libro, valore, autore, testo)
             VALUES (?, ?, ?, ?)
         ''', (libro, valore, autore, testo))
     
-    
     # Elimina recensione
-    
     def elimina_recensione(self, id_recensione):
         self.manager.scrivi('''
             DELETE
@@ -271,9 +304,7 @@ class Biblioteca:
             WHERE id = ?
         ''', (id_recensione,))
     
-    
     # Leggi posizione
-    
     def leggi_posizione(self, libro):
         return self.manager.leggi_riga('''
             SELECT l.codice, l.titolo, l.autore, l.copertina, p.stato, p.testo
@@ -283,9 +314,7 @@ class Biblioteca:
             WHERE l.codice = ?
         ''', (libro,))
     
-    
     # Modifica posizione
-    
     def modifica_posizione(self, libro, stato, testo):
         self.manager.scrivi('''
             UPDATE posizione

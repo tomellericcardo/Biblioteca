@@ -87,18 +87,19 @@ var home = {
     
     formatta_galleria: function(lista_libri) {
         var nuova_lista = [];
-        var i, libro, titolo, lista_nomi, autore;
+        var i, libro, titolo, lista_nomi, autore, copertina;
         for (i = 0; i < lista_libri.length; i++) {
             libro = lista_libri[i];
             titolo = home.formatta_stringa(libro[1]);
             lista_nomi = libro[2].split(' ');
             autore = lista_nomi[lista_nomi.length - 1];
             autore = home.formatta_stringa(autore);
+            copertina = libro[3].replace('http', 'https') + '?nc=' + Date.now();
             nuova_lista[i] = {
                 codice: libro[0],
                 titolo: titolo,
                 autore: autore,
-                copertina: libro[3].replace('http', 'https')
+                copertina: copertina
             };
         }
         return nuova_lista;

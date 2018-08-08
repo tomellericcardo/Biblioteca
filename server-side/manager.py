@@ -32,7 +32,6 @@ class Manager:
                 data_ora DATETIME DEFAULT CURRENT_TIMESTAMP
             )
         ''')
-        database.commit()
         cursore.execute('''
             CREATE TABLE IF NOT EXISTS recensione (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -43,7 +42,6 @@ class Manager:
                 data_ora DATETIME DEFAULT CURRENT_TIMESTAMP
             )
         ''')
-        database.commit()
         cursore.execute('''
             CREATE TABLE IF NOT EXISTS posizione (
                 libro TEXT PRIMARY KEY,
@@ -51,7 +49,6 @@ class Manager:
                 testo TEXT NOT NULL
             )
         ''')
-        database.commit()
         cursore.execute('''
             CREATE TABLE IF NOT EXISTS chiave (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,

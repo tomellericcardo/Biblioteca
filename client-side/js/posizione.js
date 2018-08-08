@@ -145,11 +145,12 @@ var posizione = {
     formatta_posizione: function(risposta) {
         var posizione = risposta.posizione;
         if (posizione) {
+            var copertina = posizione[3].replace('http', 'https') + '?nc=' + Date.now();
             var nuova_posizione = {
                 codice: posizione[0],
                 titolo: posizione[1],
                 autore: posizione[2],
-                copertina: posizione[3].replace('http', 'https'),
+                copertina: copertina,
                 stato: posizione[4],
                 testo: posizione[5]
             };

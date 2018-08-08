@@ -93,7 +93,7 @@ var libro = {
                 $('#seleziona').click();
             } else {
                 var copertina = $('#immagine_copertina').attr('src');
-                if (copertina != '/img/copertina.png') {
+                if (copertina.split('?')[0] != '/img/copertina.png') {
                     $('#sorgente_copertina').html('<img src="' + copertina + '" id="copertina_aperta">');
                     $('#mostra_copertina').css('display', 'block');
                 }
@@ -311,6 +311,7 @@ var libro = {
     formatta_scheda: function(risposta) {
         var scheda = risposta.scheda;
         if (scheda) {
+            var copertina = scheda[7].replace('http', 'https') + '?nc=' + Date.now();
             var nuova_scheda = {
                 codice: scheda[0],
                 titolo: scheda[1],
@@ -319,7 +320,7 @@ var libro = {
                 descrizione: scheda[4],
                 editore: scheda[5],
                 anno: scheda[6],
-                copertina: scheda[7].replace('http', 'https')
+                copertina: copertina
             };
             risposta.scheda = nuova_scheda;
             risposta.spazio = true;

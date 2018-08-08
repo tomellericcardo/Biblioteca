@@ -39,6 +39,10 @@ def invia_pagina(nome_pagina):
 def invia_file(nome_cartella, nome_file):
     return send_from_directory('../client-side/' + nome_cartella + '/', nome_file)
 
+@app.route('/img/copertine/<nome_file>')
+def invia_copertina(nome_file):
+    return send_from_directory('../client-side/img/copertine/', nome_file)
+
 
 # CONTESTI
 
@@ -127,9 +131,8 @@ def elimina_scheda():
     if not biblioteca.utente_autorizzato(chiave):
         return dumps({'non_autorizzato': True})
     codice = richiesta['codice']
+    biblioteca.elimina_copertina(codice)
     biblioteca.elimina_scheda(codice)
-    biblioteca.elimina_recensioni(codice)
-    biblioteca.elimina_posizione(codice)
     return dumps({'successo': True})
 
 # Modifica scheda
@@ -149,8 +152,9 @@ def modifica_scheda():
     anno = richiesta['anno']
     copertina = biblioteca.leggi_copertina(codice)
     biblioteca.elimina_scheda(codice)
-    nuovo_codice = biblioteca.nuovo_libro(titolo, autore, genere, descrizione, editore, anno, copertina)
+    nuovo_codice = biblioteca.aggiorna_libro(titolo, autore, genere, descrizione, editore, anno, copertina)
     if (codice != nuovo_codice):
+        biblioteca.aggiorna_copertina(nuovo_codice, copertina)
         biblioteca.aggiorna_recensioni(codice, nuovo_codice)
         biblioteca.aggiorna_posizione(codice, nuovo_codice)
     return dumps({'codice': nuovo_codice})
