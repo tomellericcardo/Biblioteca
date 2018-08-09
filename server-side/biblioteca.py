@@ -358,8 +358,8 @@ class Biblioteca:
     def nuova_posizione(self, codice):
         self.manager.scrivi('''
             INSERT INTO posizione (libro, stato, testo)
-            VALUES (?, '', '')
-        ''', (codice,))
+            VALUES (?, ?, '')
+        ''', (codice, 'casa'))
     
     # Leggi posizione
     def leggi_posizione(self, libro):
