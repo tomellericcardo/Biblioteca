@@ -28,6 +28,9 @@ class Biblioteca:
             WHERE valore = ?
         ''', (chiave,))
     
+    
+    ##### HOME #####
+    
     # Leggi galleria
     def leggi_galleria(self):
         return self.manager.leggi_righe('''
@@ -52,7 +55,10 @@ class Biblioteca:
             return []
         return classifica
     
-    # Leggi lista
+    
+    ##### LISTE #####
+    
+    # Lista per titolo
     def leggi_lista_titolo(self):
         dizionario = {}
         for lettera in self.alfabeto:
@@ -68,6 +74,7 @@ class Biblioteca:
                 dizionario[lettera] = lista
         return dizionario
     
+    # Lista per autore
     def leggi_lista_autore(self):
         dizionario = {}
         lista_autori = self.manager.leggi_righe('''
@@ -84,6 +91,7 @@ class Biblioteca:
             ''', (autore,))
         return dizionario
     
+    # Lista in altri ordini
     def leggi_lista(self, ordine):
         dizionario = {}
         lista_chiavi = self.manager.leggi_righe('''
@@ -100,6 +108,9 @@ class Biblioteca:
             ''', (chiave,))
         return dizionario
     
+    
+    ##### RICERCA #####
+    
     # Esegui ricerca
     def esegui_ricerca(self, filtro, richiesta):
         richiesta = richiesta.lower()
@@ -109,22 +120,21 @@ class Biblioteca:
             WHERE LOWER(''' + filtro + ''')
             REGEXP ?
         ''', (richiesta,))
-        
+    
+    
+    ##### AGGIUNGI #####
+    
     # Nuovo libro
     def nuovo_libro(self, titolo, autore, genere, descrizione, editore, anno, copertina):
         codice = self.genera_codice(autore, titolo)
-        if copertina.split(':')[0] == 'data':
-            percorso = self.carica_copertina(copertina, codice)
-        elif len(copertina) > 0:
-            percorso = copertina
-        else:
-            percorso = '/img/copertina.png'
+        percorso = self.percorso_copertina(copertina)
         self.manager.scrivi('''
             INSERT INTO libro (codice, titolo, autore, genere, descrizione, editore, anno, copertina)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?)
         ''', (codice, titolo, autore, genere, descrizione, editore, anno, percorso))
         return codice
     
+    # Genera codice del libro
     def genera_codice(self, autore, titolo):
         codice = ''
         lista_nomi = autore.split(' ')
@@ -151,17 +161,20 @@ class Biblioteca:
             ''', (codice + str(i),))
         return codice + str(i)
     
+    # Formatta stringa
     def formatta_stringa(self, stringa):
         stringa = stringa.upper();
         for carattere in ' \'.,':
             stringa = stringa.replace(carattere, '')
         return ''.join(i for i in stringa if ord(i) < 128)
     
-    def nuova_posizione(self, codice):
-        self.manager.scrivi('''
-            INSERT INTO posizione (libro, stato, testo)
-            VALUES (?, '', '')
-        ''', (codice,))
+    # Percorso copertina
+    def percorso_copertina(self, copertina):
+        if copertina.split(':')[0] == 'data':
+            return self.carica_copertina(copertina, codice)
+        if len(copertina) > 0:
+            return copertina
+        return '/img/copertina.png'
     
     # Caricamento della copertina
     def carica_copertina(self, copertina, codice):
@@ -186,7 +199,9 @@ class Biblioteca:
         rename(image_path, upload_path)
     
     
-    # Leggi schdea
+    ##### LIBRO #####    
+    
+    # Leggi scheda
     def leggi_scheda(self, codice):
         return self.manager.leggi_riga('''
             SELECT codice, titolo, autore, genere, descrizione, editore, anno, copertina
@@ -194,8 +209,7 @@ class Biblioteca:
             WHERE codice = ?
         ''', (codice,))
     
-    
-    # Elimina scheda
+    # Elimina copertina
     def elimina_copertina(self, codice):
         percorso = self.manager.leggi_dato('''
             SELECT copertina
@@ -205,6 +219,7 @@ class Biblioteca:
         if percorso.split('/')[2] == 'copertine':
             remove(join(self.percorso, '../client-side' + percorso))
     
+    # Elimina scheda
     def elimina_scheda(self, codice):
         self.manager.scrivi('''
             DELETE
@@ -222,7 +237,6 @@ class Biblioteca:
             WHERE libro = ?
         ''', (codice,))
     
-    
     # Modifica scheda
     def aggiorna_libro(self, titolo, autore, genere, descrizione, editore, anno, copertina):
         codice = self.genera_codice(autore, titolo)
@@ -232,6 +246,7 @@ class Biblioteca:
         ''', (codice, titolo, autore, genere, descrizione, editore, anno, copertina))
         return codice
     
+    # Leggi copertina
     def leggi_copertina(self, codice):
         return self.manager.leggi_dato('''
             SELECT copertina
@@ -239,6 +254,7 @@ class Biblioteca:
             WHERE codice = ?
         ''', (codice,))
     
+    # Aggiorna posizione copertina
     def aggiorna_copertina(self, codice, copertina):
         if copertina.split('/')[2] == 'copertine':
             nuovo_nome = 'copertina_' + str(codice) + '.png'
@@ -251,6 +267,7 @@ class Biblioteca:
                 WHERE codice = ?
             ''', ('/img/copertine/' + nuovo_nome, codice))
     
+    # Aggiorna recensioni
     def aggiorna_recensioni(self, libro, nuovo_libro):
         self.manager.scrivi('''
             UPDATE recensione
@@ -258,6 +275,7 @@ class Biblioteca:
             WHERE libro = ?
         ''', (nuovo_libro, libro))
     
+    # Aggiorna posizione
     def aggiorna_posizione(self, libro, nuovo_libro):
         self.manager.scrivi('''
             UPDATE posizione
@@ -270,7 +288,10 @@ class Biblioteca:
         self.elimina_copertina(codice)
         self.carica_copertina(copertina, codice)
     
-    # Leggi recensioni
+    
+    ##### RECENSIONI #####
+    
+    # Leggi sommario recensioni
     def leggi_sommario(self, libro):
         return self.manager.leggi_riga('''
             SELECT l.titolo, l.autore, l.copertina, AVG(r.valore)
@@ -281,6 +302,7 @@ class Biblioteca:
             GROUP BY r.libro
         ''', (libro,))
     
+    # Leggi recensioni
     def leggi_recensioni(self, libro):
         return self.manager.leggi_righe('''
             SELECT id, valore, autore, testo
@@ -303,6 +325,16 @@ class Biblioteca:
             FROM recensione
             WHERE id = ?
         ''', (id_recensione,))
+    
+    
+    ##### POSIZIONE #####
+    
+    # Inizializzazione posizione libro
+    def nuova_posizione(self, codice):
+        self.manager.scrivi('''
+            INSERT INTO posizione (libro, stato, testo)
+            VALUES (?, '', '')
+        ''', (codice,))
     
     # Leggi posizione
     def leggi_posizione(self, libro):

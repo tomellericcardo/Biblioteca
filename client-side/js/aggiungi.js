@@ -1,5 +1,6 @@
 var aggiungi = {
     
+    // Inizializzazione
     init: function() {
         aggiungi.sorgente_copertina = '';
         aggiungi.init_home();
@@ -13,44 +14,37 @@ var aggiungi = {
     },
     
     
-    // Bottone home
+    /*** LISTENERS ***/
     
+    // Bottone home
     init_home: function() {
         $('#home').on('click', function() {
             window.location.href = '/home';
         });
     },
     
-    
     // Bottone mostra caricamento informazioni
-    
     init_mostra_carica: function() {
         $('#mostra_carica').on('click', function() {
             $('#carica').css('display', 'block');
         });
     },
     
-    
     // Bottone chiudi caricamento informazioni
-    
     init_chiudi_carica: function() {
         $('#chiudi_carica, #sfondo_carica').on('click', function() {
             $('#carica').css('display', 'none');
         });
     },
     
-    
     // Bottone caricamento codice
-    
     init_carica_foto: function() {
         $('#carica_foto').on('click', function() {
             $('#file_input').click();
         });
     },
     
-    
     // Bottone caricamento informazioni
-    
     init_carica_informazioni: function() {
         $('#carica_informazioni').on('click', function() {
             aggiungi.carica_informazioni();
@@ -62,18 +56,14 @@ var aggiungi = {
         });
     },
     
-    
-    // Settore seleziona informazioni
-    
+    // Selezione input copertina
     init_seleziona_copertina: function() {
         $('#copertina').on('click', function() {
             $('#seleziona').click();
         });
     },
     
-    
-    // Input leggi copertina
-    
+    // Selezione copertina
     init_leggi_copertina: function() {
         $('#seleziona').change(function(evento) {
             $('#caricamento').css('display', 'block');
@@ -86,9 +76,7 @@ var aggiungi = {
         });
     },
     
-    
     // Bottone conferma aggiunta
-    
     init_conferma: function() {
         $('#conferma').on('click', function() {
             aggiungi.conferma();
@@ -101,8 +89,9 @@ var aggiungi = {
     },
     
     
-    // Carica informazioni
+    /*** GOOGLE BOOKS ***/
     
+    // Carica informazioni
     carica_informazioni: function() {
         var titolo = $('#titolo_carica').val();
         var autore = $('#autore_carica').val();
@@ -122,9 +111,7 @@ var aggiungi = {
         }
     },
     
-    
     // Ottieni informazioni
-    
     ottieni_informazioni: function(url) {
         $('#attesa').css('display', 'inline');
         $.ajax({
@@ -134,25 +121,8 @@ var aggiungi = {
                 if (risposta.totalItems == 0) {
                     $('#carica').css('display', 'none');
                     errore.messaggio('Libro non trovato nel registro!');
-                } else {
-                    var libro = risposta.items[0].volumeInfo;
-                    var titolo = libro.title;
-                    var autore = libro.authors[0];
-                    var genere = libro.categories[0];
-                    var descrizione = libro.description;
-                    var editore = libro.publisher;
-                    var anno = libro.publishedDate;
-                    var copertina = libro.imageLinks.thumbnail;
-                    $('#titolo').val(titolo);
-                    $('#autore').val(autore);
-                    $('#genere').val(genere);
-                    $('#descrizione').val(descrizione);
-                    $('#editore').val(editore);
-                    $('#anno').val(anno);
-                    $('#copertina').html('<img src="' + copertina.replace('http', 'https') + '" id="immagine_copertina">');
-                    aggiungi.sorgente_copertina = copertina;
-                    $('#carica').css('display', 'none');
-                }
+                } else
+                    aggiungi.leggi_informazioni(risposta);
                 $('#titolo_carica').val('');
                 $('#autore_carica').val('');
                 $('#codice_isbn').val('');
@@ -166,9 +136,31 @@ var aggiungi = {
         });
     },
     
+    // Leggi informazioni
+    leggi_informazioni: function(risposta) {
+        var libro = risposta.items[0].volumeInfo;
+        var titolo = libro.title;
+        var autore = libro.authors[0];
+        var genere = libro.categories[0];
+        var descrizione = libro.description;
+        var editore = libro.publisher;
+        var anno = libro.publishedDate;
+        var copertina = libro.imageLinks.thumbnail;
+        $('#titolo').val(titolo);
+        $('#autore').val(autore);
+        $('#genere').val(genere);
+        $('#descrizione').val(descrizione);
+        $('#editore').val(editore);
+        $('#anno').val(anno);
+        $('#copertina').html('<img src="' + copertina.replace('http', 'https') + '" id="immagine_copertina">');
+        aggiungi.sorgente_copertina = copertina;
+        $('#carica').css('display', 'none');
+    },
+    
+    
+    /*** COPERTINA ***/
     
     // Ridimensionamento copertina
-    
     ridimensiona_mostra: function(sorgente, larghezza_massima, altezza_massima) {
         var immagine = document.createElement('img');
         var canvas = document.createElement('canvas');
@@ -195,9 +187,7 @@ var aggiungi = {
         immagine.src = sorgente;
     },
     
-    
     // Visualizzazione immagine
-    
     mostra_immagine: function(sorgente) {
         $('#caricamento').css('display', 'none');
         $('#conferma').css('bottom', '20px');
@@ -206,8 +196,9 @@ var aggiungi = {
     },
     
     
-    // Aggiunta libro
+    /*** AGGIUNGI ***/
     
+    // Aggiunta libro
     conferma: function() {
         $('#titolo, #autore').css('border-color', '#757575');
         var titolo = $('#titolo').val();
@@ -225,34 +216,39 @@ var aggiungi = {
             errore.messaggio('Devi inserire l\'autore del libro per poterlo catalogare!');
         } else {
             $('#conferma').html('<i class="material-icons w3-spin">refresh</i>');
-            $.ajax({
-                url: 'nuovo_libro',
-                method: 'POST',
-                contentType: 'application/json',
-                dataType: 'json',
-                data: JSON.stringify({
-                    chiave: chiave.chiave,
-                    titolo: titolo,
-                    autore: autore,
-                    genere: genere,
-                    descrizione: descrizione,
-                    editore: editore,
-                    anno: anno,
-                    copertina: copertina
-                }),
-                success: function(risposta) {
-                    if (risposta.codice) {
-                        window.location.href = '/libro?codice=' + risposta.codice;
-                    } else if (risposta.non_autorizzato) {
-                        window.location.href = '/accedi?errore=1&destinazione=/aggiungi';
-                    }
-                },
-                error: function() {
-                    errore.messaggio('Errore del server!');
-                    $('#conferma').html('<i class="material-icons">done</i>');
-                }
-            });
+            aggiungi.richiesta_nuovo(titolo, autore, genere, descrizione, editore, anno, copertina);
         }
+    },
+    
+    // Richiesta nuovo libro
+    richiesta_nuovo: function(titolo, autore, genere, descrizione, editore, anno, copertina) {
+        $.ajax({
+            url: 'nuovo_libro',
+            method: 'POST',
+            contentType: 'application/json',
+            dataType: 'json',
+            data: JSON.stringify({
+                chiave: chiave.chiave,
+                titolo: titolo,
+                autore: autore,
+                genere: genere,
+                descrizione: descrizione,
+                editore: editore,
+                anno: anno,
+                copertina: copertina
+            }),
+            success: function(risposta) {
+                if (risposta.codice) {
+                    window.location.href = '/libro?codice=' + risposta.codice;
+                } else if (risposta.non_autorizzato) {
+                    window.location.href = '/accedi?errore=1&destinazione=/aggiungi';
+                }
+            },
+            error: function() {
+                errore.messaggio('Errore del server!');
+                $('#conferma').html('<i class="material-icons">done</i>');
+            }
+        });
     }
     
 };
