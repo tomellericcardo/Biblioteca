@@ -133,6 +133,8 @@ def elimina_scheda():
     codice = richiesta['codice']
     biblioteca.elimina_copertina(codice)
     biblioteca.elimina_scheda(codice)
+    biblioteca.elimina_recensioni(codice)
+    biblioteca.elimina_posizione(codice)
     return dumps({'successo': True})
 
 # Modifica scheda

@@ -226,11 +226,17 @@ class Biblioteca:
             FROM libro
             WHERE codice = ?
         ''', (codice,))
+    
+    # Elimina recensioni
+    def elimina_recensioni(self, codice):
         self.manager.scrivi('''
             DELETE
             FROM recensione
             WHERE libro = ?
         ''', (codice,))
+        
+    # Elimina posizione
+    def elimina_posizione(self, codice):
         self.manager.scrivi('''
             DELETE
             FROM posizione
