@@ -91,6 +91,25 @@ class Biblioteca:
             ''', (autore,))
         return dizionario
     
+    # Lista per stato
+    def leggi_lista_stato(self):
+        dizionario = {}
+        lista_chiavi = self.manager.leggi_righe('''
+            SELECT DISTINCT(stato)
+            FROM posizione
+        ''')
+        for chiave in lista_chiavi:
+            chiave = chiave[0]
+            dizionario[chiave] = self.manager.leggi_righe('''
+                SELECT l.codice, l.titolo, l.autore
+                FROM libro l
+                INNER JOIN posizione p
+                ON l.codice = p.libro
+                WHERE p.stato = ?
+                ORDER BY l.titolo
+            ''', (chiave,))
+        return dizionario
+    
     # Lista in altri ordini
     def leggi_lista(self, ordine):
         dizionario = {}
