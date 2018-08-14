@@ -6,27 +6,21 @@ var liste = {
         liste.leggi_lista();
     },
     
-    
     // Bottone home
-    
     init_home: function() {
         $('#home').on('click', function() {
             window.location.href = '/home';
         });
     },
     
-    
     // Bottone mostra
-    
     init_mostra: function() {
         $('#mostra').on('click', function() {
             liste.leggi_lista();
         });
     },
     
-    
     // Leggi lista
-    
     leggi_lista: function() {
         $('#attesa').css('display', 'inline');
         var ordine = $('#ordine').val();
@@ -37,23 +31,7 @@ var liste = {
             dataType: 'json',
             data: JSON.stringify({ordine: ordine}),
             success: function(risposta) {
-                if (ordine == 'autore') {
-                    risposta = liste.formatta_risultati_autore(risposta);
-                    $.get('/html/templates.html', function(contenuto) {
-                        var template = $(contenuto).filter('#leggi_lista_autore').html();
-                        $('#risultati').html(Mustache.render(template, risposta));
-                    }).then(function() {
-                        $('#attesa').css('display', 'none');
-                    });
-                } else {
-                    risposta = liste.formatta_risultati(risposta);
-                    $.get('/html/templates.html', function(contenuto) {
-                        var template = $(contenuto).filter('#leggi_lista').html();
-                        $('#risultati').html(Mustache.render(template, risposta));
-                    }).then(function() {
-                        $('#attesa').css('display', 'none');
-                    });
-                }
+                liste.mostra_lista(ordine, risposta);
             },
             error: function() {
                 errore.messaggio('Errore del server!');
@@ -61,9 +39,25 @@ var liste = {
         });
     },
     
+    // Mostra lista
+    mostra_lista: function(ordine, risposta) {
+        var id_template = '#leggi_lista';
+        if (ordine == 'autore') {
+            risposta = liste.formatta_risultati_autore(risposta);
+            id_template = '#leggi_lista_autore';
+        } else if (ordine == 'stato')
+            risposta = liste.formatta_risultati_stato(risposta);
+         else
+            risposta = liste.formatta_risultati(risposta);
+        $.get('/html/templates.html', function(contenuto) {
+            var template = $(contenuto).filter(id_template).html();
+            $('#risultati').html(Mustache.render(template, risposta));
+        }).then(function() {
+            $('#attesa').css('display', 'none');
+        });
+    },
     
     // Formatta lista autore
-    
     formatta_risultati_autore: function(risposta) {
         var lista_libri = risposta.lista_libri;
         if (lista_libri) {
@@ -75,7 +69,7 @@ var liste = {
                 lista_libri[nuovo_autore] = lista_libri[autore];
             }
             lista_autori.sort();
-            var nuova_lista = liste.formatta_gruppo(lista_autori, lista_libri)
+            var nuova_lista = liste.formatta_gruppo(lista_autori, lista_libri);
             risposta.lista_libri = nuova_lista;
             risposta.spazio = true;
             return risposta;
@@ -83,19 +77,37 @@ var liste = {
         return [];
     },
     
+    // Formatta lista stato
+    formatta_risultati_stato: function(risposta) {
+        var lista_libri = risposta.lista_libri;
+        if (lista_libri) {
+            var lista_chiavi = [];
+            if (lista_libri['prestito']) {
+                lista_chiavi.push('IN PRESTITO');
+                lista_libri['IN PRESTITO'] = lista_libri['prestito'];
+            }
+            if (lista_libri['casa']) {
+                lista_chiavi.push('IN CASA');
+                lista_libri['IN CASA'] = lista_libri['casa'];
+            }
+            var nuova_lista = liste.formatta_gruppo(lista_chiavi, lista_libri);
+            risposta.lista_libri = nuova_lista;
+            risposta.spazio = true;
+            return risposta;
+        }
+        return [];
+    },
     
     // Formatta nome
-    
     formatta_nome: function(autore) {
         var lista_nomi, nuovo_autore, n, nome;
         lista_nomi = autore.split(' ');
         nuovo_autore = lista_nomi[lista_nomi.length - 1];
         if (lista_nomi.length > 1) {
-            nuovo_autore += ' ('
+            nuovo_autore += ' (';
             for (n = 0; n < lista_nomi.length - 1; n++) {
-                if (n != 0) {
+                if (n != 0)
                     nuovo_autore += ' ';
-                }
                 nuovo_autore += lista_nomi[n];
             }
             nuovo_autore += ')';
@@ -103,9 +115,7 @@ var liste = {
         return nuovo_autore;
     },
 
-    
     // Formatta lista
-    
     formatta_risultati: function(risposta) {
         var lista_libri = risposta.lista_libri;
         if (lista_libri) {
@@ -123,7 +133,7 @@ var liste = {
                 lista_chiavi.push('NON SPECIFICATO');
                 lista_libri['NON SPECIFICATO'] = lista_libri[''];
             }
-            var nuova_lista = liste.formatta_gruppo(lista_chiavi, lista_libri)
+            var nuova_lista = liste.formatta_gruppo(lista_chiavi, lista_libri);
             risposta.lista_libri = nuova_lista;
             risposta.spazio = true;
             return risposta;
@@ -131,9 +141,7 @@ var liste = {
         return [];
     },
     
-    
     // Formatta gruppo
-    
     formatta_gruppo: function(lista_chiavi, lista_libri) {
         var nuova_lista = [];
         var n = 0;
@@ -149,9 +157,8 @@ var liste = {
                     codice: libro[0],
                     titolo: libro[1]
                 };
-                if (libro[2]) {
+                if (libro[2])
                     gruppo.libri[j].autore = libro[2];
-                }
                 n += 1;
             }
             nuova_lista[i] = gruppo;
