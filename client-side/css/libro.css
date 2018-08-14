@@ -26,7 +26,13 @@
     right: 12px;
 }
 
+#sorgente_copertina {
+    width: 60%!important;
+    max-width: 200px!important;
+    margin: auto!important;
+}
+
 #copertina_aperta {
     max-height: 500px;
-    max-width: 100%;
+    width: 100%;
 }

@@ -120,7 +120,7 @@ var libro = {
     // Bottone chiudi copertina
     
     init_chiudi_copertina: function() {
-        $('#chiudi_mostra, #sfondo_mostra').on('click', function() {
+        $('#sfondo_mostra').on('click', function() {
             $('#mostra_copertina').css('display', 'none');
         });
     },
