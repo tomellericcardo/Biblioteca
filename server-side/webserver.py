@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from flask import Flask, g, send_from_directory, request
+from flask import Flask, g, request, redirect, send_from_directory
 from biblioteca import Biblioteca
 from json import dumps
 
@@ -15,6 +15,9 @@ biblioteca = Biblioteca(g, 'database.db', 'clorurodisodio')
 
 @app.before_request
 def apri_connessione():
+    if request.url.startswith('http://'):
+        url = request.url.replace('http://', 'https://')
+        return redirect(url, code = 301)
     biblioteca.manager.apri_connessione()
 
 @app.teardown_request
