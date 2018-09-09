@@ -15,9 +15,6 @@ biblioteca = Biblioteca(g, 'database.db', 'clorurodisodio')
 
 @app.before_request
 def apri_connessione():
-    if request.url.startswith('http://'):
-        url = request.url.replace('http://', 'https://')
-        return redirect(url, code = 301)
     biblioteca.manager.apri_connessione()
 
 @app.teardown_request
