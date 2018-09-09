@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from flask import Flask, g, send_from_directory, request
-from flask_sslify import SSLify
 from biblioteca import Biblioteca
 from json import dumps
 
@@ -9,7 +8,6 @@ from json import dumps
 # VARIABILI GLOBALI
 
 app = Flask(__name__)
-ssLify = SSLify(app)
 biblioteca = Biblioteca(g, 'database.db', 'clorurodisodio')
 
 
@@ -47,7 +45,6 @@ def invia_copertina(nome_file):
 # CONTESTI
 
 # Accedi
-
 @app.route('/accedi', methods = ['POST'])
 def accedi():
     richiesta = request.get_json(force = True)
@@ -57,7 +54,6 @@ def accedi():
     return dumps({'utente_valido': utente_valido, 'hash_chiave': hash_chiave})
 
 # Utente autorizzato
-
 @app.route('/utente_autorizzato', methods = ['POST'])
 def utente_autorizzato():
     richiesta = request.get_json(force = True)
@@ -65,7 +61,6 @@ def utente_autorizzato():
     return dumps({'utente_valido': biblioteca.utente_autorizzato(chiave)})
 
 # Leggi galleria
-
 @app.route('/leggi_galleria', methods = ['POST'])
 def leggi_galleria():
     lista_libri = biblioteca.leggi_galleria()
@@ -73,7 +68,6 @@ def leggi_galleria():
     return dumps({'lista_libri': lista_libri, 'classifica': classifica})
 
 # Leggi lista
-
 @app.route('/leggi_lista', methods = ['POST'])
 def leggi_lista():
     richiesta = request.get_json(force = True)
@@ -89,7 +83,6 @@ def leggi_lista():
     return dumps({'lista_libri': lista_libri})
 
 # Esegui ricerca
-
 @app.route('/esegui_ricerca', methods = ['POST'])
 def esegui_ricerca():
     richiesta = request.get_json(force = True)
@@ -98,7 +91,6 @@ def esegui_ricerca():
     return dumps({'lista_libri': biblioteca.esegui_ricerca(filtro, richiesta)})
 
 # Nuovo libro
-
 @app.route('/nuovo_libro', methods = ['POST'])
 def nuovo_libro():
     richiesta = request.get_json(force = True)
@@ -117,7 +109,6 @@ def nuovo_libro():
     return dumps({'codice': codice})
 
 # Leggi scheda
-
 @app.route('/leggi_scheda', methods = ['POST'])
 def leggi_scheda():
     richiesta = request.get_json(force = True)
@@ -125,7 +116,6 @@ def leggi_scheda():
     return dumps({'scheda': biblioteca.leggi_scheda(codice)})
 
 # Elimina scheda
-
 @app.route('/elimina_scheda', methods = ['POST'])
 def elimina_scheda():
     richiesta = request.get_json(force = True)
@@ -140,7 +130,6 @@ def elimina_scheda():
     return dumps({'successo': True})
 
 # Modifica scheda
-
 @app.route('/modifica_scheda', methods = ['POST'])
 def modifica_scheda():
     richiesta = request.get_json(force = True)
@@ -164,7 +153,6 @@ def modifica_scheda():
     return dumps({'codice': nuovo_codice})
 
 # Modifica copertina
-
 @app.route('/modifica_copertina', methods = ['POST'])
 def modifica_copertina():
     richiesta = request.get_json(force = True)
@@ -177,7 +165,6 @@ def modifica_copertina():
     return dumps({'successo': True})
 
 # Leggi recensioni
-
 @app.route('/leggi_recensioni', methods = ['POST'])
 def leggi_recensioni():
     richiesta = request.get_json(force = True)
@@ -187,7 +174,6 @@ def leggi_recensioni():
     return dumps({'sommario': sommario, 'recensioni': recensioni})
 
 # Invia recensione
-
 @app.route('/invia_recensione', methods = ['POST'])
 def invia_recensione():
     richiesta = request.get_json(force = True)
@@ -199,7 +185,6 @@ def invia_recensione():
     return dumps({'successo': True})
 
 # Elimina recensione
-
 @app.route('/elimina_recensione', methods = ['POST'])
 def elimina_recensione():
     richiesta = request.get_json(force = True)
@@ -211,7 +196,6 @@ def elimina_recensione():
     return dumps({'successo': True})
 
 # Leggi posizione
-
 @app.route('/leggi_posizione', methods = ['POST'])
 def leggi_posizione():
     richiesta = request.get_json(force = True)
@@ -219,7 +203,6 @@ def leggi_posizione():
     return dumps({'posizione': biblioteca.leggi_posizione(libro)})
 
 # Modifica posizione
-
 @app.route('/modifica_posizione', methods = ['POST'])
 def modifica_posizione():
     richiesta = request.get_json(force = True)
